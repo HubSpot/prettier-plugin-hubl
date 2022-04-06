@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNEXT",
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "strict": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "baseUrl": "",
+    "rootDir": "./src",
+    "typeRoots": ["./types", "node_modules/@types"],
+    "types": ["node"],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "removeComments": true,
+    "declaration": true,
+    "allowJs": true
+  },
+  "include": ["./**/*"],
+  "exclude": ["./tests/**/*", "dist"]
+}

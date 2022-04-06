@@ -1,0 +1,36 @@
+  {% set my_string = "my value" 
+  %}
+{% set my_var = 
+a_var %}
+{% set my_number =      42 %}
+{% set key,value = "a string" %}
+  {% set key, value = 123 %}
+{% set key,  value = call_something() %}
+{% set key, value = func_with(1, 'two', three,
+ four(a,b,c,d,e)) %}
+
+
+<!--
+  templateType: section
+  label: Pricing
+  isAvailableForNewContent: true
+  screenshotPath: ../images/section-previews/pricing.png
+  description: "Middle centered heading above three pricing cards, containing a subheading, description, and button each."
+-->
+{% dnd_section %}
+  {% dnd_column %}
+    {% dnd_row %}
+      {% dnd_module
+        path="@hubspot/rich_text",
+        html={{ context.heading or '<div style="text-align: center;"><h1>Pricing</h1></div>' }},
+        no="yes",
+ margin={
+          "top": 35
+        },
+        false=true
+      %} 
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+
+  {% end_dnd_column %}
+{% end_dnd_section %}

@@ -1,0 +1,6 @@
+{
+  "watch": ["tests", "src"],
+  "exec": "ts-node ./src/inline-test.ts",
+  "ext": "js, json, ts, proto, html",
+  "ignoreRoot": [".git"]
+}

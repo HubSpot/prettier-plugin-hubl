@@ -1,0 +1,49 @@
+{%- macro inlineDynamicButtonStyles(styleDict) -%}
+  {%- for prop, value in styleDict.items() -%}
+
+  {%- endfor -%}
+{%- endmacro -%}
+{%- set buttonStyles = {
+    background_color: module.button_bg.color,
+    color: module.button_text_color.color
+  }
+-%}
+
+{% set href = module.button_link.url.href %}
+{% set rel = [] %}
+{% if module.button_link.no_follow %}
+{% endif %}
+{% if module.button_link.open_in_new_tab %}
+{% endif %}
+
+<section class="card card--pricing">
+  {% if module.tier and module.description %}
+    <div class="card__header">
+      {% if module.tier %}
+        <{{ module.tier_heading_type }} class="card__heading">{{ module.tier }}</{{ module.tier_heading_type }}>
+      {% endif %}
+      {% if module.description %}
+        <p class="card__subtitle"> {{ module.description }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+  <hr>
+  <div class="card__body">
+    <ul>
+      {% for feature in module.features %}
+        <li>
+          {{ feature }}
+        </li>
+      {% endfor %}
+    </ul>
+    <hr>
+    <p class="card__price">{{ module.price }}</p>
+    <a class="button"
+    style="{{ inlineDynamicButtonStyles(buttonStyles) }}"
+    href="{{ href }}"
+    {% if module.button_link.open_in_new_tab %}target="_blank"{% endif %}
+    {% if rel %}rel="{{ rel|join(" ") }}"{% endif %}>
+      {{ module.button_text }}
+    </a>
+  </div>
+</section>

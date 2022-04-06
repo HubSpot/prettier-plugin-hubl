@@ -1,0 +1,24 @@
+{
+  "name": "prettier-plugin-hubl",
+  "version": "1.0.0",
+  "main": "prettier-plugin-hubl.js",
+  "dependencies": {},
+  "devDependencies": {
+    "foreman": "^3.0.1"
+  },
+  "scripts": {
+    "start": "nf start -j ./configuration/watch-all",
+    "watch-all": "yarn start",
+    "watch-prettier": "nf start -j ./configuration/watch-prettier",
+    "watch-parser": "nf start -j ./configuration/watch-parser",
+    "build:parser": "cd ./parser && npm run build",
+    "build:prettier": "cd ./prettier && npm run build",
+    "prepare": "(npm run build:parser) && (npm run build:prettier)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.hubteam.com:HubSpot/hubl-prettier-plugin.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

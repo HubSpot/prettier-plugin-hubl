@@ -1,0 +1,12 @@
+<div class="what">
+{% dnd_column %}
+{% dnd_row %}
+{% dnd_module path="@hubspot/rich_text" %}
+{% module_attribute "html" %}
+<title>{{ page_meta.html_title or pageTitle }}</title>
+<h3>Nested heading</h3>
+{% end_module_attribute %}
+{% end_dnd_module %}
+{% end_dnd_row %}
+{% end_dnd_column %}
+</div>

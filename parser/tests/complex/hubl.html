@@ -1,0 +1,19 @@
+{% if module.button_link.url.type is equalto "EMAIL_ADDRESS" %}
+	{% set href = "mailto:" + href %}
+{% endif %}
+
+{% if module.button_link.no_follow %}
+	{% do rel.append("nofollow") %}
+{% endif %}
+
+{% if module.button_link.open_in_new_tab %}
+	{% do rel.append("noopener") %}
+{% endif %}
+
+{% icon
+	name='{{ module.feature_icon.name }}'
+	purpose='decorative'
+	style='{{ module.feature_icon.type }}'
+	unicode='{{ module.feature_icon.unicode }}'
+	no_wrapper=True
+%}

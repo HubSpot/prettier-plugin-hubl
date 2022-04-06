@@ -1,0 +1,2 @@
+parser: yarn --cwd ./parser watch-build
+prettier: yarn --cwd ./prettier watch-all

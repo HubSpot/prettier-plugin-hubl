@@ -1,0 +1,6 @@
+{
+  "watch": ["src", "node_modules/nunjucks/src", "tests"],
+  "exec": "tsc && ts-node ./tests/testConfig.ts",
+  "ext": "js, json, ts, proto, html",
+  "ignoreRoot": [".git"]
+}

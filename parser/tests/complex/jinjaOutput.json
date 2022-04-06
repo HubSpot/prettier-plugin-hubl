@@ -1,0 +1,631 @@
+[
+  {
+    "lineno": 0,
+    "colno": 4,
+    "name": { "lineno": 0, "colno": 10, "value": "inlineDynamicButtonStyles" },
+    "args": {
+      "lineno": 0,
+      "colno": 35,
+      "children": [{ "lineno": 0, "colno": 36, "value": "styleDict" }]
+    },
+    "body": {
+      "lineno": 0,
+      "colno": 0,
+      "children": [
+        {
+          "lineno": 0,
+          "colno": 50,
+          "children": [{ "lineno": 0, "colno": 50, "value": "" }]
+        },
+        {
+          "lineno": 1,
+          "colno": 6,
+          "arr": {
+            "lineno": 1,
+            "colno": 40,
+            "name": {
+              "lineno": 1,
+              "colno": 34,
+              "target": { "lineno": 1, "colno": 25, "value": "styleDict" },
+              "val": { "lineno": 1, "colno": 35, "value": "items" }
+            },
+            "args": { "lineno": 1, "colno": 40, "children": [] }
+          },
+          "name": {
+            "lineno": 1,
+            "colno": 10,
+            "children": [
+              { "lineno": 1, "colno": 10, "value": "prop" },
+              { "lineno": 1, "colno": 16, "value": "value" }
+            ]
+          },
+          "body": {
+            "lineno": 0,
+            "colno": 0,
+            "children": [
+              {
+                "lineno": 1,
+                "colno": 46,
+                "children": [{ "lineno": 1, "colno": 46, "value": "" }]
+              }
+            ]
+          },
+          "else_": null
+        },
+        {
+          "lineno": 3,
+          "colno": 16,
+          "children": [{ "lineno": 3, "colno": 16, "value": "" }]
+        }
+      ]
+    }
+  },
+  {
+    "lineno": 4,
+    "colno": 16,
+    "children": [{ "lineno": 4, "colno": 16, "value": "" }]
+  },
+  {
+    "lineno": 5,
+    "colno": 4,
+    "targets": [{ "lineno": 5, "colno": 8, "value": "buttonStyles" }],
+    "value": {
+      "lineno": 5,
+      "colno": 23,
+      "children": [
+        {
+          "lineno": 6,
+          "colno": 4,
+          "key": { "lineno": 6, "colno": 4, "value": "background_color" },
+          "value": {
+            "lineno": 6,
+            "colno": 38,
+            "target": {
+              "lineno": 6,
+              "colno": 28,
+              "target": { "lineno": 6, "colno": 22, "value": "module" },
+              "val": { "lineno": 6, "colno": 29, "value": "button_bg" }
+            },
+            "val": { "lineno": 6, "colno": 39, "value": "color" }
+          }
+        },
+        {
+          "lineno": 7,
+          "colno": 4,
+          "key": { "lineno": 7, "colno": 4, "value": "color" },
+          "value": {
+            "lineno": 7,
+            "colno": 35,
+            "target": {
+              "lineno": 7,
+              "colno": 17,
+              "target": { "lineno": 7, "colno": 11, "value": "module" },
+              "val": { "lineno": 7, "colno": 18, "value": "button_text_color" }
+            },
+            "val": { "lineno": 7, "colno": 36, "value": "color" }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "lineno": 9,
+    "colno": 3,
+    "children": [{ "lineno": 9, "colno": 3, "value": "" }]
+  },
+  {
+    "lineno": 11,
+    "colno": 3,
+    "targets": [{ "lineno": 11, "colno": 7, "value": "href" }],
+    "value": {
+      "lineno": 11,
+      "colno": 36,
+      "target": {
+        "lineno": 11,
+        "colno": 32,
+        "target": {
+          "lineno": 11,
+          "colno": 20,
+          "target": { "lineno": 11, "colno": 14, "value": "module" },
+          "val": { "lineno": 11, "colno": 21, "value": "button_link" }
+        },
+        "val": { "lineno": 11, "colno": 33, "value": "url" }
+      },
+      "val": { "lineno": 11, "colno": 37, "value": "href" }
+    }
+  },
+  {
+    "lineno": 11,
+    "colno": 44,
+    "children": [{ "lineno": 11, "colno": 44, "value": "\n" }]
+  },
+  {
+    "lineno": 12,
+    "colno": 3,
+    "targets": [{ "lineno": 12, "colno": 7, "value": "rel" }],
+    "value": { "lineno": 12, "colno": 13, "children": [] }
+  },
+  {
+    "lineno": 12,
+    "colno": 18,
+    "children": [{ "lineno": 12, "colno": 18, "value": "\n" }]
+  },
+  {
+    "lineno": 13,
+    "colno": 3,
+    "cond": {
+      "lineno": 13,
+      "colno": 24,
+      "target": {
+        "lineno": 13,
+        "colno": 12,
+        "target": { "lineno": 13, "colno": 6, "value": "module" },
+        "val": { "lineno": 13, "colno": 13, "value": "button_link" }
+      },
+      "val": { "lineno": 13, "colno": 25, "value": "no_follow" }
+    },
+    "body": {
+      "lineno": 0,
+      "colno": 0,
+      "children": [
+        {
+          "lineno": 13,
+          "colno": 37,
+          "children": [{ "lineno": 13, "colno": 37, "value": "\n" }]
+        }
+      ]
+    },
+    "else_": null
+  },
+  {
+    "lineno": 14,
+    "colno": 11,
+    "children": [{ "lineno": 14, "colno": 11, "value": "\n" }]
+  },
+  {
+    "lineno": 15,
+    "colno": 3,
+    "cond": {
+      "lineno": 15,
+      "colno": 24,
+      "target": {
+        "lineno": 15,
+        "colno": 12,
+        "target": { "lineno": 15, "colno": 6, "value": "module" },
+        "val": { "lineno": 15, "colno": 13, "value": "button_link" }
+      },
+      "val": { "lineno": 15, "colno": 25, "value": "open_in_new_tab" }
+    },
+    "body": {
+      "lineno": 0,
+      "colno": 0,
+      "children": [
+        {
+          "lineno": 15,
+          "colno": 43,
+          "children": [{ "lineno": 15, "colno": 43, "value": "\n" }]
+        }
+      ]
+    },
+    "else_": null
+  },
+  {
+    "lineno": 16,
+    "colno": 11,
+    "children": [
+      {
+        "lineno": 16,
+        "colno": 11,
+        "value": "\n\n<section class=\"card card--pricing\">\n  "
+      }
+    ]
+  },
+  {
+    "lineno": 19,
+    "colno": 5,
+    "cond": {
+      "lineno": 19,
+      "colno": 14,
+      "left": {
+        "lineno": 19,
+        "colno": 14,
+        "target": { "lineno": 19, "colno": 8, "value": "module" },
+        "val": { "lineno": 19, "colno": 15, "value": "tier" }
+      },
+      "right": {
+        "lineno": 19,
+        "colno": 30,
+        "target": { "lineno": 19, "colno": 24, "value": "module" },
+        "val": { "lineno": 19, "colno": 31, "value": "description" }
+      }
+    },
+    "body": {
+      "lineno": 0,
+      "colno": 0,
+      "children": [
+        {
+          "lineno": 19,
+          "colno": 45,
+          "children": [
+            {
+              "lineno": 19,
+              "colno": 45,
+              "value": "\n    <div class=\"card__header\">\n      "
+            }
+          ]
+        },
+        {
+          "lineno": 21,
+          "colno": 9,
+          "cond": {
+            "lineno": 21,
+            "colno": 18,
+            "target": { "lineno": 21, "colno": 12, "value": "module" },
+            "val": { "lineno": 21, "colno": 19, "value": "tier" }
+          },
+          "body": {
+            "lineno": 0,
+            "colno": 0,
+            "children": [
+              {
+                "lineno": 21,
+                "colno": 26,
+                "children": [
+                  { "lineno": 21, "colno": 26, "value": "\n        <" }
+                ]
+              },
+              {
+                "lineno": 22,
+                "colno": 9,
+                "children": [
+                  {
+                    "lineno": 22,
+                    "colno": 18,
+                    "target": { "lineno": 22, "colno": 12, "value": "module" },
+                    "val": {
+                      "lineno": 22,
+                      "colno": 19,
+                      "value": "tier_heading_type"
+                    }
+                  }
+                ]
+              },
+              {
+                "lineno": 22,
+                "colno": 39,
+                "children": [
+                  {
+                    "lineno": 22,
+                    "colno": 39,
+                    "value": " class=\"card__heading\">"
+                  }
+                ]
+              },
+              {
+                "lineno": 22,
+                "colno": 62,
+                "children": [
+                  {
+                    "lineno": 22,
+                    "colno": 71,
+                    "target": { "lineno": 22, "colno": 65, "value": "module" },
+                    "val": { "lineno": 22, "colno": 72, "value": "tier" }
+                  }
+                ]
+              },
+              {
+                "lineno": 22,
+                "colno": 79,
+                "children": [{ "lineno": 22, "colno": 79, "value": "</" }]
+              },
+              {
+                "lineno": 22,
+                "colno": 81,
+                "children": [
+                  {
+                    "lineno": 22,
+                    "colno": 90,
+                    "target": { "lineno": 22, "colno": 84, "value": "module" },
+                    "val": {
+                      "lineno": 22,
+                      "colno": 91,
+                      "value": "tier_heading_type"
+                    }
+                  }
+                ]
+              },
+              {
+                "lineno": 22,
+                "colno": 111,
+                "children": [
+                  { "lineno": 22, "colno": 111, "value": ">\n      " }
+                ]
+              }
+            ]
+          },
+          "else_": null
+        },
+        {
+          "lineno": 23,
+          "colno": 17,
+          "children": [{ "lineno": 23, "colno": 17, "value": "\n      " }]
+        },
+        {
+          "lineno": 24,
+          "colno": 9,
+          "cond": {
+            "lineno": 24,
+            "colno": 18,
+            "target": { "lineno": 24, "colno": 12, "value": "module" },
+            "val": { "lineno": 24, "colno": 19, "value": "description" }
+          },
+          "body": {
+            "lineno": 0,
+            "colno": 0,
+            "children": [
+              {
+                "lineno": 24,
+                "colno": 33,
+                "children": [
+                  {
+                    "lineno": 24,
+                    "colno": 33,
+                    "value": "\n        <p class=\"card__subtitle\"> "
+                  }
+                ]
+              },
+              {
+                "lineno": 25,
+                "colno": 35,
+                "children": [
+                  {
+                    "lineno": 25,
+                    "colno": 44,
+                    "target": { "lineno": 25, "colno": 38, "value": "module" },
+                    "val": { "lineno": 25, "colno": 45, "value": "description" }
+                  }
+                ]
+              },
+              {
+                "lineno": 25,
+                "colno": 59,
+                "children": [
+                  { "lineno": 25, "colno": 59, "value": "</p>\n      " }
+                ]
+              }
+            ]
+          },
+          "else_": null
+        },
+        {
+          "lineno": 26,
+          "colno": 17,
+          "children": [
+            { "lineno": 26, "colno": 17, "value": "\n    </div>\n  " }
+          ]
+        }
+      ]
+    },
+    "else_": null
+  },
+  {
+    "lineno": 28,
+    "colno": 13,
+    "children": [
+      {
+        "lineno": 28,
+        "colno": 13,
+        "value": "\n  <hr>\n  <div class=\"card__body\">\n    <ul>\n      "
+      }
+    ]
+  },
+  {
+    "lineno": 32,
+    "colno": 9,
+    "arr": {
+      "lineno": 32,
+      "colno": 30,
+      "target": { "lineno": 32, "colno": 24, "value": "module" },
+      "val": { "lineno": 32, "colno": 31, "value": "features" }
+    },
+    "name": { "lineno": 32, "colno": 13, "value": "feature" },
+    "body": {
+      "lineno": 0,
+      "colno": 0,
+      "children": [
+        {
+          "lineno": 32,
+          "colno": 42,
+          "children": [
+            { "lineno": 32, "colno": 42, "value": "\n        <li>\n          " }
+          ]
+        },
+        {
+          "lineno": 34,
+          "colno": 10,
+          "children": [{ "lineno": 34, "colno": 13, "value": "feature" }]
+        },
+        {
+          "lineno": 34,
+          "colno": 23,
+          "children": [
+            { "lineno": 34, "colno": 23, "value": "\n        </li>\n      " }
+          ]
+        }
+      ]
+    },
+    "else_": null
+  },
+  {
+    "lineno": 36,
+    "colno": 18,
+    "children": [
+      {
+        "lineno": 36,
+        "colno": 18,
+        "value": "\n    </ul>\n    <hr>\n    <p class=\"card__price\">"
+      }
+    ]
+  },
+  {
+    "lineno": 39,
+    "colno": 27,
+    "children": [
+      {
+        "lineno": 39,
+        "colno": 36,
+        "target": { "lineno": 39, "colno": 30, "value": "module" },
+        "val": { "lineno": 39, "colno": 37, "value": "price" }
+      }
+    ]
+  },
+  {
+    "lineno": 39,
+    "colno": 45,
+    "children": [
+      {
+        "lineno": 39,
+        "colno": 45,
+        "value": "</p>\n    <a class=\"button\"\n    style=\""
+      }
+    ]
+  },
+  {
+    "lineno": 41,
+    "colno": 11,
+    "children": [
+      {
+        "lineno": 41,
+        "colno": 39,
+        "name": {
+          "lineno": 41,
+          "colno": 14,
+          "value": "inlineDynamicButtonStyles"
+        },
+        "args": {
+          "lineno": 41,
+          "colno": 39,
+          "children": [{ "lineno": 41, "colno": 40, "value": "buttonStyles" }]
+        }
+      }
+    ]
+  },
+  {
+    "lineno": 41,
+    "colno": 56,
+    "children": [{ "lineno": 41, "colno": 56, "value": "\"\n    href=\"" }]
+  },
+  {
+    "lineno": 42,
+    "colno": 10,
+    "children": [{ "lineno": 42, "colno": 13, "value": "href" }]
+  },
+  {
+    "lineno": 42,
+    "colno": 20,
+    "children": [{ "lineno": 42, "colno": 20, "value": "\"\n    " }]
+  },
+  {
+    "lineno": 43,
+    "colno": 7,
+    "cond": {
+      "lineno": 43,
+      "colno": 28,
+      "target": {
+        "lineno": 43,
+        "colno": 16,
+        "target": { "lineno": 43, "colno": 10, "value": "module" },
+        "val": { "lineno": 43, "colno": 17, "value": "button_link" }
+      },
+      "val": { "lineno": 43, "colno": 29, "value": "open_in_new_tab" }
+    },
+    "body": {
+      "lineno": 0,
+      "colno": 0,
+      "children": [
+        {
+          "lineno": 43,
+          "colno": 47,
+          "children": [
+            { "lineno": 43, "colno": 47, "value": "target=\"_blank\"" }
+          ]
+        }
+      ]
+    },
+    "else_": null
+  },
+  {
+    "lineno": 43,
+    "colno": 73,
+    "children": [{ "lineno": 43, "colno": 73, "value": "\n    " }]
+  },
+  {
+    "lineno": 44,
+    "colno": 7,
+    "cond": { "lineno": 44, "colno": 10, "value": "rel" },
+    "body": {
+      "lineno": 0,
+      "colno": 0,
+      "children": [
+        {
+          "lineno": 44,
+          "colno": 16,
+          "children": [{ "lineno": 44, "colno": 16, "value": "rel=\"" }]
+        },
+        {
+          "lineno": 44,
+          "colno": 21,
+          "children": [
+            {
+              "lineno": 44,
+              "colno": 28,
+              "name": { "lineno": 44, "colno": 28, "value": "join" },
+              "args": {
+                "lineno": 44,
+                "colno": 28,
+                "children": [
+                  { "lineno": 44, "colno": 24, "value": "rel" },
+                  { "lineno": 44, "colno": 33, "value": " " }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "lineno": 44,
+          "colno": 40,
+          "children": [{ "lineno": 44, "colno": 40, "value": "\"" }]
+        }
+      ]
+    },
+    "else_": null
+  },
+  {
+    "lineno": 44,
+    "colno": 52,
+    "children": [{ "lineno": 44, "colno": 52, "value": ">\n      " }]
+  },
+  {
+    "lineno": 45,
+    "colno": 6,
+    "children": [
+      {
+        "lineno": 45,
+        "colno": 15,
+        "target": { "lineno": 45, "colno": 9, "value": "module" },
+        "val": { "lineno": 45, "colno": 16, "value": "button_text" }
+      }
+    ]
+  },
+  {
+    "lineno": 45,
+    "colno": 30,
+    "children": [
+      {
+        "lineno": 45,
+        "colno": 30,
+        "value": "\n    </a>\n  </div>\n</section>\n"
+      }
+    ]
+  }
+]
