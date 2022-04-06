@@ -11,9 +11,9 @@
     "watch-all": "yarn start",
     "watch-prettier": "nf start -j ./configuration/watch-prettier",
     "watch-parser": "nf start -j ./configuration/watch-parser",
-    "build:parser": "cd ./parser && npm run build",
-    "build:prettier": "cd ./prettier && npm run build",
-    "prepare": "(npm install && npm run build:parser) && (npm install && npm run build:prettier)"
+    "build:parser": "cd ./parser && npm install && npm run build",
+    "build:prettier": "cd ./prettier && npm install && npm run build",
+    "prepare": "(npm run build:parser) && (npm run build:prettier)"
   },
   "repository": {
     "type": "git",
