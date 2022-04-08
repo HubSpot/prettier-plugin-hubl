@@ -6,7 +6,7 @@ const languages = [
   {
     name: "HubL",
     parsers: ["hubl"],
-    extensions: [".hubl.html"]
+    extensions: [".hubl.html"],
   },
 ];
 
@@ -81,7 +81,7 @@ const tokenize = (input) => {
   }
 
   const matches = input.match(HUBL_TAG_REGEX);
-  if (matches.length) {
+  if (matches) {
     matches.forEach((match) => {
       tokenIndex++;
       tokenMap.set(
