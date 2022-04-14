@@ -4,7 +4,7 @@ A Prettier plugin that formats HubL templates for use with the HubSpot CMS
 
 ## Plugin status: Alpha
 
-This plugin is currently in development and is not yet ready for production. Bug reports and questions [are welcomed](https://git.hubteam.com/HubSpot/prettier-plugin-hubl/issues).
+This plugin is currently in development and is not yet ready for production. Bug reports and questions [are welcomed](https://github.com/HubSpot/prettier-plugin-hubl/issues).
 
 ## Installing
 
