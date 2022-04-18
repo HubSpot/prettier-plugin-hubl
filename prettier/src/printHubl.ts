@@ -346,7 +346,8 @@ function printHubl(node) {
           group([
             `{% ${node.value}`,
             align(node.colno - 1, printTagArgs(node.children)),
-            " %}",
+            line,
+            "%}",
           ]),
           indent(printBody(node.body)),
           group([`{% end_${node.value} %}`]),
