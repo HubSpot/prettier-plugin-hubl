@@ -267,12 +267,12 @@ function printHubl(node) {
           join(
             ",",
             node.children.map((kw) => {
-              return [line, printHubl(kw.key), ": ", printHubl(kw.value)];
+              return [hardline, printHubl(kw.key), ": ", printHubl(kw.value)];
             })
           )
         )
       );
-      dictParts.push(line, "}");
+      dictParts.push(hardline, "}");
       return dictParts;
     case "For":
       const forCol = node.colno;
