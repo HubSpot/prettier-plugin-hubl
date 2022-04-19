@@ -19,6 +19,8 @@ function installCompat(env) {
   var orig_Parser_parseAggregate;
   var orig_Parser_parseExpression;
   var orig_Parser_parseStatement;
+  var orig_Parser_parseOr;
+  var orig_Parser_parseFilter;
   if (Compiler) {
     orig_Compiler_assertType = Compiler.prototype.assertType;
   }
@@ -26,6 +28,8 @@ function installCompat(env) {
     orig_Parser_parseAggregate = Parser.prototype.parseAggregate;
     orig_Parser_parseExpression = Parser.prototype.parseExpression;
     orig_Parser_parseStatement = Parser.prototype.parseStatement;
+    orig_Parser_parseOr = Parser.prototype.parseOr;
+    orig_Parser_parseFilter = Parser.prototype.parseFilter;
   }
 
   function uninstall() {
@@ -38,6 +42,8 @@ function installCompat(env) {
       Parser.prototype.parseAggregate = orig_Parser_parseAggregate;
       Parser.prototype.parseExpression = orig_Parser_parseExpression;
       Parser.prototype.parseStatement = orig_Parser_parseStatement;
+      Parser.prototype.parseOr = orig_Parser_parseOr;
+      Parser.prototype.parseFilter = orig_Parser_parseFilter;
     }
   }
 
@@ -192,11 +198,7 @@ function installCompat(env) {
       if (this.skipSymbol("unless")) {
         node = new Unless(tag.lineno, tag.colno);
       } else {
-        this.fail(
-          "parseIf: expected if, elif, or elseif",
-          tag.lineno,
-          tag.colno
-        );
+        this.fail("parseUnless: expected unless, else", tag.lineno, tag.colno);
       }
 
       node.cond = this.parseExpression();
@@ -283,6 +285,45 @@ function installCompat(env) {
             }
           }
           this.fail("unknown block tag: " + tok.value, tok.lineno, tok.colno);
+      }
+
+      return node;
+    };
+
+    Parser.prototype.parseOr = function parseOr() {
+      let node = this.parseAnd();
+
+      while (
+        (this.skip(lexer.TOKEN_PIPE) && this.tokens._extractString("|")) ||
+        this.skipSymbol("or")
+      ) {
+        const node2 = this.parseAnd();
+        node = new nodes.Or(node.lineno, node.colno, node, node2);
+      }
+      return node;
+    };
+
+    Parser.prototype.parseFilter = function parseFilter(node) {
+      while (this.skip(lexer.TOKEN_PIPE)) {
+        // If we encounter ||, this is not a filter
+        if (this.tokens._extractString("|")) {
+          this.tokens.backN(2);
+          console.log(this.tokens.currentStr());
+          return node;
+        }
+        const name = this.parseFilterName();
+
+        node = new nodes.Filter(
+          name.lineno,
+          name.colno,
+          name,
+          new nodes.NodeList(
+            name.lineno,
+            name.colno,
+            [node].concat(this.parseFilterArgs(node))
+          )
+        );
+        // }
       }
 
       return node;
