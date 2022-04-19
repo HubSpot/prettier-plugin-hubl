@@ -183,7 +183,7 @@ function installCompat(env) {
 
     Parser.prototype.parseUnless = function parseUnless() {
       const Unless = nodes.Node.extend("Unless", {
-        fields: ["cond", "body"],
+        fields: ["cond", "body", "_else"],
       });
 
       const tag = this.peekToken();
@@ -202,13 +202,23 @@ function installCompat(env) {
       node.cond = this.parseExpression();
       this.advanceAfterBlockEnd(tag.value);
 
-      node.body = this.parseUntilBlocks("endunless");
+      node.body = this.parseUntilBlocks("else", "endunless");
       const tok = this.peekToken();
 
-      if (tok && tok.value === "endunless") {
-        this.advanceAfterBlockEnd();
-      } else {
-        this.fail("parseIf: expected elif, else, or endif, got end of file");
+      switch (tok && tok.value) {
+        case "else":
+          this.advanceAfterBlockEnd();
+          node.else_ = this.parseUntilBlocks("endunless");
+          this.advanceAfterBlockEnd();
+          break;
+        case "endunless":
+          node.else_ = null;
+          this.advanceAfterBlockEnd();
+          break;
+        default:
+          this.fail(
+            "parseUnless: expected else, or endunless, got end of file"
+          );
       }
 
       return node;
