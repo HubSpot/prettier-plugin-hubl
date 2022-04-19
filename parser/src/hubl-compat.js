@@ -18,12 +18,14 @@ function installCompat(env) {
   var orig_Compiler_assertType;
   var orig_Parser_parseAggregate;
   var orig_Parser_parseExpression;
+  var orig_Parser_parseStatement;
   if (Compiler) {
     orig_Compiler_assertType = Compiler.prototype.assertType;
   }
   if (Parser) {
     orig_Parser_parseAggregate = Parser.prototype.parseAggregate;
     orig_Parser_parseExpression = Parser.prototype.parseExpression;
+    orig_Parser_parseStatement = Parser.prototype.parseStatement;
   }
 
   function uninstall() {
@@ -35,6 +37,7 @@ function installCompat(env) {
     if (Parser) {
       Parser.prototype.parseAggregate = orig_Parser_parseAggregate;
       Parser.prototype.parseExpression = orig_Parser_parseExpression;
+      Parser.prototype.parseStatement = orig_Parser_parseStatement;
     }
   }
 
@@ -176,6 +179,113 @@ function installCompat(env) {
         }
         return new nodes.Array(tok.lineno, tok.colno, [node]);
       }
+    };
+
+    Parser.prototype.parseUnless = function parseUnless() {
+      const Unless = nodes.Node.extend("Unless", {
+        fields: ["cond", "body", "_else"],
+      });
+
+      const tag = this.peekToken();
+      let node;
+
+      if (this.skipSymbol("unless")) {
+        node = new Unless(tag.lineno, tag.colno);
+      } else {
+        this.fail(
+          "parseIf: expected if, elif, or elseif",
+          tag.lineno,
+          tag.colno
+        );
+      }
+
+      node.cond = this.parseExpression();
+      this.advanceAfterBlockEnd(tag.value);
+
+      node.body = this.parseUntilBlocks("else", "endunless");
+      const tok = this.peekToken();
+
+      switch (tok && tok.value) {
+        case "else":
+          this.advanceAfterBlockEnd();
+          node.else_ = this.parseUntilBlocks("endunless");
+          this.advanceAfterBlockEnd();
+          break;
+        case "endunless":
+          node.else_ = null;
+          this.advanceAfterBlockEnd();
+          break;
+        default:
+          this.fail(
+            "parseUnless: expected else, or endunless, got end of file"
+          );
+      }
+
+      return node;
+    };
+
+    Parser.prototype.parseStatement = function parseStatement() {
+      var tok = this.peekToken();
+      var node;
+
+      if (tok.type !== lexer.TOKEN_SYMBOL) {
+        this.fail("tag name expected", tok.lineno, tok.colno);
+      }
+
+      if (
+        this.breakOnBlocks &&
+        lib.indexOf(this.breakOnBlocks, tok.value) !== -1
+      ) {
+        return null;
+      }
+
+      switch (tok.value) {
+        case "raw":
+          return this.parseRaw();
+        case "verbatim":
+          return this.parseRaw("verbatim");
+        case "if":
+        case "ifAsync":
+          return this.parseIf();
+        case "for":
+        case "asyncEach":
+        case "asyncAll":
+          return this.parseFor();
+        case "unless":
+          return this.parseUnless();
+        case "block":
+          return this.parseBlock();
+        case "extends":
+          return this.parseExtends();
+        case "include":
+          return this.parseInclude();
+        case "set":
+          return this.parseSet();
+        case "macro":
+          return this.parseMacro();
+        case "call":
+          return this.parseCall();
+        case "import":
+          return this.parseImport();
+        case "from":
+          return this.parseFrom();
+        case "filter":
+          return this.parseFilterStatement();
+        case "switch":
+          return this.parseSwitch();
+        default:
+          if (this.extensions.length) {
+            for (let i = 0; i < this.extensions.length; i++) {
+              const ext = this.extensions[i];
+              if (lib.indexOf(ext.tags || [], tok.value) !== -1) {
+                return ext.parse(this, nodes, lexer);
+              }
+            }
+          }
+          this.fail("unknown block tag: " + tok.value, tok.lineno, tok.colno);
+      }
+
+      return node;
     };
   }
 
