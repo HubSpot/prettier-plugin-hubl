@@ -150,6 +150,14 @@ function printHubl(node) {
         " : ",
         printHubl(node.else),
       ]);
+    case "Unless":
+      return [
+        "{% unless ",
+        printHubl(node.cond),
+        " %}",
+        indent(printBody(node.body)),
+        "{% endunless %}",
+      ]
     case "Div":
       return group([printHubl(node.left), " / ", printHubl(node.right)]);
     case "Neg":
