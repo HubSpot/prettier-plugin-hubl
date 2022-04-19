@@ -120,8 +120,6 @@ function printHubl(node) {
     case "Is":
       return [printHubl(node.left), " is ", printHubl(node.right)];
     case "If":
-      const col = node.colno;
-
       const ifParts = [
         group(["{% if ", printHubl(node.cond), " %}"]),
         indent(printBody(node.body)),
@@ -151,13 +149,15 @@ function printHubl(node) {
         printHubl(node.else),
       ]);
     case "Unless":
-      return [
-        "{% unless ",
-        printHubl(node.cond),
-        " %}",
+      const unlessParts = [
+        group(["{% unless ", printHubl(node.cond), " %}"]),
         indent(printBody(node.body)),
-        "{% endunless %}",
-      ]
+      ];
+      if (node.else_) {
+        unlessParts.push(printElse(node));
+      }
+      unlessParts.push("{% endunless %}");
+      return group(unlessParts);
     case "Div":
       return group([printHubl(node.left), " / ", printHubl(node.right)]);
     case "Neg":
@@ -317,7 +317,15 @@ function printHubl(node) {
       ];
     case "Not":
       return ["not ", printHubl(node.target)];
-
+    case "Group":
+      return group([
+        "(",
+        // children is an array with no type information so it must be iterated on here
+        node.children.map((child) => {
+          return printHubl(child);
+        }),
+        ")",
+      ]);
     case "Extends":
       return group(["{% extends ", printHubl(node.template), " %}"]);
     default:
@@ -360,7 +368,6 @@ function printHubl(node) {
           group([`{% end_${node.value} %}`]),
         ];
       }
-      console.log(node);
       return `unknown type: ${node.typename}`;
   }
 }
