@@ -1324,11 +1324,11 @@ exports[`minimal_nested.html 1`] = `
 `;
 
 exports[`misc.html 1`] = `
-{% if sky === 'blue' %}
+{% if sky != 'blue' %}
 Clouds
 {% endif %}
 
-{% if sun === True and rain === 'yes' %}
+{% if sun === True && rain === 'yes' %}
 Sun Shower
 {% elif sun === true and rain === 'no' %}
 Sunny
@@ -1342,9 +1342,9 @@ Sledding
 Brrrr
 {% endif %}
 
-{% if one %}
+{% if !one %}
 One
-{% elif two %}
+{% elif not two %}
 Two
 {% elif three %}
 Three
@@ -1361,7 +1361,7 @@ Infinity
 {% endif %}
 
 {% if true %}
-  {% if false %}
+  {% if !false %}
 
   {% endif %}
   {% endif %}
@@ -1450,8 +1450,18 @@ Infinity
 {{ rel|join(" ") }}
 
 {% set testing_table_id = null %} 
+
+{% unless true %}
+  Content
+{% endunless %}
+
+{% unless (module.logo.link is string_startingwith("http")) || (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
+    {% set link = "//" ~ module.logo.link %}
+  {% else %}
+    {% set link = module.logo.link || "" %}
+  {% endunless %}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{% if sky === "blue" %}
+{% if sky != "blue" %}
   Clouds
 {% endif %}
 
@@ -1469,9 +1479,9 @@ Infinity
   Brrrr
 {% endif %}
 
-{% if one %}
+{% if not one %}
   One
-{% elif two %}
+{% elif not two %}
   Two
 {% elif three %}
   Three
@@ -1499,7 +1509,7 @@ Infinity
 {% endif %}
 
 {% if true %}
-  {% if false %}
+  {% if not false %}
 
   {% endif %}
 {% endif %}
@@ -1588,6 +1598,16 @@ Infinity
 {{ rel|join(" ") }}
 
 {% set testing_table_id = null %}
+
+{% unless true %}
+  Content
+{% endunless %}
+
+{% unless (module.logo.link is string_startingwith("http")) or (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
+  {% set link = "//" ~ module.logo.link %}
+{% else %}
+  {% set link = module.logo.link or "" %}
+{% endunless %}
 
 `;
 
