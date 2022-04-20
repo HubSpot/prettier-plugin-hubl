@@ -25,7 +25,7 @@ const tokenize = (input) => {
   const HUBL_TAG_REGEX = /({%.+?%})/gs;
   const LINE_BREAK_REGEX = /[\r\n]+/gm;
   const VARIABLE_REGEX = /({{.+?}})/gs;
-  const HTML_TAG_WITH_HUBL_TAG_REGEX = /<.[^>]*?(?={%|{{).*?>/gms;
+  const HTML_TAG_WITH_HUBL_TAG_REGEX = /<[^>]*?(?={%|{{).*?>/gms;
   const STYLE_BLOCK_WITH_HUBL_REGEX = /<style.[^>]*?(?={%|{{).*?style>/gms;
 
   // Replace tags in style block
@@ -63,8 +63,11 @@ const tokenize = (input) => {
         return `_npe${tokenIndex}_`;
       });
       newString = newString.replace(VARIABLE_REGEX, (match) => {
+        //@ts-ignore
+        if (tokenMap.size && ![...tokenMap].find(([key, value]) => match === value)[0]) {
         tokenIndex++;
         tokenMap.set(`_npe${tokenIndex}_`, match);
+        }
         return `_npe${tokenIndex}_`;
       });
       input = input.replace(tag, newString);
