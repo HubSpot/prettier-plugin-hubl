@@ -22,6 +22,7 @@ function installCompat(env) {
   var orig_Parser_parseOr;
   var orig_Parser_parseFilter;
   var orig_Parser_parseAnd;
+  var orig_Parse_parseNot;
   if (Compiler) {
     orig_Compiler_assertType = Compiler.prototype.assertType;
   }
@@ -32,6 +33,7 @@ function installCompat(env) {
     orig_Parser_parseOr = Parser.prototype.parseOr;
     orig_Parser_parseFilter = Parser.prototype.parseFilter;
     orig_Parser_parseAnd = Parser.prototype.parseAnd;
+    orig_Parse_parseNot = Parser.prototype.parseNot;
   }
 
   function uninstall() {
@@ -47,6 +49,7 @@ function installCompat(env) {
       Parser.prototype.parseOr = orig_Parser_parseOr;
       Parser.prototype.parseFilter = orig_Parser_parseFilter;
       Parser.prototype.parseAnd = orig_Parser_parseAnd;
+      Parser.prototype.parseNot = orig_Parse_parseNot;
     }
   }
 
@@ -199,6 +202,15 @@ function installCompat(env) {
       return node;
     };
 
+    Parser.prototype.parseNot = function parseNot() {
+      const tok = this.peekToken();
+
+      if (this.skipValue(lexer.TOKEN_OPERATOR, "!") || this.skipSymbol("not")) {
+        return new nodes.Not(tok.lineno, tok.colno, this.parseNot());
+      }
+      return this.parseIn();
+    };
+
     Parser.prototype.parseUnless = function parseUnless() {
       const Unless = nodes.Node.extend("Unless", {
         fields: ["cond", "body", "_else"],
@@ -320,7 +332,6 @@ function installCompat(env) {
         // If we encounter ||, this is not a filter
         if (this.tokens._extractString("|")) {
           this.tokens.backN(2);
-          console.log(this.tokens.currentStr());
           return node;
         }
         const name = this.parseFilterName();

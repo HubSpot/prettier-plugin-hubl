@@ -1,4 +1,4 @@
-{% if sky === 'blue' %}
+{% if sky != 'blue' %}
 Clouds
 {% endif %}
 
@@ -16,9 +16,9 @@ Sledding
 Brrrr
 {% endif %}
 
-{% if one %}
+{% if !one %}
 One
-{% elif two %}
+{% elif not two %}
 Two
 {% elif three %}
 Three
@@ -35,7 +35,7 @@ Infinity
 {% endif %}
 
 {% if true %}
-  {% if false %}
+  {% if !false %}
 
   {% endif %}
   {% endif %}
