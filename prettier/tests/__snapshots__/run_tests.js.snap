@@ -1198,7 +1198,9 @@ exports[`landing-page.html 1`] = `
 
     {% include_dnd_partial
       path="../sections/multi-column-content.html",
-      context={ "background_color": "#FFFFFF" } %}
+      context={
+        "background_color": "#FFFFFF"
+      } %}
 
   {% end_dnd_area %}
 {% endblock body %}
@@ -2393,7 +2395,9 @@ exports[`qatest.html 1`] = `
         {# Forms #}
 
         {% dnd_row
-          margin={ "top": 35 } %}
+          margin={
+            "top": 35
+          } %}
           {% dnd_module
             path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
@@ -2405,7 +2409,9 @@ exports[`qatest.html 1`] = `
         {# One column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="@hubspot/form" %}
           {% end_dnd_module %}
@@ -2414,7 +2420,9 @@ exports[`qatest.html 1`] = `
         {# Two column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="@hubspot/form",
             offset=0,
@@ -2430,7 +2438,9 @@ exports[`qatest.html 1`] = `
         {# Three column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="@hubspot/form",
             offset=0,
@@ -2467,7 +2477,9 @@ exports[`qatest.html 1`] = `
         {# Card #}
 
         {% dnd_row
-          margin={ "top": 35 } %}
+          margin={
+            "top": 35
+          } %}
           {% dnd_module
             path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
@@ -2479,7 +2491,9 @@ exports[`qatest.html 1`] = `
         {# One column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/card" %}
           {% end_dnd_module %}
@@ -2488,7 +2502,9 @@ exports[`qatest.html 1`] = `
         {# Two column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/card",
             offset=0,
@@ -2504,7 +2520,9 @@ exports[`qatest.html 1`] = `
         {# Three column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/card",
             offset=0,
@@ -2525,7 +2543,9 @@ exports[`qatest.html 1`] = `
         {# Button #}
 
         {% dnd_row
-          margin={ "top": 35 } %}
+          margin={
+            "top": 35
+          } %}
           {% dnd_module
             path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
@@ -2537,7 +2557,9 @@ exports[`qatest.html 1`] = `
         {# One column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/button" %}
           {% end_dnd_module %}
@@ -2546,7 +2568,9 @@ exports[`qatest.html 1`] = `
         {# Two column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/button",
             offset=0,
@@ -2562,7 +2586,9 @@ exports[`qatest.html 1`] = `
         {# Three column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/button",
             offset=0,
@@ -2583,7 +2609,9 @@ exports[`qatest.html 1`] = `
         {# Menu #}
 
         {% dnd_row
-          margin={ "top": 35 } %}
+          margin={
+            "top": 35
+          } %}
           {% dnd_module
             path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
@@ -2600,7 +2628,9 @@ exports[`qatest.html 1`] = `
         {# Pricing card #}
 
         {% dnd_row
-          margin={ "top": 35 } %}
+          margin={
+            "top": 35
+          } %}
           {% dnd_module
             path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
@@ -2612,7 +2642,9 @@ exports[`qatest.html 1`] = `
         {# One column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/pricing-card" %}
           {% end_dnd_module %}
@@ -2621,7 +2653,9 @@ exports[`qatest.html 1`] = `
         {# Two column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/pricing-card",
             offset=0,
@@ -2637,7 +2671,9 @@ exports[`qatest.html 1`] = `
         {# Three column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/pricing-card",
             offset=0,
@@ -2658,7 +2694,9 @@ exports[`qatest.html 1`] = `
         {# Social follow #}
 
         {% dnd_row
-          margin={ "top": 35 } %}
+          margin={
+            "top": 35
+          } %}
           {% dnd_module
             path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
@@ -2670,7 +2708,9 @@ exports[`qatest.html 1`] = `
         {# One column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/social-follow" %}
           {% end_dnd_module %}
@@ -2679,7 +2719,9 @@ exports[`qatest.html 1`] = `
         {# Two column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/social-follow",
             offset=0,
@@ -2695,7 +2737,9 @@ exports[`qatest.html 1`] = `
         {# Three column #}
 
         {% dnd_row
-          padding={ "top": 35 } %}
+          padding={
+            "top": 35
+          } %}
           {% dnd_module
             path="../modules/social-follow",
             offset=0,
@@ -2734,8 +2778,13 @@ exports[`qatest.html 1`] = `
     {# Call to action #}
 
     {% dnd_section
-      padding={ "top": 0, "bottom": 0 },
-      margin={ "top": 35 } %}
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
       {% dnd_column %}
         {% dnd_row %}
           {% dnd_module
@@ -2754,8 +2803,13 @@ exports[`qatest.html 1`] = `
     {# Cards #}
 
     {% dnd_section
-      padding={ "top": 0, "bottom": 0 },
-      margin={ "top": 35 } %}
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
       {% dnd_column %}
         {% dnd_row %}
           {% dnd_module
@@ -2774,8 +2828,13 @@ exports[`qatest.html 1`] = `
     {# Hero banner #}
 
     {% dnd_section
-      padding={ "top": 0, "bottom": 0 },
-      margin={ "top": 35 } %}
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
       {% dnd_column %}
         {% dnd_row %}
           {% dnd_module
@@ -2794,8 +2853,13 @@ exports[`qatest.html 1`] = `
     {# Multi-column content #}
 
     {% dnd_section
-      padding={ "top": 0, "bottom": 0 },
-      margin={ "top": 35 } %}
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
       {% dnd_column %}
         {% dnd_row %}
           {% dnd_module
@@ -2814,8 +2878,13 @@ exports[`qatest.html 1`] = `
     {# Multi-row content #}
 
     {% dnd_section
-      padding={ "top": 0, "bottom": 0 },
-      margin={ "top": 35 } %}
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
       {% dnd_column %}
         {% dnd_row %}
           {% dnd_module
@@ -2834,8 +2903,13 @@ exports[`qatest.html 1`] = `
     {# Pricing #}
 
     {% dnd_section
-      padding={ "top": 0, "bottom": 0 },
-      margin={ "top": 35 } %}
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
       {% dnd_column %}
         {% dnd_row %}
           {% dnd_module
@@ -2916,7 +2990,9 @@ a_var %}
         path="@hubspot/rich_text",
         html={{ context.heading or '<div style="text-align: center;"><h1>Pricing</h1></div>' }},
         no="yes",
-        margin={ "top": 35 },
+        margin={
+          "top": 35
+        },
         false=true %}
       {% end_dnd_module %}
     {% end_dnd_row %}
