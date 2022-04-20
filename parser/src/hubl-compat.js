@@ -195,6 +195,7 @@ function installCompat(env) {
 
     Parser.prototype.parseAnd = function parseAnd() {
       let node = this.parseNot();
+      // Adds a check for the && symbol
       while (this.skipSymbol("&&") || this.skipSymbol("and")) {
         const node2 = this.parseNot();
         node = new nodes.And(node.lineno, node.colno, node, node2);
@@ -204,7 +205,7 @@ function installCompat(env) {
 
     Parser.prototype.parseNot = function parseNot() {
       const tok = this.peekToken();
-
+      // Add a check for the ! token
       if (this.skipValue(lexer.TOKEN_OPERATOR, "!") || this.skipSymbol("not")) {
         return new nodes.Not(tok.lineno, tok.colno, this.parseNot());
       }
@@ -318,6 +319,7 @@ function installCompat(env) {
       let node = this.parseAnd();
 
       while (
+        // Adds a check for the PIPE token followed by another PIPE char
         (this.skip(lexer.TOKEN_PIPE) && this.tokens._extractString("|")) ||
         this.skipSymbol("or")
       ) {
@@ -329,7 +331,7 @@ function installCompat(env) {
 
     Parser.prototype.parseFilter = function parseFilter(node) {
       while (this.skip(lexer.TOKEN_PIPE)) {
-        // If we encounter ||, this is not a filter
+        // If we encounter ||, this is not a filter so back out and return node
         if (this.tokens._extractString("|")) {
           this.tokens.backN(2);
           return node;
@@ -346,7 +348,6 @@ function installCompat(env) {
             [node].concat(this.parseFilterArgs(node))
           )
         );
-        // }
       }
 
       return node;
