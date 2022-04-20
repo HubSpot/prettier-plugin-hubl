@@ -1328,7 +1328,7 @@ exports[`misc.html 1`] = `
 Clouds
 {% endif %}
 
-{% if sun === True and rain === 'yes' %}
+{% if sun === True && rain === 'yes' %}
 Sun Shower
 {% elif sun === true and rain === 'no' %}
 Sunny
@@ -1450,6 +1450,16 @@ Infinity
 {{ rel|join(" ") }}
 
 {% set testing_table_id = null %} 
+
+{% unless true %}
+  Content
+{% endunless %}
+
+{% unless (module.logo.link is string_startingwith("http")) || (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
+    {% set link = "//" ~ module.logo.link %}
+  {% else %}
+    {% set link = module.logo.link || "" %}
+  {% endunless %}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% if sky === "blue" %}
   Clouds
@@ -1588,6 +1598,16 @@ Infinity
 {{ rel|join(" ") }}
 
 {% set testing_table_id = null %}
+
+{% unless true %}
+  Content
+{% endunless %}
+
+{% unless (module.logo.link is string_startingwith("http")) or (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
+  {% set link = "//" ~ module.logo.link %}
+{% else %}
+  {% set link = module.logo.link or "" %}
+{% endunless %}
 
 `;
 

@@ -21,6 +21,7 @@ function installCompat(env) {
   var orig_Parser_parseStatement;
   var orig_Parser_parseOr;
   var orig_Parser_parseFilter;
+  var orig_Parser_parseAnd;
   if (Compiler) {
     orig_Compiler_assertType = Compiler.prototype.assertType;
   }
@@ -30,6 +31,7 @@ function installCompat(env) {
     orig_Parser_parseStatement = Parser.prototype.parseStatement;
     orig_Parser_parseOr = Parser.prototype.parseOr;
     orig_Parser_parseFilter = Parser.prototype.parseFilter;
+    orig_Parser_parseAnd = Parser.prototype.parseAnd;
   }
 
   function uninstall() {
@@ -44,6 +46,7 @@ function installCompat(env) {
       Parser.prototype.parseStatement = orig_Parser_parseStatement;
       Parser.prototype.parseOr = orig_Parser_parseOr;
       Parser.prototype.parseFilter = orig_Parser_parseFilter;
+      Parser.prototype.parseAnd = orig_Parser_parseAnd;
     }
   }
 
@@ -185,6 +188,15 @@ function installCompat(env) {
         }
         return new nodes.Array(tok.lineno, tok.colno, [node]);
       }
+    };
+
+    Parser.prototype.parseAnd = function parseAnd() {
+      let node = this.parseNot();
+      while (this.skipSymbol("&&") || this.skipSymbol("and")) {
+        const node2 = this.parseNot();
+        node = new nodes.And(node.lineno, node.colno, node, node2);
+      }
+      return node;
     };
 
     Parser.prototype.parseUnless = function parseUnless() {
