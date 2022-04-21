@@ -12,6 +12,8 @@ function installCompat(env) {
   var Parser = env.parser.Parser;
   var nodes = env.nodes;
   var lexer = env.lexer;
+  let dropLeading = false;
+  let dropTrailing = false;
 
   var orig_contextOrFrameLookup = runtime.contextOrFrameLookup;
   var orig_memberLookup = runtime.memberLookup;
@@ -23,6 +25,7 @@ function installCompat(env) {
   var orig_Parser_parseFilter;
   var orig_Parser_parseAnd;
   var orig_Parse_parseNot;
+  var orig_Parse_parseNodes;
   if (Compiler) {
     orig_Compiler_assertType = Compiler.prototype.assertType;
   }
@@ -34,6 +37,9 @@ function installCompat(env) {
     orig_Parser_parseFilter = Parser.prototype.parseFilter;
     orig_Parser_parseAnd = Parser.prototype.parseAnd;
     orig_Parse_parseNot = Parser.prototype.parseNot;
+    orig_Parse_parseNodes = Parser.prototype.parseNodes;
+
+    nodes.Node.prototype.dropLeadingWhitespace = false;
   }
 
   function uninstall() {
@@ -50,6 +56,7 @@ function installCompat(env) {
       Parser.prototype.parseFilter = orig_Parser_parseFilter;
       Parser.prototype.parseAnd = orig_Parser_parseAnd;
       Parser.prototype.parseNot = orig_Parse_parseNot;
+      Parser.prototype.parseNodes = orig_Parse_parseNodes;
     }
   }
 
@@ -249,6 +256,82 @@ function installCompat(env) {
       }
 
       return node;
+    };
+
+    Parser.prototype.parseNodes = function parseNodes() {
+      let tok;
+      const buf = [];
+
+      while ((tok = this.nextToken())) {
+        if (tok.type === lexer.TOKEN_DATA) {
+          let data = tok.value;
+          const nextToken = this.peekToken();
+          const nextVal = nextToken && nextToken.value;
+
+          // If the last token has "-" we need to trim the
+          // leading whitespace of the data. This is marked with
+          // the `dropLeadingWhitespace` variable.
+          if (this.dropLeadingWhitespace) {
+            // TODO: this could be optimized (don't use regex)
+            // data = data.replace(/^\s*/, "");
+            // this.dropLeadingWhitespace = false;
+          }
+
+          // Same for the succeeding block start token
+          if (
+            nextToken &&
+            ((nextToken.type === lexer.TOKEN_BLOCK_START &&
+              nextVal.charAt(nextVal.length - 1) === "-") ||
+              (nextToken.type === lexer.TOKEN_VARIABLE_START &&
+                nextVal.charAt(this.tokens.tags.VARIABLE_START.length) ===
+                  "-") ||
+              (nextToken.type === lexer.TOKEN_COMMENT &&
+                nextVal.charAt(this.tokens.tags.COMMENT_START.length) === "-"))
+          ) {
+            // TODO: this could be optimized (don't use regex)
+            // data = data.replace(/\s*$/, "");
+            this.dropLeadingWhitespace = true;
+            dropLeading = true;
+          }
+
+          buf.push(
+            new nodes.Output(tok.lineno, tok.colno, [
+              new nodes.TemplateData(tok.lineno, tok.colno, data),
+            ])
+          );
+        } else if (tok.type === lexer.TOKEN_BLOCK_START) {
+          this.dropLeadingWhitespace = false;
+          dropLeading = false;
+          const n = this.parseStatement();
+          if (!n) {
+            break;
+          }
+          buf.push(n);
+        } else if (tok.type === lexer.TOKEN_VARIABLE_START) {
+          dropLeading = false;
+          const e = this.parseExpression();
+          dropLeading = this.dropLeadingWhitespace;
+          this.dropLeadingWhitespace = false;
+          this.advanceAfterVariableEnd();
+          dropTrailing = this.dropLeadingWhitespace;
+          console.log(dropLeading, dropTrailing);
+          buf.push(new nodes.Output(tok.lineno, tok.colno, [e]));
+        } else if (tok.type === lexer.TOKEN_COMMENT) {
+          this.dropLeadingWhitespace =
+            tok.value.charAt(
+              tok.value.length - this.tokens.tags.COMMENT_END.length - 1
+            ) === "-";
+        } else {
+          // Ignore comments, otherwise this should be an error
+          this.fail(
+            "Unexpected token at top-level: " + tok.type,
+            tok.lineno,
+            tok.colno
+          );
+        }
+      }
+
+      return buf;
     };
 
     Parser.prototype.parseStatement = function parseStatement() {

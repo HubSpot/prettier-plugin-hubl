@@ -168,9 +168,15 @@ function printHubl(node) {
       return group([printHubl(node.left), " + ", printHubl(node.right)]);
     case "Output":
       return node.children.map((child) => {
+
         if (child.typename === "TemplateData") {
           return printHubl(child);
         }
+
+        if (node.dropLeadingWhitespace) {
+          return ["{{- ", printHubl(child), " }}"];
+        }
+
         return ["{{ ", printHubl(child), " }}"];
       });
     case "NodeList":
@@ -296,6 +302,7 @@ function printHubl(node) {
         "{% endfor %}",
       ];
     case "Macro":
+      console.log(node.dropLeadingWhitespace)
       return [
         group([
           `{% macro `,
