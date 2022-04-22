@@ -20,6 +20,16 @@ function locEnd(node) {
 
 let tokenMap = new Map();
 let tokenIndex = 0;
+
+const tokenExists = (match) => {
+  let tokens = tokenMap.entries();
+  for (let token of tokens) {
+    if (token[1] === match) {
+      return token[0];
+    }
+  }
+};
+
 const tokenize = (input) => {
   const COMMENT_REGEX = /{#.*?#}/gms;
   const HUBL_TAG_REGEX = /({%.+?%})/gs;
@@ -59,16 +69,16 @@ const tokenize = (input) => {
       let newString;
       newString = tag.replace(HUBL_TAG_REGEX, (match) => {
         tokenIndex++;
-        tokenMap.set(`_npe${tokenIndex}_`, match);
-        return `_npe${tokenIndex}_`;
+        tokenMap.set(`npe${tokenIndex}_`, match);
+        return `npe${tokenIndex}_`;
       });
       newString = newString.replace(VARIABLE_REGEX, (match) => {
-        //@ts-ignore
-        if (tokenMap.size && ![...tokenMap].find(([key, value]) => match === value)[0]) {
-        tokenIndex++;
-        tokenMap.set(`_npe${tokenIndex}_`, match);
+        if (tokenExists(match)) {
+          return tokenExists(match);
         }
-        return `_npe${tokenIndex}_`;
+        tokenIndex++;
+        tokenMap.set(`npe${tokenIndex}_`, match);
+        return `npe${tokenIndex}_`;
       });
       input = input.replace(tag, newString);
     });
