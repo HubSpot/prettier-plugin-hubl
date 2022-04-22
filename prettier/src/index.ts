@@ -20,12 +20,22 @@ function locEnd(node) {
 
 let tokenMap = new Map();
 let tokenIndex = 0;
+
+const getToken = (match) => {
+  let tokens = tokenMap.entries();
+  for (let token of tokens) {
+    if (token[1] === match) {
+      return token[0];
+    }
+  }
+};
+
 const tokenize = (input) => {
   const COMMENT_REGEX = /{#.*?#}/gms;
   const HUBL_TAG_REGEX = /({%.+?%})/gs;
   const LINE_BREAK_REGEX = /[\r\n]+/gm;
   const VARIABLE_REGEX = /({{.+?}})/gs;
-  const HTML_TAG_WITH_HUBL_TAG_REGEX = /<.[^>]*?(?={%|{{).*?>/gms;
+  const HTML_TAG_WITH_HUBL_TAG_REGEX = /<[^>]*?(?={%|{{).*?>/gms;
   const STYLE_BLOCK_WITH_HUBL_REGEX = /<style.[^>]*?(?={%|{{).*?style>/gms;
 
   // Replace tags in style block
@@ -59,13 +69,19 @@ const tokenize = (input) => {
       let newString;
       newString = tag.replace(HUBL_TAG_REGEX, (match) => {
         tokenIndex++;
-        tokenMap.set(`_npe${tokenIndex}_`, match);
-        return `_npe${tokenIndex}_`;
+        tokenMap.set(`npe${tokenIndex}_`, match);
+        return `npe${tokenIndex}_`;
       });
       newString = newString.replace(VARIABLE_REGEX, (match) => {
+        // Variables are sometimes used as HTML tag names
+        const token = getToken(match);
+        if (token) {
+          return token;
+        }
+
         tokenIndex++;
-        tokenMap.set(`_npe${tokenIndex}_`, match);
-        return `_npe${tokenIndex}_`;
+        tokenMap.set(`npe${tokenIndex}_`, match);
+        return `npe${tokenIndex}_`;
       });
       input = input.replace(tag, newString);
     });
@@ -117,7 +133,7 @@ const unTokenize = (input) => {
         return;
       }
     }
-    input = input.replace(key, value);
+    input = input.replaceAll(key, value);
   });
   const COMMENT_START_REGEX = /{#/gm;
   const COMMENT_END_REGEX = /#}/gm;
