@@ -1,8 +1,8 @@
-{% if sky === 'blue' %}
+{% if sky != 'blue' %}
 Clouds
 {% endif %}
 
-{% if sun === True and rain === 'yes' %}
+{% if sun === True && rain === 'yes' %}
 Sun Shower
 {% elif sun === true and rain === 'no' %}
 Sunny
@@ -16,9 +16,9 @@ Sledding
 Brrrr
 {% endif %}
 
-{% if one %}
+{% if !one %}
 One
-{% elif two %}
+{% elif not two %}
 Two
 {% elif three %}
 Three
@@ -35,7 +35,7 @@ Infinity
 {% endif %}
 
 {% if true %}
-  {% if false %}
+  {% if !false %}
 
   {% endif %}
   {% endif %}
@@ -129,10 +129,10 @@ Infinity
   Content
 {% endunless %}
 
-{% unless (module.logo.link is string_startingwith("http")) or (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
+{% unless (module.logo.link is string_startingwith("http")) || (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
     {% set link = "//" ~ module.logo.link %}
   {% else %}
-    {% set link = module.logo.link or "" %}
+    {% set link = module.logo.link || "" %}
   {% endunless %}
 
 

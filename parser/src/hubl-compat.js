@@ -19,6 +19,10 @@ function installCompat(env) {
   var orig_Parser_parseAggregate;
   var orig_Parser_parseExpression;
   var orig_Parser_parseStatement;
+  var orig_Parser_parseOr;
+  var orig_Parser_parseFilter;
+  var orig_Parser_parseAnd;
+  var orig_Parse_parseNot;
   if (Compiler) {
     orig_Compiler_assertType = Compiler.prototype.assertType;
   }
@@ -26,6 +30,10 @@ function installCompat(env) {
     orig_Parser_parseAggregate = Parser.prototype.parseAggregate;
     orig_Parser_parseExpression = Parser.prototype.parseExpression;
     orig_Parser_parseStatement = Parser.prototype.parseStatement;
+    orig_Parser_parseOr = Parser.prototype.parseOr;
+    orig_Parser_parseFilter = Parser.prototype.parseFilter;
+    orig_Parser_parseAnd = Parser.prototype.parseAnd;
+    orig_Parse_parseNot = Parser.prototype.parseNot;
   }
 
   function uninstall() {
@@ -38,6 +46,10 @@ function installCompat(env) {
       Parser.prototype.parseAggregate = orig_Parser_parseAggregate;
       Parser.prototype.parseExpression = orig_Parser_parseExpression;
       Parser.prototype.parseStatement = orig_Parser_parseStatement;
+      Parser.prototype.parseOr = orig_Parser_parseOr;
+      Parser.prototype.parseFilter = orig_Parser_parseFilter;
+      Parser.prototype.parseAnd = orig_Parser_parseAnd;
+      Parser.prototype.parseNot = orig_Parse_parseNot;
     }
   }
 
@@ -181,6 +193,25 @@ function installCompat(env) {
       }
     };
 
+    Parser.prototype.parseAnd = function parseAnd() {
+      let node = this.parseNot();
+      // Adds a check for the && symbol
+      while (this.skipSymbol("&&") || this.skipSymbol("and")) {
+        const node2 = this.parseNot();
+        node = new nodes.And(node.lineno, node.colno, node, node2);
+      }
+      return node;
+    };
+
+    Parser.prototype.parseNot = function parseNot() {
+      const tok = this.peekToken();
+      // Add a check for the ! token
+      if (this.skipValue(lexer.TOKEN_OPERATOR, "!") || this.skipSymbol("not")) {
+        return new nodes.Not(tok.lineno, tok.colno, this.parseNot());
+      }
+      return this.parseIn();
+    };
+
     Parser.prototype.parseUnless = function parseUnless() {
       const Unless = nodes.Node.extend("Unless", {
         fields: ["cond", "body", "_else"],
@@ -192,11 +223,7 @@ function installCompat(env) {
       if (this.skipSymbol("unless")) {
         node = new Unless(tag.lineno, tag.colno);
       } else {
-        this.fail(
-          "parseIf: expected if, elif, or elseif",
-          tag.lineno,
-          tag.colno
-        );
+        this.fail("parseUnless: expected unless, else", tag.lineno, tag.colno);
       }
 
       node.cond = this.parseExpression();
@@ -283,6 +310,44 @@ function installCompat(env) {
             }
           }
           this.fail("unknown block tag: " + tok.value, tok.lineno, tok.colno);
+      }
+
+      return node;
+    };
+
+    Parser.prototype.parseOr = function parseOr() {
+      let node = this.parseAnd();
+
+      while (
+        // Adds a check for the PIPE token followed by another PIPE char
+        (this.skip(lexer.TOKEN_PIPE) && this.tokens._extractString("|")) ||
+        this.skipSymbol("or")
+      ) {
+        const node2 = this.parseAnd();
+        node = new nodes.Or(node.lineno, node.colno, node, node2);
+      }
+      return node;
+    };
+
+    Parser.prototype.parseFilter = function parseFilter(node) {
+      while (this.skip(lexer.TOKEN_PIPE)) {
+        // If we encounter ||, this is not a filter so back out and return node
+        if (this.tokens._extractString("|")) {
+          this.tokens.backN(2);
+          return node;
+        }
+        const name = this.parseFilterName();
+
+        node = new nodes.Filter(
+          name.lineno,
+          name.colno,
+          name,
+          new nodes.NodeList(
+            name.lineno,
+            name.colno,
+            [node].concat(this.parseFilterArgs(node))
+          )
+        );
       }
 
       return node;
