@@ -280,7 +280,7 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     { start: "dnd_module", end: "end_dnd_module" },
     { start: "dnd_row", end: "end_dnd_row" },
     { start: "dnd_section", end: "end_dnd_section" },
-    { start: "email_each", end: "end_email_each" },
+    { start: "email_each", end: "endemail_each" },
     { start: "flip", end: "end_flip" },
     { start: "module_attribute", end: "end_module_attribute" },
     { start: "module_block", end: "end_module_block" },

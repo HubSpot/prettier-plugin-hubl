@@ -165,16 +165,6 @@
       Welcome to my awesome homepage.
     </p>
 {% endblock %}
-{% flip val_true %}
-world
-{% with %}
-hello
-{% endflip %}
-{% flip val_false %}
-world
-{% with %}
-hello
-{% endflip %}
 {% follow_me "follow_me" %}
 {% follow_me "follow_us" title="Follow Us", module_title_tag="h2" %}
 {% for item in items %}
@@ -191,12 +181,6 @@ hello
 {% endfor %}
 {% form "my_form" %}
 {% form "my_form" label="My Form", custom_form_html=None, no_title=False, title="" %}
-{% macro header(tag, title_text) %}
-    <header> <{{ tag }}>{{ title_text }} </{{tag}}> </header>
-{% endmacro %}
-{% macro footer(tag, footer_text) %}
-    <footer> <{{ tag }}>{{ footer_text }} </{{tag}}> </footer>
-{% endmacro %}
 {% from 'custom/page/web_page_basic/my_macros.html' import footer %}
 {{ footer('h2', 'My footer info') }}
 {% gallery "gallery" %}
@@ -231,7 +215,6 @@ Variable named number is greater than 6.
 {% end_widget_block %}
 {% image_src "image_src" %}
 {% image_src "executve_image_src" src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg", no_wrapper=True %}
-{# replace 1 #}
 {% import 'custom/page/web_page_basic/my_macros.html' as header_footer %}
 {{ header_footer.header('h1', 'My page title') }}
 {{ header_footer.footer('h3', 'Company footer info') }}
@@ -308,7 +291,6 @@ a { {{ trans("all .2s ease-in-out") }} }
 {% end_widget_attribute %}
 {% end_widget_block %}
 {% rss_listing "rss_listing" %}
-{% rss_listing "my_rss_listing" rss_url="", publish_date_text="posted at", feed_source={rss_url="", is_external=False, content_group_id="24732847"}, click_through_text="Read more", show_date=True, include_featured_image=True, overrideable=False, publish_date_format="short", show_detail=True, show_author=True, number_of_items="5", is_external=False, title="", content_group_id="24732847", label="RSS Listing", limit_to_chars="200", attribution_text="by" %}
 {% section_header "section_header" %}
 {% section_header "my_section_header" header="A clear and bold header", subheader="A more subdued subheader", label="Sidebar Header" %}
 {% set primaryColor = "#F7761F" %}
@@ -318,9 +300,6 @@ a { {{ trans("all .2s ease-in-out") }} }
 {% set var_two = "String 2" %}
 {% set sequence = [var_one,  var_two] %}
 {% set name = 'Jack' %}
-{% set message %}
-My name is {{ name }}
-{% end_set %}
 {% simple_menu "simple_menu" %}
 {% simple_menu "my_simple_menu" orientation="horizontal", label="Simple Menu" %}
 {% social_sharing "social_sharing" use_page_url=True %}
@@ -354,7 +333,7 @@ Smart content rule 1
 {% textarea "textarea" %}
 {% textarea "my_textarea" label="Enter plain text block", value="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a urna quis lacus vehicula rutrum.", no_wrapper=True %}
 {% unless x < 0 %} x is greater than zero {% endunless %}
-{% video_player "embed_player" player_id="1234", type="script", label="good player", width="300", height="200", play_button_color="#006643", hide_playlist=True, full_width=False %}
+
 {% widget_block rich_text "my_text_block" overrideable=True, label="Right Column" %}
    {% widget_attribute "html" %}
        <h2>Something Powerful</h2>
@@ -379,4 +358,4 @@ Smart content rule 1
     </div>
 {% end_widget_wrapper %}
 
-{% some_widget 'other_unique_key' widget_wrapper={type='inline', value='unique_key'} %}
+{% video_player "embed_player" player_id="1234", type="script", label="good player", width="300", height="200", play_button_color="#006643", hide_playlist=True, full_width=False %}

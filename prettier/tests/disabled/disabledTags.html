@@ -1,0 +1,28 @@
+<!-- Nested widget params not supported -->
+{% some_widget 'other_unique_key' widget_wrapper={type='inline', value='unique_key'} %}
+
+{% rss_listing "my_rss_listing" rss_url="", publish_date_text="posted at", feed_source={rss_url="", is_external=False, content_group_id="24732847"}, click_through_text="Read more", show_date=True, include_featured_image=True, overrideable=False, publish_date_format="short", show_detail=True, show_author=True, number_of_items="5", is_external=False, title="", content_group_id="24732847", label="RSS Listing", limit_to_chars="200", attribution_text="by" %}
+
+<!-- Beginning and closing tags inconsistent -->
+{% macro header(tag, title_text) %}
+    <header> <{{ tag }}>{{ title_text }} </{{tag}}> </header>
+{% endmacro %}
+{% macro footer(tag, footer_text) %}
+    <footer> <{{ tag }}>{{ footer_text }} </{{tag}}> </footer>
+{% endmacro %}
+
+<!-- end_set isn't valid -->
+{% set message %}
+My name is {{ name }}
+{% end_set %}
+
+{% flip val_true %}
+world
+{% with %}
+hello
+{% endflip %}
+{% flip val_false %}
+world
+{% with %}
+hello
+{% endflip %}
