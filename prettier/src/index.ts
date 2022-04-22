@@ -73,9 +73,12 @@ const tokenize = (input) => {
         return `npe${tokenIndex}_`;
       });
       newString = newString.replace(VARIABLE_REGEX, (match) => {
-        if (tokenExists(match)) {
-          return tokenExists(match);
+        // Variables are sometimes used as HTML tag names
+        const token = tokenExists(match);
+        if (token) {
+          return token;
         }
+
         tokenIndex++;
         tokenMap.set(`npe${tokenIndex}_`, match);
         return `npe${tokenIndex}_`;
@@ -130,7 +133,7 @@ const unTokenize = (input) => {
         return;
       }
     }
-    input = input.replace(key, value);
+    input = input.replaceAll(key, value);
   });
   const COMMENT_START_REGEX = /{#/gm;
   const COMMENT_END_REGEX = /#}/gm;
