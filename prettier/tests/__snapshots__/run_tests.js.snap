@@ -1450,6 +1450,21 @@ Infinity
 {{ rel|join(" ") }}
 
 {% set testing_table_id = null %} 
+
+{% unless true %}
+  Content
+{% endunless %}
+
+{% unless (module.logo.link is string_startingwith("http")) or (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
+    {% set link = "//" ~ module.logo.link %}
+  {% else %}
+    {% set link = module.logo.link or "" %}
+  {% endunless %}
+
+
+<{{ module.list_type }} class="list">
+What is this element?
+</{{ module.list_type }}>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% if sky === "blue" %}
   Clouds
@@ -1588,6 +1603,18 @@ Infinity
 {{ rel|join(" ") }}
 
 {% set testing_table_id = null %}
+
+{% unless true %}
+  Content
+{% endunless %}
+
+{% unless (module.logo.link is string_startingwith("http")) or (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
+  {% set link = "//" ~ module.logo.link %}
+{% else %}
+  {% set link = module.logo.link or "" %}
+{% endunless %}
+
+<{{ module.list_type }} class="list"> What is this element? </{{ module.list_type }}>
 
 `;
 

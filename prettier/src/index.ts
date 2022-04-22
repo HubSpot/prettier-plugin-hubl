@@ -21,7 +21,7 @@ function locEnd(node) {
 let tokenMap = new Map();
 let tokenIndex = 0;
 
-const tokenExists = (match) => {
+const getToken = (match) => {
   let tokens = tokenMap.entries();
   for (let token of tokens) {
     if (token[1] === match) {
@@ -74,7 +74,7 @@ const tokenize = (input) => {
       });
       newString = newString.replace(VARIABLE_REGEX, (match) => {
         // Variables are sometimes used as HTML tag names
-        const token = tokenExists(match);
+        const token = getToken(match);
         if (token) {
           return token;
         }
