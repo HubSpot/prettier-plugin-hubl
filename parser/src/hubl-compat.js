@@ -263,36 +263,24 @@ function installCompat(env) {
       const buf = [];
 
       while ((tok = this.nextToken())) {
+        const tokVal = tok && tok.value;
+
+        //  For each token, check to see if it starts with a whitepace control char
+        if (
+          tok &&
+          ((tok.type === lexer.TOKEN_BLOCK_START &&
+            tokVal.charAt(nextVal.length - 1) === "-") ||
+            (tok.type === lexer.TOKEN_VARIABLE_START &&
+              tokVal.charAt(this.tokens.tags.VARIABLE_START.length) === "-") ||
+            (tok.type === lexer.TOKEN_COMMENT &&
+              tokVal.charAt(this.tokens.tags.COMMENT_START.length) === "-"))
+        ) {
+          this.dropLeadingWhitespace = true;
+          dropLeading = true;
+          dropTrailing = false;
+        }
         if (tok.type === lexer.TOKEN_DATA) {
           let data = tok.value;
-          const nextToken = this.peekToken();
-          const nextVal = nextToken && nextToken.value;
-
-          // If the last token has "-" we need to trim the
-          // leading whitespace of the data. This is marked with
-          // the `dropLeadingWhitespace` variable.
-          if (this.dropLeadingWhitespace) {
-            // TODO: this could be optimized (don't use regex)
-            // data = data.replace(/^\s*/, "");
-            // this.dropLeadingWhitespace = false;
-          }
-
-          // Same for the succeeding block start token
-          if (
-            nextToken &&
-            ((nextToken.type === lexer.TOKEN_BLOCK_START &&
-              nextVal.charAt(nextVal.length - 1) === "-") ||
-              (nextToken.type === lexer.TOKEN_VARIABLE_START &&
-                nextVal.charAt(this.tokens.tags.VARIABLE_START.length) ===
-                  "-") ||
-              (nextToken.type === lexer.TOKEN_COMMENT &&
-                nextVal.charAt(this.tokens.tags.COMMENT_START.length) === "-"))
-          ) {
-            // TODO: this could be optimized (don't use regex)
-            // data = data.replace(/\s*$/, "");
-            this.dropLeadingWhitespace = true;
-            dropLeading = true;
-          }
 
           buf.push(
             new nodes.Output(tok.lineno, tok.colno, [
@@ -300,22 +288,22 @@ function installCompat(env) {
             ])
           );
         } else if (tok.type === lexer.TOKEN_BLOCK_START) {
-          this.dropLeadingWhitespace = false;
-          dropLeading = false;
           const n = this.parseStatement();
           if (!n) {
             break;
           }
           buf.push(n);
         } else if (tok.type === lexer.TOKEN_VARIABLE_START) {
-          dropLeading = false;
           const e = this.parseExpression();
-          dropLeading = this.dropLeadingWhitespace;
           this.dropLeadingWhitespace = false;
           this.advanceAfterVariableEnd();
           dropTrailing = this.dropLeadingWhitespace;
-          console.log(dropLeading, dropTrailing);
+          console.log(
+            `dropLeading: ${dropLeading} dropTrailing: ${dropTrailing}`
+          );
           buf.push(new nodes.Output(tok.lineno, tok.colno, [e]));
+          dropLeading = false;
+          dropTrailing = false;
         } else if (tok.type === lexer.TOKEN_COMMENT) {
           this.dropLeadingWhitespace =
             tok.value.charAt(
