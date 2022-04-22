@@ -1,0 +1,382 @@
+{% extends "custom/page/web_page_basic/my_template.html" %}
+{% block my_sidebar %}
+   <!--Content that will render within a block of the same name in the parent template-->
+{% endblock %}
+{% blog_comments "blog_comments" %}
+{% blog_comments "default_blog_comments" select_blog="359485112" %}
+{% blog_social_sharing "blog_social_sharing" %}
+{% blog_social_sharing "my_blog_social_sharing" select_blog="359485112" %}
+{% blog_subscribe "blog_subscribe" %}
+{% blog_subscribe "subscribe_designers_blog" select_blog="default", title="Subscribe to the Designers Blog", response_message="Thanks for Subscribing!", label="Blog Email Subscription", overrideable=False %}
+{% boolean "boolean" %}
+{% boolean "nav_toggle" label="Hide navigation", value=False, no_wrapper=True %}
+ {% macro render_dialog(title, class='dialog') %}
+  <div class="{{ class }}">
+      <h2>{{ title }}</h2>
+      <div class="contents">
+          {{ caller() }}
+      </div>
+  </div>
+ {% endmacro %}
+
+ {% call render_dialog('Hello World') %}
+     This is a simple dialog rendered by using a macro and
+     a call block.
+ {% endcall %}
+ {% macro dump_users(users) %}
+   <ul>
+     {% for user in users %}
+       <li><p>{{ user.username|e }}</p>{{ caller(user) }}</li>
+     {%- endfor %}
+   </ul>
+ {% endmacro %}
+
+ {% call(user) dump_users(list_of_user) %}
+  <dl>
+       <dl>Realname</dl>
+       <dd>{{ user.realname|e }}</dd>
+       <dl>Description</dl>
+       <dd>{{ user.description }}</dd>
+  </dl>
+ {% endcall %}
+{% choice "flip_layout" value="left", choices="left,right", export_to_template_context=True %}
+{% choice "flip_layout" value="left", choices="[[\"\", \"\"], [\"option1\", \"Option 1\"], [\"option2\", \"Option 2\"], [\"option3\", \"Option 3\"]]", export_to_template_context=True %}
+{% color "color" %}
+{% color "my_color_picker" label="Choose a color", color="#000000", no_wrapper=True %}
+{% content_attribute "email_body" %}
+<p>Your email body default content</p>
+{% end_content_attribute %}
+{% cta "cta" %}
+{% cta "my_cta" label="Select a CTA", guid="ccd39b7c-ae18-4c4e-98ee-547069bfbc5b", image_src="https://no-cache.hubspot.com/cta/default/53/c7335b66-a0d4-4d19-82eb-75e1626d02d0.png" %}
+{% custom_widget "custom_widget" widget_name="Custom Module Name" %}
+{% custom_widget "employee_quote" widget_name="Employee Quote", label="Employee image and quote section" %}
+{% for content in contents %}
+    <div class="post-item {% cycle 'odd','even' %}">Blog post content</div>
+{% endfor %}
+{% dnd_area "unique_name", class="main" %}
+{% end_dnd_area %}
+{% dnd_column
+  offset=0,
+  width=12,
+  background_color={
+    r: 255,
+    g: 0,
+    b: 0,
+    a: 1
+  },
+  margin={
+    'top': 20,
+    'bottom': 200
+  },
+%}
+
+{% end_dnd_column %}
+{% dnd_module
+  path="@hubspot/rich_text",
+  offset=0,
+  width=8,
+%}
+  {% module_attribute "html" %}
+    <h1>Hello, world!</h1>
+  {% end_module_attribute %}
+{% end_dnd_module %}
+{% dnd_row
+  background_color={
+    r: 123,
+    g: 123,
+    b: 123,
+    a: 1.0
+  },
+  margin={
+    'top': 20,
+    'bottom': 200
+  },
+  padding={
+    'top': 20,
+    'bottom': 200,
+    'left': 20,
+    'right': 20
+  }
+%}
+
+{% end_dnd_row %}
+{% dnd_section
+  background_image={
+    'backgroundPosition': 'MIDDLE_CENTER',
+    'backgroundSize': 'cover',
+    'imageUrl': 'https://example.com/path/to/image.jpg'
+  },
+  margin={
+    'top': 20,
+    'bottom': 200
+  },
+  padding={
+    'top': 20,
+    'bottom': 200,
+    'left': 20,
+    'right': 20
+  },
+  max_width=1200,
+  vertical_alignment='MIDDLE'
+%}
+
+{% end_dnd_section %}
+{% do list.append('value 2') %}
+{% email_each list="custom.cart_items" %}
+<td>{{item.name}}</td><td>{{item.price}}
+{% endemail_each %}
+{% email_each list="custom.cart_items" item="line_item" %}
+<td>{{line_item.name}}</td><td>{{line_item.price}}
+{% endemail_each %}
+{% email_simple_subscription "email_simple_subscription" %}
+{% email_simple_subscription "email_simple_subscription" header="Email Unsubscribe", input_help_text="Your email address:", input_placeholder="email@example.com", button_text="Unsubscribe", label="Backup Unsubscribe" %}
+{% email_subscriptions "email_subscriptions"  %}
+{% email_subscriptions "email_subscriptions" resubscribe_button_text="Yes, resubscribe me!", unsubscribe_single_text="Uncheck the types of emails you do not want to receive:", subheader_text="If this is not your email address, please ignore this page since the email associated with this page was most likely forwarded to you.", unsubscribe_all_unsubbed_text="You are presently unsubscribed from all of our emails. Would you like to receive our emails again?", button_text="Update email preferences", label="Subscription Preferences", header="Communication Preferences", unsubscribe_all_option="Unsubscribe me from all mailing lists.", unsubscribe_all_text="Or check here to never receive any emails:" %}
+{% email_subscriptions_confirmation "email_subscriptions_confirmation" %}
+{% email_subscriptions_confirmation "email_subscriptions_confirmation" header="Communication Preferences", label="Subscriptions Update Confirmation", unsubscribe_all_success="You have successfully unsubscribed from all email communications.", subscription_update_success="You have successfully updated your email preferences.", subheader_text="If this is not your email address, please ignore this page since the email associated with this page was most likely forwarded to you." %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="style.css" />
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+    {% endblock %}
+</head>
+<body>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+        {% endblock %}
+    </div>
+</body>
+</html>
+{% extends "custom/page/web_page_basic/my_template.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1>Index</h1>
+    <p class="important">
+      Welcome to my awesome homepage.
+    </p>
+{% endblock %}
+{% flip val_true %}
+world
+{% with %}
+hello
+{% endflip %}
+{% flip val_false %}
+world
+{% with %}
+hello
+{% endflip %}
+{% follow_me "follow_me" %}
+{% follow_me "follow_us" title="Follow Us", module_title_tag="h2" %}
+{% for item in items %}
+    {{ item }}
+{% endfor %}
+{% for value in dictionary %}
+    {{ value }}
+{% endfor %}
+{% for key, value in dictionary.items() %}
+    {{ key }}: {{ value }}
+{% endfor %}
+{% for content in contents %}
+    Post content variables
+{% endfor %}
+{% form "my_form" %}
+{% form "my_form" label="My Form", custom_form_html=None, no_title=False, title="" %}
+{% macro header(tag, title_text) %}
+    <header> <{{ tag }}>{{ title_text }} </{{tag}}> </header>
+{% endmacro %}
+{% macro footer(tag, footer_text) %}
+    <footer> <{{ tag }}>{{ footer_text }} </{{tag}}> </footer>
+{% endmacro %}
+{% from 'custom/page/web_page_basic/my_macros.html' import footer %}
+{{ footer('h2', 'My footer info') }}
+{% gallery "gallery" %}
+{% widget_block gallery "crm_slider" sizing="static", only_thumbnails=False, transition="slide", caption_position="below", with_thumbnail_nav=False, lightbox=False, auto_advance=True, overrideable=True, show_pagination=True, label="Gallery", loop_slides=True, num_seconds=5, version='1' %}
+{% widget_attribute "slides" is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url": "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts", "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240", "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile", "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text": "HubSpot CRM Contact Profile", "img_src": "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240", "open_in_new_tab": true}]{% end_widget_attribute %}
+{% end_widget_block %}
+{% global_widget "global_widget" %}
+{% global_widget "facebook_fan_box" overrideable=False, label='Facebook Fan Box' %}
+{% google_search "google_search" %}
+{% google_search "my_search_bar" label="Google Search", prefill_input_with_pathname=True, search_field_label="Search this site on Google", search_button_text="Search Google" %}
+{% header "header" %}
+{% header "my_header" header_tag="h1", overrideable=True, value="A clear and bold header", label="Header" %}
+{% icon name="address-card" icon_set="fontawesome-5" style="solid" format="svg" width="64" height="64", purpose="semantic", title="address-card icon" %}
+{% icon name="address-card" %}
+{% if condition %}
+If the condition is true print this to template.
+{% endif %}
+{% if number <= 2 %}
+Variable named number is less than or equal to 2.
+{% elif number <= 4 %}
+Variable named number is less than or equal to 4.
+{% elif number <= 6 %}
+Variable named number is less than or equal to 6.
+{% else %}
+Variable named number is greater than 6.
+{% endif %}
+{% image "image" %}
+{% image "executive_image" label="Executive photo", alt="Photo of Brian Halligan", src="//cdn2.hubspot.net/hub/53/file-733888619-jpg/assets/hubspot.com/about/management/brian-home.jpg", width="300", loading="lazy" %}
+{% image_slider "image_slider" %}
+{% widget_block image_slider "crm_slider" sizing="static", only_thumbnails=False, transition="slide", caption_position="below", with_thumbnail_nav=False, lightbox=False, auto_advance=True, overrideable=True, show_pagination=True, label="Image Slider", loop_slides=True, num_seconds=5, version='0' %}
+{% widget_attribute "slides" is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url": "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts", "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240", "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile", "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text": "HubSpot CRM Contact Profile", "img_src": "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240", "open_in_new_tab": true}]{% end_widget_attribute %}
+{% end_widget_block %}
+{% image_src "image_src" %}
+{% image_src "executve_image_src" src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg", no_wrapper=True %}
+{# replace 1 #}
+{% import 'custom/page/web_page_basic/my_macros.html' as header_footer %}
+{{ header_footer.header('h1', 'My page title') }}
+{{ header_footer.footer('h3', 'Company footer info') }}
+{% include "custom/page/web_page_basic/my_footer.html" %}
+{% include "generated_global_groups/2781996615.html" %}
+{% include "hubspot/styles/patches/recommended.css" %}
+{% inline_rich_text "inline_rich_text" field="my_text_field" %}
+{% inline_rich_text "inline_rich_text" field="my_text_field" html="<p>My rich text default content</p>" %}
+{% inline_text "text" field="my_text_field" %}
+{% inline_text "simple_text_field" field="my_text_field" value="This is the default value for this text field" %}
+{% language_switcher "language_switcher" %}
+{% language_switcher  "language_switcher" display_mode="hybrid" %}
+
+{% linked_image "linked_image" %}
+{% linked_image "my_linked_image" label="My Linked Image", align="left", alt="Click the button", height=240, hspace="3", link="", src="http://mycdn.com/images/my-image.png", style="border: 1px solid red;", width=400, loading="lazy" %}
+{% logo "logo" %}
+{% logo "my_logo" label="Logo", src="//cdn2.hubspot.net/hub/53/file-1237149549-png/assets/hubspot.com/V2-Global/hubspot-logo-dark.png", width=200 %}
+{% macro name_of_macro(argument_name, argument_name2) %}
+    {{ argument_name }}
+    {{ argument_name2 }}
+{% endmacro %}
+{{ name_of_macro("value to pass to argument 1", "value to pass to argument 2") }}
+{% macro trans(value) %}
+   -webkit-transition: {{value}};
+   -moz-transition: {{value}};
+   -o-transition: {{value}};
+   -ms-transition: {{value}};
+   transition: {{value}};
+{% endmacro %}
+a { {{ trans("all .2s ease-in-out") }} }
+{% member_login "my_login" %}
+{% member_login "my_login" email_label="Email", password_label="Password", remember_me_label="Remember Me", submit_button_text="Login", reset_password_text="Forgot your password?", show_password="Show password" %}
+{% member_register "my_register" %}
+{% member_register "my_register" email_label="Email", password_label="Password", password_confirm_label="Confirm Password", submit_button_text="Save password", show_password="Show password" %}
+{% menu "menu" id="123" %}
+{% menu "my_menu" id="456", site_map_name="Default", overrideable=False, root_type="site_root", flyouts="true", max_levels="2", flow="horizontal", label="Advanced Menu" %}
+{% module "module" module_id=123 %}
+{% module "module" path="/absolute/path/to/Module" %}
+{% module "module" path="relative/path/to/Module" %}
+{% module "module" path="@hubspot/rich_text" %}
+{% module "employee_quote" module_id=456, label="Employee image and quote section" %}
+{% module_block rich_text "my_text_block" overrideable=True, label="Right Column" %}
+   {% module_attribute "html" %}
+       <h2>Something Powerful</h2>
+       <p>Some paragraph content...</p>
+   {% end_module_attribute %}
+{% end_module_block %}
+{% page_footer "page_footer" %}
+{% password_prompt "my_password_prompt" %}
+{% password_prompt "my_password_prompt" label="My Password Prompt", bad_password_message="<p>Sorry, please try again.</p>", submit_button_text="Submit", password_placeholder="Password" %}
+{% password_reset "my_password_reset" %}
+{% password_reset "my_password_reset" password_label="Password", password_confirm_label="Confirm Password", submit_button_text="Save password", show_password="Show password" %}
+{% password_reset_request "my_password_reset_request" %}
+{% password_reset_request "my_password_reset_request" email_label="Email", submit_button_text="Send reset email"%}
+{% post_filter "my_post_filter" %}
+{% post_filter "my_post_filter" label="My Post Filter", expand_link_text="see all", filter_type="tag", list_title="Lists by Tag", max_links=5, order_by="post_count", select_blog="default" %}
+{% post_listing "my_post_listing" %}
+{% post_listing "my_post_listing" label="My Post Listing", list_title="Recent Posts", listing_type="recent", max_links=5, select_blog="default" %}
+{% set string_to_echo = "Print me" %}
+{% print string_to_echo %}
+{% raw %}
+    The personalization token for a contact's first name is {{ contact.firstname }}
+{% endraw %}
+{% raw_html "raw_html" %}
+{% raw_html "my_raw_html" label="Enter HTML here", value="<div>My HTML Block</div>" %}
+{% related_blog_posts %}
+{% related_blog_posts blog_ids="1,2", limit=5, tags="Sales enablement, couches", end_date="2018-04-10", blog_authors="John Smith,Joe Smith,Frank Smith", path_prefixes="/path-prefix", post_formatter="test_macro" %}
+{% rich_text "rich_text" %}
+{% rich_text "my_rich_text" label="Enter text here" html="<p>My rich text default content</p>" %}
+{% widget_block rich_text "right_column" overrideable=True, label="Right Column" %}
+{% widget_attribute "html" %}
+<h2>Something Powerful</h2>
+<p>Some paragraph content...</p>
+{% end_widget_attribute %}
+{% end_widget_block %}
+{% rss_listing "rss_listing" %}
+{% rss_listing "my_rss_listing" rss_url="", publish_date_text="posted at", feed_source={rss_url="", is_external=False, content_group_id="24732847"}, click_through_text="Read more", show_date=True, include_featured_image=True, overrideable=False, publish_date_format="short", show_detail=True, show_author=True, number_of_items="5", is_external=False, title="", content_group_id="24732847", label="RSS Listing", limit_to_chars="200", attribution_text="by" %}
+{% section_header "section_header" %}
+{% section_header "my_section_header" header="A clear and bold header", subheader="A more subdued subheader", label="Sidebar Header" %}
+{% set primaryColor = "#F7761F" %}
+{{ primaryColor }}
+
+{% set var_one = "String 1" %}
+{% set var_two = "String 2" %}
+{% set sequence = [var_one,  var_two] %}
+{% set name = 'Jack' %}
+{% set message %}
+My name is {{ name }}
+{% end_set %}
+{% simple_menu "simple_menu" %}
+{% simple_menu "my_simple_menu" orientation="horizontal", label="Simple Menu" %}
+{% social_sharing "social_sharing" use_page_url=True %}
+{% widget_block social_sharing "my_social_sharing" label="Social Sharing", use_page_url=True, overrideable=True %}
+{% widget_attribute "pinterest" is_json=True %}{"custom_link_format": "", "pinterest_media": "http://cdn2.hubspot.net/hub/158015/305390_10100548508246879_837195_59275782_6882128_n.jpg", "enabled": true, "network": "pinterest", "img_src": "https://static.hubspot.com/final/img/common/icons/social/pinterest-24x24.png"}{% end_widget_attribute %}
+{% widget_attribute "twitter" is_json=True %}{"custom_link_format": "", "enabled": true, "network": "twitter", "img_src": "https://static.hubspot.com/final/img/common/icons/social/twitter-24x24.png"}{% end_widget_attribute %}
+{% widget_attribute "linkedin" is_json=True %}{"custom_link_format": "", "enabled": true, "network": "linkedin", "img_src": "https://static.hubspot.com/final/img/common/icons/social/linkedin-24x24.png"}{% end_widget_attribute %}
+{% widget_attribute "facebook" is_json=True %}{"custom_link_format": "", "enabled": true, "network": "facebook", "img_src": "https://static.hubspot.com/final/img/common/icons/social/facebook-24x24.png"}{% end_widget_attribute %}
+{% widget_attribute "email" is_json=True %}{"custom_link_format": "", "enabled": true, "network": "email", "img_src": "https://static.hubspot.com/final/img/common/icons/social/email-24x24.png"}{% end_widget_attribute %}
+{% end_widget_block %}
+{% space "space" %}
+{% space "my_spacer" label="Horizontal Spacer" %}
+{% module_block raw_html "module_block raw_html" definition_id=2801831944, overrideable=False, smart_type="GEO_IP", label="Custom HTML" %}
+{% module_attribute "value" %}
+Default smart content value
+{% end_module_attribute %}
+{% targeted_module_attribute "value" label="Custom HTML", criterion_id=2801831949, order=0, target_type="CUSTOM_HTML_WIDGET"  %}
+Smart content rule 1
+{% end_targeted_module_attribute %}
+{% end_module_block %}
+{% widget_block raw_html "widget_block raw_html" definition_id=2801831944, overrideable=False, smart_type="GEO_IP", label="Custom HTML" %}
+{% widget_attribute "value" %}
+Default smart content value
+{% end_widget_attribute %}
+{% targeted_widget_attribute "value" label="Custom HTML", criterion_id=2801831949, order=0, target_type="CUSTOM_HTML_WIDGET"  %}
+Smart content rule 1
+{% end_targeted_widget_attribute %}
+{% end_widget_block %}
+{% text "text" %}
+{% text "simple_text_field" label="Enter text here", value="This is the default value for this text field" %}
+{% textarea "textarea" %}
+{% textarea "my_textarea" label="Enter plain text block", value="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a urna quis lacus vehicula rutrum.", no_wrapper=True %}
+{% unless x < 0 %} x is greater than zero {% endunless %}
+{% video_player "embed_player" player_id="1234", type="script", label="good player", width="300", height="200", play_button_color="#006643", hide_playlist=True, full_width=False %}
+{% widget_block rich_text "my_text_block" overrideable=True, label="Right Column" %}
+   {% widget_attribute "html" %}
+       <h2>Something Powerful</h2>
+       <p>Some paragraph content...</p>
+   {% end_widget_attribute %}
+{% end_widget_block %}
+{% widget_block rich_text "my_text_block" overrideable=True, label="Right Column" %}
+{% widget_attribute "html" %}
+<h2>Something Powerful</h2>
+<p>Some paragraph content...</p>
+{% end_widget_attribute %}
+{% end_widget_block %}
+{% widget_container "widget_container" %}
+{% end_widget_container %}
+{% widget_container "my_flexible_column" %}
+    {% rich_text "my_rich_text" %}
+    {% rich_text "second_rich_text" %}
+{% end_widget_container %}
+{% widget_wrapper 'unique_key' %}
+    <div>
+        {{ html }}
+    </div>
+{% end_widget_wrapper %}
+
+{% some_widget 'other_unique_key' widget_wrapper={type='inline', value='unique_key'} %}
