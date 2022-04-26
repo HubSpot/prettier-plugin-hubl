@@ -55,7 +55,8 @@ function installCompat(env) {
       Parser.prototype.parsePostfix = orig_Parse_parsePostfix;
     }
   }
-  const tests = [
+
+  const builtInTests = [
     "divisibleby",
     "equalto",
     "eq",
@@ -315,8 +316,7 @@ function installCompat(env) {
           lookup = new nodes.Literal(val.lineno, val.colno, val.value);
 
           node = new nodes.LookupVal(tok.lineno, tok.colno, node, lookup);
-        } else if (node && tests.includes(node.value)) {
-          console.log(node.value);
+        } else if (node && builtInTests.includes(node.value)) {
           node = new nodes.FunCall(
             tok.lineno,
             tok.colno,
