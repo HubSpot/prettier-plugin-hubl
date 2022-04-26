@@ -160,12 +160,20 @@ function printHubl(node) {
       return group(unlessParts);
     case "Div":
       return group([printHubl(node.left), " / ", printHubl(node.right)]);
+    case "Mul":
+      return group([printHubl(node.left), " * ", printHubl(node.right)]);
+    case "Mod":
+      return group([printHubl(node.left), " % ", printHubl(node.right)]);
+    case "Pow":
+      return group([printHubl(node.left), " ** ", printHubl(node.right)]);
     case "Neg":
       return group(["-", printHubl(node.target)]);
     case "Sub":
       return group([printHubl(node.left), " - ", printHubl(node.right)]);
     case "Add":
       return group([printHubl(node.left), " + ", printHubl(node.right)]);
+    case "In":
+      return group([printHubl(node.left), " in ", printHubl(node.right)]);
     case "Output":
       return node.children.map((child) => {
         if (child.typename === "TemplateData") {
