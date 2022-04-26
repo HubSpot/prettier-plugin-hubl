@@ -139,3 +139,15 @@ Infinity
 <{{ module.list_type }} class="list">
 What is this element?
 </{{ module.list_type }}>
+
+{{ foo is equalto "bar" }}
+{{ foo is equalto("bar") }}
+
+{{ foo is equalto var }}
+{{ foo is equalto(var) }}
+
+{{ foo is not equalto "baz" }}
+{{ foo is not equalto("baz") }}
+
+{% if var is string_startingwith "v" %}{% endif %}
+{% if var is string_startingwith("v") %}{% endif %}
