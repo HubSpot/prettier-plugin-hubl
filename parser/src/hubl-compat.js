@@ -23,6 +23,7 @@ function installCompat(env) {
   var orig_Parser_parseFilter;
   var orig_Parser_parseAnd;
   var orig_Parse_parseNot;
+  var orig_Parse_parsePostfix;
   if (Compiler) {
     orig_Compiler_assertType = Compiler.prototype.assertType;
   }
@@ -34,6 +35,7 @@ function installCompat(env) {
     orig_Parser_parseFilter = Parser.prototype.parseFilter;
     orig_Parser_parseAnd = Parser.prototype.parseAnd;
     orig_Parse_parseNot = Parser.prototype.parseNot;
+    orig_Parse_parsePostfix = Parser.prototype.parsePostfix;
   }
 
   function uninstall() {
@@ -50,8 +52,26 @@ function installCompat(env) {
       Parser.prototype.parseFilter = orig_Parser_parseFilter;
       Parser.prototype.parseAnd = orig_Parser_parseAnd;
       Parser.prototype.parseNot = orig_Parse_parseNot;
+      Parser.prototype.parsePostfix = orig_Parse_parsePostfix;
     }
   }
+  const tests = [
+    "divisibleby",
+    "equalto",
+    "eq",
+    "sameas",
+    "ge",
+    "greaterthan",
+    "gt",
+    "le",
+    "lessthan",
+    "lt",
+    "ne",
+    "string_containing",
+    "string_startingwith",
+    "containing",
+    "containingall",
+  ];
 
   runtime.contextOrFrameLookup = function contextOrFrameLookup(
     context,
@@ -246,6 +266,68 @@ function installCompat(env) {
           this.fail(
             "parseUnless: expected else, or endunless, got end of file"
           );
+      }
+
+      return node;
+    };
+
+    Parser.prototype.parsePostfix = function parsePostfix(node) {
+      let lookup;
+      let tok = this.peekToken();
+
+      while (tok) {
+        if (tok.type === lexer.TOKEN_LEFT_PAREN) {
+          // Function call
+          node = new nodes.FunCall(
+            tok.lineno,
+            tok.colno,
+            node,
+            this.parseSignature()
+          );
+        } else if (tok.type === lexer.TOKEN_LEFT_BRACKET) {
+          // Reference
+          lookup = this.parseAggregate();
+          if (lookup.children.length > 1) {
+            this.fail("invalid index");
+          }
+
+          node = new nodes.LookupVal(
+            tok.lineno,
+            tok.colno,
+            node,
+            lookup.children[0]
+          );
+        } else if (tok.type === lexer.TOKEN_OPERATOR && tok.value === ".") {
+          // Reference
+          this.nextToken();
+          const val = this.nextToken();
+
+          if (val.type !== lexer.TOKEN_SYMBOL) {
+            this.fail(
+              "expected name as lookup value, got " + val.value,
+              val.lineno,
+              val.colno
+            );
+          }
+
+          // Make a literal string because it's not a variable
+          // reference
+          lookup = new nodes.Literal(val.lineno, val.colno, val.value);
+
+          node = new nodes.LookupVal(tok.lineno, tok.colno, node, lookup);
+        } else if (node && tests.includes(node.value)) {
+          console.log(node.value);
+          node = new nodes.FunCall(
+            tok.lineno,
+            tok.colno,
+            node,
+            new nodes.NodeList(tok.lineno, tok.colno, [this.parseExpression()])
+          );
+        } else {
+          break;
+        }
+
+        tok = this.peekToken();
       }
 
       return node;

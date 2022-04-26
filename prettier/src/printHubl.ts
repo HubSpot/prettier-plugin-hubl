@@ -316,6 +316,13 @@ function printHubl(node) {
         group([`{% endmacro %}`]),
       ];
     case "Not":
+      if (node.target.typename === "Is") {
+        return [
+          printHubl(node.target.left),
+          " is not ",
+          printHubl(node.target.right),
+        ];
+      }
       return ["not ", printHubl(node.target)];
     case "Group":
       return group([
