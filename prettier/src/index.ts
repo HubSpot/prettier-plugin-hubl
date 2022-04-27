@@ -135,6 +135,8 @@ const unTokenize = (input) => {
     }
     input = input.replaceAll(key, value);
   });
+  tokenMap.clear();
+
   const COMMENT_START_REGEX = /{#/gm;
   const COMMENT_END_REGEX = /#}/gm;
   input = input.replace(COMMENT_START_REGEX, "{% comment %}<!--");
