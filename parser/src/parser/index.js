@@ -4,7 +4,6 @@ const lib = require("./lib");
 const parser = require("./parser");
 const lexer = require("./lexer");
 const nodes = require("./nodes");
-// const installJinjaCompat = require("./jinja-compat");
 
 // A single instance of an environment, since this is so commonly used
 let e;
@@ -43,7 +42,5 @@ module.exports = {
   lexer: lexer,
   lib: lib,
   nodes: nodes,
-  // TODO: once hubl-compat is moved into this package, rework this
-  // installJinjaCompat: installJinjaCompat,
   configure: configure,
 };

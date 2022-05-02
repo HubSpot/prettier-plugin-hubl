@@ -1,10 +1,6 @@
 /**
- * Parser Code - https://github.com/mozilla/nunjucks/blob/master/nunjucks/src/parser.js
- * API - https://mozilla.github.io/nunjucks/api.html
- *
- * Overview: nunjucks is the JS version of Jinja.  It has some differences, however
- * we install full Jinja compatibility using the `nunjucks.installJinjaCompat()` function.
- * For testing, we use the `testInput` function.  For actual release, we export the `parse` function.
+ * This parser is built upon the Nunjucks parser.
+ * Please see NOTICE.md for license information
  */
 import parser from "./parser";
 import { Parser } from "./types/parser";
