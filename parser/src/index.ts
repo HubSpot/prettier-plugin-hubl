@@ -6,7 +6,7 @@
  * we install full Jinja compatibility using the `nunjucks.installJinjaCompat()` function.
  * For testing, we use the `testInput` function.  For actual release, we export the `parse` function.
  */
-import nunjucks from "nunjucks";
+import nunjucks from "./parser";
 import { Parser } from "./types/parser";
 import Tags from "./Tags";
 import installCompat from "./hubl-compat.js";
