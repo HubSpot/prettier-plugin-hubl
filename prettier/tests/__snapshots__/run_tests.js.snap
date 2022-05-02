@@ -1467,7 +1467,23 @@ Infinity
 <{{ module.list_type }} class="list">
 What is this element?
 </{{ module.list_type }}>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ foo is equalto "bar" }}
+{{ foo is equalto("bar") }}
+
+{{ foo is equalto var }}
+{{ foo is equalto(var) }}
+
+{{ foo is not equalto "baz" }}
+{{ foo is not equalto("baz") }}
+
+{% if var is string_startingwith "v" %}{% endif %}
+{% if var is string_startingwith("v") %}{% endif %}
+
+{{ foo in bar }}
+{{ foo % bar }}
+{{ foo ** bar }}
+{{ foo * bar }}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% if sky != "blue" %}
   Clouds
 {% endif %}
@@ -1617,6 +1633,23 @@ What is this element?
 {% endunless %}
 
 <{{ module.list_type }} class="list"> What is this element? </{{ module.list_type }}>
+
+{{ foo is equalto("bar") }}
+{{ foo is equalto("bar") }}
+
+{{ foo is equalto(var) }}
+{{ foo is equalto(var) }}
+
+{{ foo is not equalto("baz") }}
+{{ foo is not equalto("baz") }}
+
+{% if var is string_startingwith("v") %}{% endif %}
+{% if var is string_startingwith("v") %}{% endif %}
+
+{{ foo in bar }}
+{{ foo % bar }}
+{{ foo ** bar }}
+{{ foo * bar }}
 
 `;
 
@@ -4193,5 +4226,10 @@ exports[`website-header.html 1`] = `
     class="content-wrapper" %}
   {% end_dnd_area %}
 </header>
+
+`;
+
+exports[`whitespace.html 1`] = `
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 `;
