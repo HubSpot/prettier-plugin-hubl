@@ -91,6 +91,7 @@ const LookupVal = Node.extend("LookupVal", { fields: ["target", "val"] });
 const If = Node.extend("If", { fields: ["cond", "body", "else_"] });
 const IfAsync = If.extend("IfAsync");
 const InlineIf = Node.extend("InlineIf", { fields: ["cond", "body", "else_"] });
+const Ternary = Node.extend("Ternary", { fields: ["cond", "body", "else"] });
 const For = Node.extend("For", { fields: ["arr", "name", "body", "else_"] });
 const AsyncEach = For.extend("AsyncEach");
 const AsyncAll = For.extend("AsyncAll");
@@ -245,6 +246,7 @@ module.exports = {
   If: If,
   IfAsync: IfAsync,
   InlineIf: InlineIf,
+  Ternary: Ternary,
   For: For,
   AsyncEach: AsyncEach,
   AsyncAll: AsyncAll,

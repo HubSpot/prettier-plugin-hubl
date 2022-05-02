@@ -17,25 +17,12 @@ function installCompat(env) {
   // var orig_memberLookup = runtime.memberLookup;
   var orig_Compiler_assertType;
   var orig_Parser_parseAggregate;
-  var orig_Parser_parseExpression;
-  var orig_Parser_parseStatement;
-  var orig_Parser_parseOr;
-  var orig_Parser_parseFilter;
-  var orig_Parser_parseAnd;
-  var orig_Parse_parseNot;
-  var orig_Parse_parsePostfix;
+
   // if (Compiler) {
   //   orig_Compiler_assertType = Compiler.prototype.assertType;
   // }
   if (Parser) {
     orig_Parser_parseAggregate = Parser.prototype.parseAggregate;
-    orig_Parser_parseExpression = Parser.prototype.parseExpression;
-    orig_Parser_parseStatement = Parser.prototype.parseStatement;
-    orig_Parser_parseOr = Parser.prototype.parseOr;
-    orig_Parser_parseFilter = Parser.prototype.parseFilter;
-    orig_Parser_parseAnd = Parser.prototype.parseAnd;
-    orig_Parse_parseNot = Parser.prototype.parseNot;
-    orig_Parse_parsePostfix = Parser.prototype.parsePostfix;
   }
 
   function uninstall() {
@@ -46,33 +33,8 @@ function installCompat(env) {
     // }
     if (Parser) {
       Parser.prototype.parseAggregate = orig_Parser_parseAggregate;
-      Parser.prototype.parseExpression = orig_Parser_parseExpression;
-      Parser.prototype.parseStatement = orig_Parser_parseStatement;
-      Parser.prototype.parseOr = orig_Parser_parseOr;
-      Parser.prototype.parseFilter = orig_Parser_parseFilter;
-      Parser.prototype.parseAnd = orig_Parser_parseAnd;
-      Parser.prototype.parseNot = orig_Parse_parseNot;
-      Parser.prototype.parsePostfix = orig_Parse_parsePostfix;
     }
   }
-
-  const builtInTests = [
-    "divisibleby",
-    "equalto",
-    "eq",
-    "sameas",
-    "ge",
-    "greaterthan",
-    "gt",
-    "le",
-    "lessthan",
-    "lt",
-    "ne",
-    "string_containing",
-    "string_startingwith",
-    "containing",
-    "containingall",
-  ];
 
   // runtime.contextOrFrameLookup = function contextOrFrameLookup(
   //   context,
@@ -130,28 +92,6 @@ function installCompat(env) {
   //   this._compileExpression(node.step, frame);
   //   this._emit(")");
   // };
-
-  Parser.prototype.parseExpression = function parseExpression() {
-    // Register new ternary type
-    const Ternary = nodes.Node.extend("Ternary", {
-      fields: ["cond", "body", "else"],
-    });
-    let node = this.parseInlineIf();
-
-    // Search ahead for ?, which isn't an official lexer token
-    if (this.skipSymbol("?")) {
-      const bodyNode = this.parseExpression();
-      const condNode = node;
-      node = new Ternary(node.lineno, node.colno);
-      node.body = bodyNode;
-      node.cond = condNode;
-      if (this.expect(lexer.TOKEN_COLON)) {
-        node.else = this.parseExpression();
-      }
-    }
-
-    return node;
-  };
 
   Parser.prototype.parseAggregate = function parseAggregate() {
     var origState = getTokensState(this.tokens);
@@ -214,224 +154,6 @@ function installCompat(env) {
     }
   };
 
-  Parser.prototype.parseAnd = function parseAnd() {
-    let node = this.parseNot();
-    // Adds a check for the && symbol
-    while (this.skipSymbol("&&") || this.skipSymbol("and")) {
-      const node2 = this.parseNot();
-      node = new nodes.And(node.lineno, node.colno, node, node2);
-    }
-    return node;
-  };
-
-  Parser.prototype.parseNot = function parseNot() {
-    const tok = this.peekToken();
-    // Add a check for the ! token
-    if (this.skipValue(lexer.TOKEN_OPERATOR, "!") || this.skipSymbol("not")) {
-      return new nodes.Not(tok.lineno, tok.colno, this.parseNot());
-    }
-    return this.parseIn();
-  };
-
-  Parser.prototype.parseUnless = function parseUnless() {
-    const Unless = nodes.Node.extend("Unless", {
-      fields: ["cond", "body", "_else"],
-    });
-
-    const tag = this.peekToken();
-    let node;
-
-    if (this.skipSymbol("unless")) {
-      node = new Unless(tag.lineno, tag.colno);
-    } else {
-      this.fail("parseUnless: expected unless, else", tag.lineno, tag.colno);
-    }
-
-    node.cond = this.parseExpression();
-    this.advanceAfterBlockEnd(tag.value);
-
-    node.body = this.parseUntilBlocks("else", "endunless");
-    const tok = this.peekToken();
-
-    switch (tok && tok.value) {
-      case "else":
-        this.advanceAfterBlockEnd();
-        node.else_ = this.parseUntilBlocks("endunless");
-        this.advanceAfterBlockEnd();
-        break;
-      case "endunless":
-        node.else_ = null;
-        this.advanceAfterBlockEnd();
-        break;
-      default:
-        this.fail("parseUnless: expected else, or endunless, got end of file");
-    }
-
-    return node;
-  };
-
-  Parser.prototype.parsePostfix = function parsePostfix(node) {
-    let lookup;
-    let tok = this.peekToken();
-
-    while (tok) {
-      if (tok.type === lexer.TOKEN_LEFT_PAREN) {
-        // Function call
-        node = new nodes.FunCall(
-          tok.lineno,
-          tok.colno,
-          node,
-          this.parseSignature()
-        );
-      } else if (tok.type === lexer.TOKEN_LEFT_BRACKET) {
-        // Reference
-        lookup = this.parseAggregate();
-        if (lookup.children.length > 1) {
-          this.fail("invalid index");
-        }
-
-        node = new nodes.LookupVal(
-          tok.lineno,
-          tok.colno,
-          node,
-          lookup.children[0]
-        );
-      } else if (tok.type === lexer.TOKEN_OPERATOR && tok.value === ".") {
-        // Reference
-        this.nextToken();
-        const val = this.nextToken();
-
-        if (val.type !== lexer.TOKEN_SYMBOL) {
-          this.fail(
-            "expected name as lookup value, got " + val.value,
-            val.lineno,
-            val.colno
-          );
-        }
-
-        // Make a literal string because it's not a variable
-        // reference
-        lookup = new nodes.Literal(val.lineno, val.colno, val.value);
-
-        node = new nodes.LookupVal(tok.lineno, tok.colno, node, lookup);
-      } else if (node && builtInTests.includes(node.value)) {
-        node = new nodes.FunCall(
-          tok.lineno,
-          tok.colno,
-          node,
-          new nodes.NodeList(tok.lineno, tok.colno, [this.parseExpression()])
-        );
-      } else {
-        break;
-      }
-
-      tok = this.peekToken();
-    }
-
-    return node;
-  };
-
-  Parser.prototype.parseStatement = function parseStatement() {
-    var tok = this.peekToken();
-    var node;
-
-    if (tok.type !== lexer.TOKEN_SYMBOL) {
-      this.fail("tag name expected", tok.lineno, tok.colno);
-    }
-
-    if (
-      this.breakOnBlocks &&
-      lib.indexOf(this.breakOnBlocks, tok.value) !== -1
-    ) {
-      return null;
-    }
-
-    switch (tok.value) {
-      case "raw":
-        return this.parseRaw();
-      case "verbatim":
-        return this.parseRaw("verbatim");
-      case "if":
-      case "ifAsync":
-        return this.parseIf();
-      case "for":
-      case "asyncEach":
-      case "asyncAll":
-        return this.parseFor();
-      case "unless":
-        return this.parseUnless();
-      case "block":
-        return this.parseBlock();
-      case "extends":
-        return this.parseExtends();
-      case "include":
-        return this.parseInclude();
-      case "set":
-        return this.parseSet();
-      case "macro":
-        return this.parseMacro();
-      case "call":
-        return this.parseCall();
-      case "import":
-        return this.parseImport();
-      case "from":
-        return this.parseFrom();
-      case "filter":
-        return this.parseFilterStatement();
-      case "switch":
-        return this.parseSwitch();
-      default:
-        if (this.extensions.length) {
-          for (let i = 0; i < this.extensions.length; i++) {
-            const ext = this.extensions[i];
-            if (lib.indexOf(ext.tags || [], tok.value) !== -1) {
-              return ext.parse(this, nodes, lexer);
-            }
-          }
-        }
-        this.fail("unknown block tag: " + tok.value, tok.lineno, tok.colno);
-    }
-
-    return node;
-  };
-
-  Parser.prototype.parseOr = function parseOr() {
-    let node = this.parseAnd();
-
-    while (
-      // Adds a check for the PIPE token followed by another PIPE char
-      (this.skip(lexer.TOKEN_PIPE) && this.tokens._extractString("|")) ||
-      this.skipSymbol("or")
-    ) {
-      const node2 = this.parseAnd();
-      node = new nodes.Or(node.lineno, node.colno, node, node2);
-    }
-    return node;
-  };
-
-  Parser.prototype.parseFilter = function parseFilter(node) {
-    while (this.skip(lexer.TOKEN_PIPE)) {
-      // If we encounter ||, this is not a filter so back out and return node
-      if (this.tokens._extractString("|")) {
-        this.tokens.backN(2);
-        return node;
-      }
-      const name = this.parseFilterName();
-
-      node = new nodes.Filter(
-        name.lineno,
-        name.colno,
-        name,
-        new nodes.NodeList(
-          name.lineno,
-          name.colno,
-          [node].concat(this.parseFilterArgs(node))
-        )
-      );
-    }
-
-    return node;
-  };
   // }
 
   // function sliceLookup(obj, start, stop, step) {
