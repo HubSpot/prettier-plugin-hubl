@@ -16,7 +16,7 @@ class Node extends Obj {
   init(lineno, colno, ...args) {
     this.lineno = lineno;
     this.colno = colno;
-
+    this.whiteSpaceData = {};
     this.fields.forEach((field, i) => {
       // The first two args are line/col numbers, so offset by 2
       var val = arguments[i + 2];

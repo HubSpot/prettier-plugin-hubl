@@ -129,6 +129,8 @@ class Parser extends Obj {
     if (tok && tok.type === lexer.TOKEN_BLOCK_END) {
       if (tok.value.charAt(0) === "-") {
         this.dropLeadingWhitespace = true;
+      } else {
+        this.dropLeadingWhitespace = false;
       }
     } else {
       this.fail("expected block end in " + name + " statement");
@@ -360,6 +362,8 @@ class Parser extends Obj {
         // this is done in `advanceAfterBlockEnd`
         if (nextTok.value.charAt(0) === "-") {
           this.dropLeadingWhitespace = true;
+        } else {
+          this.dropLeadingWhitespace = false;
         }
 
         this.nextToken();
@@ -459,7 +463,7 @@ class Parser extends Obj {
     return node;
   }
 
-  parseIf() {
+  parseIf(parentIf) {
     const tag = this.peekToken();
     let node;
 
@@ -469,31 +473,56 @@ class Parser extends Obj {
       this.skipSymbol("elseif")
     ) {
       node = new nodes.If(tag.lineno, tag.colno);
+      node.whiteSpaceData.start = this.dropLeadingWhitespace;
     } else if (this.skipSymbol("ifAsync")) {
       node = new nodes.IfAsync(tag.lineno, tag.colno);
     } else {
       this.fail("parseIf: expected if, elif, or elseif", tag.lineno, tag.colno);
     }
-
+    // this.dropLeadingWhitespace = false;
     node.cond = this.parseExpression();
     this.advanceAfterBlockEnd(tag.value);
-
+    node.whiteSpaceData.end = this.dropLeadingWhitespace;
+    // this.dropLeadingWhitespace = false;
     node.body = this.parseUntilBlocks("elif", "elseif", "else", "endif");
     const tok = this.peekToken();
-
     switch (tok && tok.value) {
       case "elseif":
       case "elif":
-        node.else_ = this.parseIf();
+        node.else_ = this.parseIf(node);
         break;
       case "else":
+        let elseNode = { start: this.dropLeadingWhitespace };
         this.advanceAfterBlockEnd();
+        elseNode.end = this.dropLeadingWhitespace;
         node.else_ = this.parseUntilBlocks("endif");
+        node.else_.whiteSpaceData = elseNode;
+        if (parentIf) {
+          parentIf.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
+        } else {
+          node.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
+        }
         this.advanceAfterBlockEnd();
+        if (parentIf) {
+          parentIf.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
+        } else {
+          node.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
+        }
+
         break;
       case "endif":
         node.else_ = null;
+        if (parentIf) {
+          parentIf.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
+        } else {
+          node.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
+        }
         this.advanceAfterBlockEnd();
+        if (parentIf) {
+          parentIf.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
+        } else {
+          node.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
+        }
         break;
       default:
         this.fail("parseIf: expected elif, else, or endif, got end of file");
@@ -1334,31 +1363,6 @@ class Parser extends Obj {
     while ((tok = this.nextToken())) {
       if (tok.type === lexer.TOKEN_DATA) {
         let data = tok.value;
-        const nextToken = this.peekToken();
-        const nextVal = nextToken && nextToken.value;
-
-        // If the last token has "-" we need to trim the
-        // leading whitespace of the data. This is marked with
-        // the `dropLeadingWhitespace` variable.
-        if (this.dropLeadingWhitespace) {
-          // TODO: this could be optimized (don't use regex)
-          data = data.replace(/^\s*/, "");
-          this.dropLeadingWhitespace = false;
-        }
-
-        // Same for the succeeding block start token
-        if (
-          nextToken &&
-          ((nextToken.type === lexer.TOKEN_BLOCK_START &&
-            nextVal.charAt(nextVal.length - 1) === "-") ||
-            (nextToken.type === lexer.TOKEN_VARIABLE_START &&
-              nextVal.charAt(this.tokens.tags.VARIABLE_START.length) === "-") ||
-            (nextToken.type === lexer.TOKEN_COMMENT &&
-              nextVal.charAt(this.tokens.tags.COMMENT_START.length) === "-"))
-        ) {
-          // TODO: this could be optimized (don't use regex)
-          data = data.replace(/\s*$/, "");
-        }
 
         buf.push(
           new nodes.Output(tok.lineno, tok.colno, [
@@ -1366,17 +1370,20 @@ class Parser extends Obj {
           ])
         );
       } else if (tok.type === lexer.TOKEN_BLOCK_START) {
-        this.dropLeadingWhitespace = false;
+        this.dropLeadingWhitespace = tok.value.charAt(2) === "-";
         const n = this.parseStatement();
         if (!n) {
           break;
         }
         buf.push(n);
       } else if (tok.type === lexer.TOKEN_VARIABLE_START) {
+        this.dropLeadingWhitespace = tok.value.charAt(2) === "-";
         const e = this.parseExpression();
-        this.dropLeadingWhitespace = false;
+        const variableNode = new nodes.Output(tok.lineno, tok.colno, [e]);
+        variableNode.whiteSpaceData.start = this.dropLeadingWhitespace;
         this.advanceAfterVariableEnd();
-        buf.push(new nodes.Output(tok.lineno, tok.colno, [e]));
+        variableNode.whiteSpaceData.end = this.dropLeadingWhitespace;
+        buf.push(variableNode);
       } else if (tok.type === lexer.TOKEN_COMMENT) {
         this.dropLeadingWhitespace =
           tok.value.charAt(

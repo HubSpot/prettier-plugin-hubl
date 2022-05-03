@@ -4,13 +4,22 @@ const {
   builders: { group, indent, dedent, join, hardline, line, softline, align },
 } = doc;
 
+const openTag = (stripWhitespace) => {
+  return stripWhitespace ? "{%-" : "{%";
+};
+const closeTag = (stripWhitespace) => {
+  return stripWhitespace ? "-%}" : "%}";
+};
+
 // Recurvisely print if elif and else
 const printElse = (node) => {
   if (node.else_ && node.else_.typename === "If") {
     const parts = [
-      "{% elif ",
+      openTag(node.else_.whiteSpaceData.start),
+      " elif ",
       printHubl(node.else_.cond),
-      " %}",
+      " ",
+      closeTag(node.else_.whiteSpaceData.end),
       indent(printBody(node.else_.body)),
     ];
     if (node.else_.else_) {
@@ -18,7 +27,12 @@ const printElse = (node) => {
     }
     return parts;
   } else if (node.else_ && node.else_.typename === "NodeList") {
-    return ["{% else %}", indent(printBody(node.else_))];
+    return [
+      openTag(node.else_.whiteSpaceData.start),
+      " else ",
+      closeTag(node.else_.whiteSpaceData.end),
+      indent(printBody(node.else_)),
+    ];
   }
 };
 
@@ -121,13 +135,23 @@ function printHubl(node) {
       return [printHubl(node.left), " is ", printHubl(node.right)];
     case "If":
       const ifParts = [
-        group(["{% if ", printHubl(node.cond), " %}"]),
+        group([
+          openTag(node.whiteSpaceData.start),
+          " if ",
+          printHubl(node.cond),
+          " ",
+          closeTag(node.whiteSpaceData.end),
+        ]),
         indent(printBody(node.body)),
       ];
       if (node.else_) {
         ifParts.push(printElse(node));
       }
-      ifParts.push("{% endif %}");
+      ifParts.push(
+        openTag(node.whiteSpaceData.closingTagStart),
+        " endif ",
+        closeTag(node.whiteSpaceData.closingTagEnd)
+      );
       return group(ifParts);
     case "InlineIf":
       if (node.else_) {
