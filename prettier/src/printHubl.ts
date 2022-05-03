@@ -318,14 +318,18 @@ function printHubl(node) {
       const forCol = node.colno;
       return [
         group([
-          "{% for ",
+          openTag(node.whiteSpaceData.start),
+          " for ",
           printHubl(node.name),
           " in ",
           printHubl(node.arr),
-          " %}",
+          " ",
+          closeTag(node.whiteSpaceData.end),
         ]),
         printHubl(node.body),
-        "{% endfor %}",
+        openTag(node.whiteSpaceData.closingTagStart),
+        " endfor ",
+        closeTag(node.whiteSpaceData.closingTagEnd),
       ];
     case "Macro":
       return [

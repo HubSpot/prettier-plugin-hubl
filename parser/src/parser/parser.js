@@ -170,6 +170,7 @@ class Parser extends Obj {
     } else {
       this.fail("parseFor: expected for{Async}", forTok.lineno, forTok.colno);
     }
+    node.whiteSpaceData.start = this.dropLeadingWhitespace;
 
     node.name = this.parsePrimary();
 
@@ -201,7 +202,11 @@ class Parser extends Obj {
     node.arr = this.parseExpression();
     this.advanceAfterBlockEnd(forTok.value);
 
+    node.whiteSpaceData.end = this.dropLeadingWhitespace;
+
     node.body = this.parseUntilBlocks(endBlock, "else");
+
+    node.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
 
     if (this.skipSymbol("else")) {
       this.advanceAfterBlockEnd("else");
@@ -209,6 +214,8 @@ class Parser extends Obj {
     }
 
     this.advanceAfterBlockEnd();
+
+    node.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
 
     return node;
   }
@@ -479,11 +486,9 @@ class Parser extends Obj {
     } else {
       this.fail("parseIf: expected if, elif, or elseif", tag.lineno, tag.colno);
     }
-    // this.dropLeadingWhitespace = false;
     node.cond = this.parseExpression();
     this.advanceAfterBlockEnd(tag.value);
     node.whiteSpaceData.end = this.dropLeadingWhitespace;
-    // this.dropLeadingWhitespace = false;
     node.body = this.parseUntilBlocks("elif", "elseif", "else", "endif");
     const tok = this.peekToken();
     switch (tok && tok.value) {
