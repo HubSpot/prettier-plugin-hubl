@@ -6,6 +6,10 @@ var Obj = require("./object").Obj;
 var lib = require("./lib");
 var { builtInTests } = require("./tests");
 
+const whiteSpace = {
+  openTag: { start: false, end: false },
+  closingTag: { start: false, end: false },
+};
 class Parser extends Obj {
   init(tokens) {
     this.tokens = tokens;
@@ -753,19 +757,30 @@ class Parser extends Obj {
   }
 
   parseRaw(tagName) {
+    const rawWhiteSpace = { ...whiteSpace };
+    rawWhiteSpace.openTag.start = this.dropLeadingWhitespace;
     tagName = tagName || "raw";
     const endTagName = "end" + tagName;
     // Look for upcoming raw blocks (ignore all other kinds of blocks)
+    // Group 1: raw content
+    // Group 2: end tag delimiter
+    // Group 3: end tag name
+    // Group 4: end tag delimiter
     const rawBlockRegex = new RegExp(
-      "([\\s\\S]*?){%-*\\s*(" + tagName + "|" + endTagName + ")\\s*(?=-*%})-*%}"
+      "([\\s\\S]*?)({%-*)\\s*(" +
+        tagName +
+        "|" +
+        endTagName +
+        ")\\s*(?=-*%})(-*%})"
     );
     let rawLevel = 1;
     let str = "";
     let matches = null;
-
     // Skip opening raw token
     // Keep this token to track line and column numbers
     const begun = this.advanceAfterBlockEnd();
+
+    rawWhiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     // Exit when there's nothing to match
     // or when we've found the matching "endraw" block
@@ -775,7 +790,16 @@ class Parser extends Obj {
     ) {
       const all = matches[0];
       const pre = matches[1];
-      const blockName = matches[2];
+      const blockName = matches[3];
+
+      // Since we're not user the lexer to parse the end tag, we need to
+      // manually check the start and end tags
+      if (matches[2] === "{%-") {
+        rawWhiteSpace.closingTag.start = true;
+      }
+      if (matches[4] === "-%}") {
+        rawWhiteSpace.closingTag.end = true;
+      }
 
       // Adjust rawlevel
       if (blockName === tagName) {
@@ -795,7 +819,9 @@ class Parser extends Obj {
       }
     }
 
-    return new nodes.Raw(begun.lineno, begun.colno, str);
+    const raw = new nodes.Raw(begun.lineno, begun.colno, str);
+    raw.whiteSpace = rawWhiteSpace;
+    return raw;
   }
 
   parsePostfix(node) {

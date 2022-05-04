@@ -4,11 +4,17 @@ const {
   builders: { group, indent, dedent, join, hardline, line, softline, align },
 } = doc;
 
-const openTag = (stripWhitespace) => {
-  return stripWhitespace.start ? "{%-" : "{%";
+const openTag = (whitepsace) => {
+  return whitepsace.start ? "{%-" : "{%";
 };
-const closeTag = (stripWhitespace) => {
-  return stripWhitespace.end ? "-%}" : "%}";
+const closeTag = (whitepsace) => {
+  return whitepsace.end ? "-%}" : "%}";
+};
+const openVar = (whitepsace) => {
+  return whitepsace.start ? "{{-" : "{{";
+};
+const closeVar = (whitepsace) => {
+  return whitepsace.end ? "-}}" : "}}";
 };
 
 // Recurvisely print if elif and else

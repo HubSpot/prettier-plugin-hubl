@@ -16,7 +16,10 @@ class Node extends Obj {
   init(lineno, colno, ...args) {
     this.lineno = lineno;
     this.colno = colno;
-    this.whiteSpace = { openTag: {}, closingTag: {} };
+    this.whiteSpace = {
+      openTag: { start: false, end: false },
+      closingTag: { start: false, end: false },
+    };
     this.fields.forEach((field, i) => {
       // The first two args are line/col numbers, so offset by 2
       var val = arguments[i + 2];
