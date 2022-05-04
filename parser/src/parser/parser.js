@@ -458,9 +458,14 @@ class Parser extends Obj {
     }
 
     const node = new nodes.Extends(tag.lineno, tag.colno);
-    node.template = this.parseExpression();
 
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
+
+    node.template = this.parseExpression();
     this.advanceAfterBlockEnd(tag.value);
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     return node;
   }
 

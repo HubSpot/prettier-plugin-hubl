@@ -404,7 +404,13 @@ function printHubl(node) {
         ")",
       ]);
     case "Extends":
-      return group(["{% extends ", printHubl(node.template), " %}"]);
+      return group([
+        openTag(node.whiteSpace.openTag),
+        " extends ",
+        printHubl(node.template),
+        " ",
+        closeTag(node.whiteSpace.openTag),
+      ]);
     default:
       if (node.type === "tag") {
         if (node.value) {
