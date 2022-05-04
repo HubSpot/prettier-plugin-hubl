@@ -247,6 +247,11 @@ class Parser extends Obj {
   }
 
   parseCall() {
+    const callWhiteSpace = {
+      openTag: { start: this.dropLeadingWhitespace, end: false },
+      closingTag: { start: false, end: false },
+    };
+
     // a call block is parsed as a normal FunCall, but with an added
     // 'caller' kwarg which is a Caller node.
     var callTok = this.peekToken();
@@ -258,33 +263,27 @@ class Parser extends Obj {
     const macroCall = this.parsePrimary();
 
     this.advanceAfterBlockEnd(callTok.value);
+
+    callWhiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     const body = this.parseUntilBlocks("endcall");
+
+    callWhiteSpace.closingTag.start = this.dropLeadingWhitespace;
+
     this.advanceAfterBlockEnd();
 
-    const callerName = new nodes.Symbol(
+    callWhiteSpace.closingTag.end = this.dropLeadingWhitespace;
+
+    const callNode = new nodes.Caller(
       callTok.lineno,
       callTok.colno,
-      "caller"
-    );
-    const callerNode = new nodes.Caller(
-      callTok.lineno,
-      callTok.colno,
-      callerName,
       callerArgs,
+      macroCall,
       body
     );
 
-    // add the additional caller kwarg, adding kwargs if necessary
-    const args = macroCall.args.children;
-    if (!(args[args.length - 1] instanceof nodes.KeywordArgs)) {
-      args.push(new nodes.KeywordArgs());
-    }
-    const kwargs = args[args.length - 1];
-    kwargs.addChild(
-      new nodes.Pair(callTok.lineno, callTok.colno, callerName, callerNode)
-    );
-
-    return new nodes.Output(callTok.lineno, callTok.colno, [macroCall]);
+    callNode.whiteSpace = callWhiteSpace;
+    return callNode;
   }
 
   parseWithContext() {

@@ -54,3 +54,7 @@ Content
 
 {%- widget_attribute -%}
 {%- end_widget_attribute -%}
+
+{%- call render_dialog("Hello World", "greeting") -%}
+<p>This is a paragraph tag that I want to render in my.</p>
+{%- endcall -%}

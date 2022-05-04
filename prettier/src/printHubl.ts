@@ -449,6 +449,22 @@ function printHubl(node) {
       ]);
     case "Pair":
       return [printHubl(node.key), " as ", printHubl(node.value)];
+    case "Caller":
+      return [
+        group([
+          openTag(node.whiteSpace.openTag),
+          " call ",
+          printHubl(node.args),
+          " ",
+          closeTag(node.whiteSpace.openTag),
+        ]),
+        printHubl(node.body),
+        group([
+          openTag(node.whiteSpace.closingTag),
+          " endcall ",
+          closeTag(node.whiteSpace.closingTag),
+        ]),
+      ];
     default:
       if (node.type === "tag") {
         if (node.value) {

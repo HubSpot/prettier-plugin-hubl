@@ -100,7 +100,7 @@ const For = Node.extend("For", { fields: ["arr", "name", "body", "else_"] });
 const AsyncEach = For.extend("AsyncEach");
 const AsyncAll = For.extend("AsyncAll");
 const Macro = Node.extend("Macro", { fields: ["name", "args", "body"] });
-const Caller = Macro.extend("Caller");
+const Caller = Macro.extend("Caller", { fields: ["name", "args", "body"] });
 const Import = Node.extend("Import", {
   fields: ["template", "target", "withContext"],
 });
