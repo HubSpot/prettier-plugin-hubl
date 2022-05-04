@@ -96,7 +96,9 @@ NO
                              test3=None,
                              test4=False,
                              title="" %}</div>
-  <img src="" />{{ variable|upper }}{% if x == "T" %}
+  <img src="" />
+  {{ variable|upper }}
+  {% if x == "T" %}
     GO
   {% else %}
     NO
@@ -3444,7 +3446,8 @@ caller=unknown type: Caller) }}
     <li>
       <p>{{ user.username|e }}</p>
       {{ caller(user) }}
-    </li>{% endfor %}
+    </li>
+    {%- endfor %}
   </ul>
 {% endmacro %}
 
@@ -3640,7 +3643,7 @@ caller=unknown type: Caller) }}
     custom_form_html=None,
     no_title=False,
     title="" %}
-  unknown type: FromImport
+  {% from "custom/page/web_page_basic/my_macros.html" import footer %}
   {{ footer("h2", "My footer info") }}
   {% gallery "gallery" %}
   {% widget_block gallery "crm_slider"
@@ -3740,8 +3743,8 @@ caller=unknown type: Caller) }}
  {% end_widget_block %} {% image_src "image_src" %} {% image_src
                                                                                                            "executve_image_src"
                                                                                                            src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
-                                                                                                           no_wrapper=True %} unknown type: Import {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }}
-  unknown type: Include unknown type: Include unknown type: Include {% inline_rich_text
+                                                                                                           no_wrapper=True %} {% import "custom/page/web_page_basic/my_macros.html" as header_footer %} {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }}
+  {% include "custom/page/web_page_basic/my_footer.html" %} {% include "generated_global_groups/2781996615.html" %} {% include "hubspot/styles/patches/recommended.css" %} {% inline_rich_text
                                                                                                                                                                              "inline_rich_text"
                                                                                                                                                                              field="my_text_field" %}
   {% inline_rich_text "inline_rich_text"
@@ -3869,10 +3872,10 @@ caller=unknown type: Caller) }}
     select_blog="default" %}
   {% set string_to_echo = "Print me" %}
   {% print string_to_echo %}
-
+  {% raw %}
   The personalization token for a contact's first name is
   {{ contact.firstname }}
-
+  {% endraw %}
   {% raw_html "raw_html" %}
   {% raw_html "my_raw_html"
     label="Enter HTML here",
@@ -4230,6 +4233,103 @@ exports[`website-header.html 1`] = `
 `;
 
 exports[`whitespace.html 1`] = `
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{- foo }}
+{{- bar -}}
+{{ baz -}}
+
+{%- set foo = bar %}
+{%- set foo = bar -%}
+{% set foo = bar -%}
+
+{%- if x -%}
+{% elif x -%}
+{%- else %}
+{%- endif %}
+
+{%- raw -%}
+{% set x=true %}
+{%- endraw %}
+
+{%- for foo in bar %}
+{% endfor -%}
+
+{%- unless foo -%}
+Content
+{%- else -%}
+{%- endunless -%}
+
+{%- block a -%}
+{%- endblock -%}
+
+{%- extends 'foo.html' -%}
+
+{%- include 'bar.html' -%}
+
+{%- set foo = "bar" -%}
+
+{%- macro foo() -%}
+Content
+{%- endmacro -%}
+
+{%- import 'foo.html' %}
+
+{%- import 'custom/page/web_page_basic/my_macros.html' as header_footer -%}
+
+{%- from 'custom/page/web_page_basic/my_macros.html' import footer -%}
+
+{% from "forms.html" import field, label as description %}
+
+{% from "forms.html" import field with context %}
+
+{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{ foo }}
+{{ bar }}
+{{ baz }}
+
+{%- set foo = bar %}
+{%- set foo = bar -%}
+{% set foo = bar -%}
+
+{%- if x -%}
+{% elif x -%}
+{%- else %}
+{%- endif %}
+
+{%- raw -%}
+{% set x=true %}
+{%- endraw %}
+
+{%- for foo in bar %}
+{% endfor -%}
+
+{%- unless foo -%}
+  Content
+{%- else -%}
+{%- endunless -%}
+
+{%- block a -%}
+{%- endblock a -%}
+
+{%- extends "foo.html" -%}
+
+{%- include "bar.html" -%}
+
+{%- set foo = "bar" -%}
+
+{%- macro foo() -%}
+  Content
+{%- endmacro -%}
+
+{%- import "foo.html" %}
+
+{%- import "custom/page/web_page_basic/my_macros.html" as header_footer -%}
+
+{%- from "custom/page/web_page_basic/my_macros.html" import footer -%}
+
+{% from "forms.html" import field, label as description %}
+
+{% from "forms.html" import field with context %}
+
+{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}
 
 `;
