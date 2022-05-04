@@ -221,7 +221,13 @@ function printHubl(node) {
         if (child.typename === "TemplateData") {
           return printHubl(child);
         }
-        return ["{{ ", printHubl(child), " }}"];
+        return [
+          openVar(node.whiteSpace.openTag),
+          " ",
+          printHubl(child),
+          " ",
+          closeVar(node.whiteSpace.openTag),
+        ];
       });
     case "NodeList":
       return node.children.map((child) => {
