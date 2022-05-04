@@ -122,7 +122,8 @@ function printHubl(node) {
       });
     case "Set":
       return [
-        "{% set ",
+        openTag(node.whiteSpace.openTag),
+        " set ",
         join(
           ", ",
           node.targets.map((target) => {
@@ -131,7 +132,8 @@ function printHubl(node) {
         ),
         " = ",
         printHubl(node.value),
-        " %}",
+        " ",
+        closeTag(node.whiteSpace.openTag),
       ];
     case "Concat":
       return [printHubl(node.left), " ~ ", printHubl(node.right)];

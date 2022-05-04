@@ -609,6 +609,8 @@ class Parser extends Obj {
 
     const node = new nodes.Set(tag.lineno, tag.colno, []);
 
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
+
     let target;
     while ((target = this.parsePrimary())) {
       node.targets.push(target);
@@ -638,6 +640,8 @@ class Parser extends Obj {
       node.value = this.parseExpression();
       this.advanceAfterBlockEnd(tag.value);
     }
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     return node;
   }
