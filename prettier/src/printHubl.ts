@@ -427,6 +427,15 @@ function printHubl(node) {
         " ",
         closeTag(node.whiteSpace.openTag),
       ]);
+    case "Import":
+      return group([
+        openTag(node.whiteSpace.openTag),
+        " import ",
+        printHubl(node.template),
+        [node.target ? [" as ", printHubl(node.target)] : []],
+        " ",
+        closeTag(node.whiteSpace.openTag),
+      ]);
     default:
       if (node.type === "tag") {
         if (node.value) {

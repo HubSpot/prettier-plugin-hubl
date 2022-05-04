@@ -327,26 +327,26 @@ class Parser extends Obj {
     }
 
     const template = this.parseExpression();
-
-    if (!this.skipSymbol("as")) {
-      this.fail(
-        'parseImport: expected "as" keyword',
+    let node;
+    if (this.skipSymbol("as")) {
+      const target = this.parseExpression();
+      const withContext = this.parseWithContext();
+      node = new nodes.Import(
         importTok.lineno,
-        importTok.colno
+        importTok.colno,
+        template,
+        target,
+        withContext
       );
+    } else {
+      node = new nodes.Import(importTok.lineno, importTok.colno, template);
     }
 
-    const target = this.parseExpression();
-    const withContext = this.parseWithContext();
-    const node = new nodes.Import(
-      importTok.lineno,
-      importTok.colno,
-      template,
-      target,
-      withContext
-    );
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
 
     this.advanceAfterBlockEnd(importTok.value);
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     return node;
   }
