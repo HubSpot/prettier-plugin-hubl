@@ -5,21 +5,21 @@ const {
 } = doc;
 
 const openTag = (stripWhitespace) => {
-  return stripWhitespace ? "{%-" : "{%";
+  return stripWhitespace.start ? "{%-" : "{%";
 };
 const closeTag = (stripWhitespace) => {
-  return stripWhitespace ? "-%}" : "%}";
+  return stripWhitespace.end ? "-%}" : "%}";
 };
 
 // Recurvisely print if elif and else
 const printElse = (node) => {
   if (node.else_ && node.else_.typename === "If") {
     const parts = [
-      openTag(node.else_.whiteSpaceData.start),
+      openTag(node.else_.whiteSpace.openTag),
       " elif ",
       printHubl(node.else_.cond),
       " ",
-      closeTag(node.else_.whiteSpaceData.end),
+      closeTag(node.else_.whiteSpace.openTag),
       indent(printBody(node.else_.body)),
     ];
     if (node.else_.else_) {
@@ -28,9 +28,9 @@ const printElse = (node) => {
     return parts;
   } else if (node.else_ && node.else_.typename === "NodeList") {
     return [
-      openTag(node.else_.whiteSpaceData.start),
+      openTag(node.else_.whiteSpace.openTag),
       " else ",
-      closeTag(node.else_.whiteSpaceData.end),
+      closeTag(node.else_.whiteSpace.openTag),
       indent(printBody(node.else_)),
     ];
   }
@@ -136,11 +136,11 @@ function printHubl(node) {
     case "If":
       const ifParts = [
         group([
-          openTag(node.whiteSpaceData.start),
+          openTag(node.whiteSpace.openTag),
           " if ",
           printHubl(node.cond),
           " ",
-          closeTag(node.whiteSpaceData.end),
+          closeTag(node.whiteSpace.openTag),
         ]),
         indent(printBody(node.body)),
       ];
@@ -148,9 +148,9 @@ function printHubl(node) {
         ifParts.push(printElse(node));
       }
       ifParts.push(
-        openTag(node.whiteSpaceData.closingTagStart),
+        openTag(node.whiteSpace.closingTag),
         " endif ",
-        closeTag(node.whiteSpaceData.closingTagEnd)
+        closeTag(node.whiteSpace.closingTag)
       );
       return group(ifParts);
     case "InlineIf":
@@ -318,18 +318,18 @@ function printHubl(node) {
       const forCol = node.colno;
       return [
         group([
-          openTag(node.whiteSpaceData.start),
+          openTag(node.whiteSpace.openTag),
           " for ",
           printHubl(node.name),
           " in ",
           printHubl(node.arr),
           " ",
-          closeTag(node.whiteSpaceData.end),
+          closeTag(node.whiteSpace.openTag),
         ]),
         printHubl(node.body),
-        openTag(node.whiteSpaceData.closingTagStart),
+        openTag(node.whiteSpace.closingTag),
         " endfor ",
-        closeTag(node.whiteSpaceData.closingTagEnd),
+        closeTag(node.whiteSpace.closingTag),
       ];
     case "Macro":
       return [

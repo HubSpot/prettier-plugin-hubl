@@ -170,7 +170,7 @@ class Parser extends Obj {
     } else {
       this.fail("parseFor: expected for{Async}", forTok.lineno, forTok.colno);
     }
-    node.whiteSpaceData.start = this.dropLeadingWhitespace;
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
 
     node.name = this.parsePrimary();
 
@@ -202,11 +202,11 @@ class Parser extends Obj {
     node.arr = this.parseExpression();
     this.advanceAfterBlockEnd(forTok.value);
 
-    node.whiteSpaceData.end = this.dropLeadingWhitespace;
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     node.body = this.parseUntilBlocks(endBlock, "else");
 
-    node.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
+    node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
 
     if (this.skipSymbol("else")) {
       this.advanceAfterBlockEnd("else");
@@ -215,7 +215,7 @@ class Parser extends Obj {
 
     this.advanceAfterBlockEnd();
 
-    node.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
+    node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
 
     return node;
   }
@@ -480,7 +480,7 @@ class Parser extends Obj {
       this.skipSymbol("elseif")
     ) {
       node = new nodes.If(tag.lineno, tag.colno);
-      node.whiteSpaceData.start = this.dropLeadingWhitespace;
+      node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
     } else if (this.skipSymbol("ifAsync")) {
       node = new nodes.IfAsync(tag.lineno, tag.colno);
     } else {
@@ -488,7 +488,7 @@ class Parser extends Obj {
     }
     node.cond = this.parseExpression();
     this.advanceAfterBlockEnd(tag.value);
-    node.whiteSpaceData.end = this.dropLeadingWhitespace;
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
     node.body = this.parseUntilBlocks("elif", "elseif", "else", "endif");
     const tok = this.peekToken();
     switch (tok && tok.value) {
@@ -497,36 +497,36 @@ class Parser extends Obj {
         node.else_ = this.parseIf(node);
         break;
       case "else":
-        let elseNode = { start: this.dropLeadingWhitespace };
+        let elseNode = { openTag: { start: this.dropLeadingWhitespace } };
         this.advanceAfterBlockEnd();
-        elseNode.end = this.dropLeadingWhitespace;
+        elseNode.openTag.end = this.dropLeadingWhitespace;
         node.else_ = this.parseUntilBlocks("endif");
-        node.else_.whiteSpaceData = elseNode;
+        node.else_.whiteSpace = elseNode;
         if (parentIf) {
-          parentIf.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
+          parentIf.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
         } else {
-          node.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
+          node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
         }
         this.advanceAfterBlockEnd();
         if (parentIf) {
-          parentIf.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
+          parentIf.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         } else {
-          node.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
+          node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         }
 
         break;
       case "endif":
         node.else_ = null;
         if (parentIf) {
-          parentIf.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
+          parentIf.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
         } else {
-          node.whiteSpaceData.closingTagStart = this.dropLeadingWhitespace;
+          node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
         }
         this.advanceAfterBlockEnd();
         if (parentIf) {
-          parentIf.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
+          parentIf.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         } else {
-          node.whiteSpaceData.closingTagEnd = this.dropLeadingWhitespace;
+          node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         }
         break;
       default:
@@ -1385,9 +1385,9 @@ class Parser extends Obj {
         this.dropLeadingWhitespace = tok.value.charAt(2) === "-";
         const e = this.parseExpression();
         const variableNode = new nodes.Output(tok.lineno, tok.colno, [e]);
-        variableNode.whiteSpaceData.start = this.dropLeadingWhitespace;
+        variableNode.whiteSpace.openTag.start = this.dropLeadingWhitespace;
         this.advanceAfterVariableEnd();
-        variableNode.whiteSpaceData.end = this.dropLeadingWhitespace;
+        variableNode.whiteSpace.openTag.end = this.dropLeadingWhitespace;
         buf.push(variableNode);
       } else if (tok.type === lexer.TOKEN_COMMENT) {
         this.dropLeadingWhitespace =
