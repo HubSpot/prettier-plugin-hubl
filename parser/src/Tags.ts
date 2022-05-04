@@ -302,6 +302,10 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     { start: "widget_wrapper", end: "end_widget_wrapper" },
   ];
   this.parse = function (parser: ParserClass, nodes: Nodes, lexer: Lexer) {
+    const tagWhiteSpace = {
+      openTag: { start: parser.dropLeadingWhitespace, end: false },
+      closingTag: { start: false, end: false },
+    };
     /**
      * This is our next top-level token/tag.  It will be one of the ones listed in the tags array above.
      * It will look like
@@ -334,12 +338,16 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
      */
     parser.advanceAfterBlockEnd(nextTag.value as string);
 
+    tagWhiteSpace.openTag.end = parser.dropLeadingWhitespace;
+
     // If we have a block tag, we need to parse the block to nest the contents as a body
     if (blockTag) {
       nextTag.body = parser.parseUntilBlocks(blockTag.end);
+      tagWhiteSpace.closingTag.start = parser.dropLeadingWhitespace;
       parser.advanceAfterBlockEnd();
+      tagWhiteSpace.closingTag.end = parser.dropLeadingWhitespace;
     }
-
+    nextTag.whiteSpace = tagWhiteSpace;
     return nextTag;
   };
 }

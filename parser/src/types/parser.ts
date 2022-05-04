@@ -112,6 +112,7 @@ type Obj = {
 type NodeChild = {
   lineno: number;
   colno: number;
+  whiteSpace?: object;
   value?: NodeChild | string;
   name?: NodeChild;
   body?: NodeChild;
@@ -218,6 +219,7 @@ export type ParserClass = {
   parseNodes: () => Array<NodeType>;
   parse: () => Array<NodeType>;
   parseAsRoot: () => NodeType;
+  dropLeadingWhitespace: boolean;
 };
 
 declare type ParserClassDef<T = ParserClass> = new (...args: any[]) => T;

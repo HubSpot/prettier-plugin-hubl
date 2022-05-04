@@ -453,19 +453,28 @@ function printHubl(node) {
       if (node.type === "tag") {
         if (node.value) {
           if (node.value === "do") {
-            return group(["{% do ", printHubl(node.children), " %}"]);
+            return group([
+              openTag(node.whiteSpace.openTag),
+              " do ",
+              printHubl(node.children),
+              " ",
+              closeTag(node.whiteSpace.openTag),
+            ]);
           }
           return group([
-            `{% ${node.value}`,
+            openTag(node.whiteSpace.openTag),
+            ` ${node.value}`,
             align(node.colno - 1, printTagArgs(node.children)),
-            " %}",
+            " ",
+            closeTag(node.whiteSpace.openTag),
           ]);
         } else {
           return group([
-            "{% ",
+            openTag(node.whiteSpace.openTag),
             " ",
             align(node.colno - 1, printTagArgs(node.children)),
-            " %}",
+            " ",
+            closeTag(node.whiteSpace.openTag),
           ]);
         }
       } else if (node.type === "compound") {
@@ -481,12 +490,15 @@ function printHubl(node) {
         }
         return [
           group([
-            `{% ${node.value}`,
+            openTag(node.whiteSpace.openTag),
+            ` ${node.value}`,
             align(node.colno - 1, printTagArgs(node.children)),
-            " %}",
+            " ",
+            closeTag(node.whiteSpace.openTag),
           ]),
           indent(printBody(node.body)),
-          group([`{% end_${node.value} %}`]),
+          group([openTag(node.whiteSpace.closingTag), ` end_${node.value} `]),
+          closeTag(node.whiteSpace.closingTag),
         ];
       }
       return `unknown type: ${node.typename}`;

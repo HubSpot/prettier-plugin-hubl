@@ -47,3 +47,10 @@ Content
 {% from "forms.html" import field with context %}
 
 {%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}
+
+{%- do foo.append('bar') -%}
+
+{%- form form_id=123 -%}
+
+{%- widget_attribute -%}
+{%- end_widget_attribute -%}
