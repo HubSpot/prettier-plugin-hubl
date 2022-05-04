@@ -436,6 +436,19 @@ function printHubl(node) {
         " ",
         closeTag(node.whiteSpace.openTag),
       ]);
+    case "FromImport":
+      return group([
+        openTag(node.whiteSpace.openTag),
+        " from ",
+        printHubl(node.template),
+        " import ",
+        join(", ", printHubl(node.names)),
+        ...[node.withContext ? [" with context"] : []],
+        " ",
+        closeTag(node.whiteSpace.openTag),
+      ]);
+    case "Pair":
+      return [printHubl(node.key), " as ", printHubl(node.value)];
     default:
       if (node.type === "tag") {
         if (node.value) {

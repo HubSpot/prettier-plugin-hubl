@@ -39,3 +39,11 @@ Content
 {%- import 'foo.html' %}
 
 {%- import 'custom/page/web_page_basic/my_macros.html' as header_footer -%}
+
+{%- from 'custom/page/web_page_basic/my_macros.html' import footer -%}
+
+{% from "forms.html" import field, label as description %}
+
+{% from "forms.html" import field with context %}
+
+{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}

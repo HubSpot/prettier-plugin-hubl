@@ -5,11 +5,6 @@ const nodes = require("./nodes");
 const Obj = require("./object").Obj;
 const lib = require("./lib");
 const { builtInTests } = require("./tests");
-
-const whiteSpace = {
-  openTag: { start: false, end: false },
-  closingTag: { start: false, end: false },
-};
 class Parser extends Obj {
   init(tokens) {
     this.tokens = tokens;
@@ -352,6 +347,11 @@ class Parser extends Obj {
   }
 
   parseFrom() {
+    const fromWhiteSpace = {
+      openTag: { start: this.dropLeadingWhitespace, end: false },
+      closingTag: { start: false, end: false },
+    };
+
     const fromTok = this.peekToken();
     if (!this.skipSymbol("from")) {
       this.fail("parseFrom: expected from");
@@ -414,13 +414,17 @@ class Parser extends Obj {
       withContext = this.parseWithContext();
     }
 
-    return new nodes.FromImport(
+    fromWhiteSpace.openTag.end = this.dropLeadingWhitespace;
+
+    const fromNode = new nodes.FromImport(
       fromTok.lineno,
       fromTok.colno,
       template,
       names,
       withContext
     );
+    fromNode.whiteSpace = fromWhiteSpace;
+    return fromNode;
   }
 
   parseBlock() {
@@ -588,7 +592,10 @@ class Parser extends Obj {
 
     switch (tok && tok.value) {
       case "else":
-        const elseWhiteSpace = { ...whiteSpace };
+        const elseWhiteSpace = {
+          openTag: { start: this.dropLeadingWhitespace, end: false },
+          closingTag: { start: false, end: false },
+        };
         elseWhiteSpace.openTag.start = this.dropLeadingWhitespace;
         this.advanceAfterBlockEnd();
         elseWhiteSpace.openTag.end = this.dropLeadingWhitespace;
@@ -795,7 +802,10 @@ class Parser extends Obj {
   }
 
   parseRaw(tagName) {
-    const rawWhiteSpace = { ...whiteSpace };
+    const rawWhiteSpace = {
+      openTag: { start: this.dropLeadingWhitespace, end: false },
+      closingTag: { start: false, end: false },
+    };
     rawWhiteSpace.openTag.start = this.dropLeadingWhitespace;
     tagName = tagName || "raw";
     const endTagName = "end" + tagName;
