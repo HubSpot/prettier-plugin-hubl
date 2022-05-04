@@ -370,7 +370,8 @@ function printHubl(node) {
     case "Macro":
       return [
         group([
-          `{% macro `,
+          openTag(node.whiteSpace.openTag),
+          " macro ",
           group([
             printHubl(node.name),
             "(",
@@ -381,11 +382,16 @@ function printHubl(node) {
               })
             ),
             ")",
-            " %}",
+            " ",
+            closeTag(node.whiteSpace.openTag),
           ]),
         ]),
         indent(printBody(node.body)),
-        group([`{% endmacro %}`]),
+        group([
+          openTag(node.whiteSpace.closingTag),
+          " endmacro ",
+          closeTag(node.whiteSpace.closingTag),
+        ]),
       ];
     case "Not":
       if (node.target.typename === "Is") {

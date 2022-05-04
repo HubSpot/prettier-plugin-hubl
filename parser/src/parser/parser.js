@@ -234,9 +234,19 @@ class Parser extends Obj {
     const args = this.parseSignature();
     const node = new nodes.Macro(macroTok.lineno, macroTok.colno, name, args);
 
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
+
     this.advanceAfterBlockEnd(macroTok.value);
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     node.body = this.parseUntilBlocks("endmacro");
+
+    node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
+
     this.advanceAfterBlockEnd();
+
+    node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
 
     return node;
   }
