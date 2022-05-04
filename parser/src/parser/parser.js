@@ -421,6 +421,8 @@ class Parser extends Obj {
 
     const node = new nodes.Block(tag.lineno, tag.colno);
 
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
+
     node.name = this.parsePrimary();
     if (!(node.name instanceof nodes.Symbol)) {
       this.fail("parseBlock: variable name expected", tag.lineno, tag.colno);
@@ -428,9 +430,13 @@ class Parser extends Obj {
 
     this.advanceAfterBlockEnd(tag.value);
 
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     node.body = this.parseUntilBlocks("endblock");
     this.skipSymbol("endblock");
     this.skipSymbol(node.name.value);
+
+    node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
 
     const tok = this.peekToken();
     if (!tok) {
@@ -438,6 +444,8 @@ class Parser extends Obj {
     }
 
     this.advanceAfterBlockEnd(tok.value);
+
+    node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
 
     return node;
   }

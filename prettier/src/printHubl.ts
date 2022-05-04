@@ -296,13 +296,17 @@ function printHubl(node) {
     case "Block":
       return [
         [
-          "{% block ",
+          openTag(node.whiteSpace.openTag),
+          " block ",
           printHubl(node.name),
-          " %}",
+          " ",
+          closeTag(node.whiteSpace.openTag),
           indent(printBody(node.body)),
-          "{% endblock ",
+          openTag(node.whiteSpace.closingTag),
+          " endblock ",
           printHubl(node.name),
-          " %}",
+          " ",
+          closeTag(node.whiteSpace.closingTag),
         ],
       ];
     case "Raw":
