@@ -97,7 +97,7 @@ NO
                              test4=False,
                              title="" %}</div>
   <img src="" />
-  {{ variable|upper }}
+  {{- variable|upper -}}
   {% if x == "T" %}
     GO
   {% else %}
@@ -3438,8 +3438,9 @@ class="dialog") %}
   </div>
 {% endmacro %}
 
-{{ render_dialog("Hello World",
-caller=unknown type: Caller) }}
+{% call render_dialog("Hello World") %}
+This is a simple dialog rendered by using a macro and a call block.
+{% endcall %}
 {% macro dump_users(users) %}
   <ul>
     {% for user in users %}
@@ -3451,8 +3452,14 @@ caller=unknown type: Caller) }}
   </ul>
 {% endmacro %}
 
-{{ dump_users(list_of_user,
-caller=unknown type: Caller) }}
+{% call dump_users(list_of_user) %}
+<dl>
+  <dl>Realname</dl>
+  <dd>{{ user.realname|e }}</dd>
+  <dl>Description</dl>
+  <dd>{{ user.description }}</dd>
+</dl>
+{% endcall %}
 {% choice "flip_layout"
   value="left",
   choices="left,right",
@@ -4281,10 +4288,22 @@ Content
 
 {% from "forms.html" import field with context %}
 
-{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{{ foo }}
-{{ bar }}
-{{ baz }}
+{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}
+
+{%- do foo.append('bar') -%}
+
+{%- form form_id=123 -%}
+
+{%- widget_attribute -%}
+{%- end_widget_attribute -%}
+
+{%- call render_dialog("Hello World", "greeting") -%}
+<p>This is a paragraph tag that I want to render in my.</p>
+{%- endcall -%}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{- foo }}
+{{- bar -}}
+{{ baz -}}
 
 {%- set foo = bar %}
 {%- set foo = bar -%}
@@ -4331,5 +4350,17 @@ Content
 {% from "forms.html" import field with context %}
 
 {%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}
+
+{%- do foo.append("bar") -%}
+
+{%- form
+   form_id=123 -%}
+
+{%- widget_attribute -%}
+{%- end_widget_attribute -%}
+
+{%- call render_dialog("Hello World", "greeting") -%}
+<p>This is a paragraph tag that I want to render in my.</p>
+{%- endcall -%}
 
 `;
