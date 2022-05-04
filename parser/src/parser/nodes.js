@@ -16,7 +16,10 @@ class Node extends Obj {
   init(lineno, colno, ...args) {
     this.lineno = lineno;
     this.colno = colno;
-
+    this.whiteSpace = {
+      openTag: { start: false, end: false },
+      closingTag: { start: false, end: false },
+    };
     this.fields.forEach((field, i) => {
       // The first two args are line/col numbers, so offset by 2
       var val = arguments[i + 2];
@@ -89,6 +92,7 @@ const Pair = Node.extend("Pair", { fields: ["key", "value"] });
 const Dict = NodeList.extend("Dict");
 const LookupVal = Node.extend("LookupVal", { fields: ["target", "val"] });
 const If = Node.extend("If", { fields: ["cond", "body", "else_"] });
+const Unless = Node.extend("Unless", { fields: ["cond", "body", "_else"] });
 const IfAsync = If.extend("IfAsync");
 const InlineIf = Node.extend("InlineIf", { fields: ["cond", "body", "else_"] });
 const Ternary = Node.extend("Ternary", { fields: ["cond", "body", "else"] });
@@ -96,7 +100,7 @@ const For = Node.extend("For", { fields: ["arr", "name", "body", "else_"] });
 const AsyncEach = For.extend("AsyncEach");
 const AsyncAll = For.extend("AsyncAll");
 const Macro = Node.extend("Macro", { fields: ["name", "args", "body"] });
-const Caller = Macro.extend("Caller");
+const Caller = Macro.extend("Caller", { fields: ["name", "args", "body"] });
 const Import = Node.extend("Import", {
   fields: ["template", "target", "withContext"],
 });
@@ -120,6 +124,7 @@ const FilterAsync = Filter.extend("FilterAsync", {
   fields: ["name", "args", "symbol"],
 });
 const KeywordArgs = Dict.extend("KeywordArgs");
+const Raw = Node.extend("Raw", { fields: ["body"] });
 const Block = Node.extend("Block", { fields: ["name", "body"] });
 const Super = Node.extend("Super", { fields: ["blockName", "symbol"] });
 const TemplateRef = Node.extend("TemplateRef", { fields: ["template"] });
@@ -246,6 +251,7 @@ module.exports = {
   If: If,
   IfAsync: IfAsync,
   InlineIf: InlineIf,
+  Unless: Unless,
   Ternary: Ternary,
   For: For,
   AsyncEach: AsyncEach,
@@ -258,6 +264,7 @@ module.exports = {
   Filter: Filter,
   FilterAsync: FilterAsync,
   KeywordArgs: KeywordArgs,
+  Raw: Raw,
   Block: Block,
   Super: Super,
   Extends: Extends,

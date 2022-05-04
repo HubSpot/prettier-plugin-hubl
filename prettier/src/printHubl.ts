@@ -4,13 +4,28 @@ const {
   builders: { group, indent, dedent, join, hardline, line, softline, align },
 } = doc;
 
+const openTag = (whitepsace) => {
+  return whitepsace.start ? "{%-" : "{%";
+};
+const closeTag = (whitepsace) => {
+  return whitepsace.end ? "-%}" : "%}";
+};
+const openVar = (whitepsace) => {
+  return whitepsace.start ? "{{-" : "{{";
+};
+const closeVar = (whitepsace) => {
+  return whitepsace.end ? "-}}" : "}}";
+};
+
 // Recurvisely print if elif and else
 const printElse = (node) => {
   if (node.else_ && node.else_.typename === "If") {
     const parts = [
-      "{% elif ",
+      openTag(node.else_.whiteSpace.openTag),
+      " elif ",
       printHubl(node.else_.cond),
-      " %}",
+      " ",
+      closeTag(node.else_.whiteSpace.openTag),
       indent(printBody(node.else_.body)),
     ];
     if (node.else_.else_) {
@@ -18,7 +33,12 @@ const printElse = (node) => {
     }
     return parts;
   } else if (node.else_ && node.else_.typename === "NodeList") {
-    return ["{% else %}", indent(printBody(node.else_))];
+    return [
+      openTag(node.else_.whiteSpace.openTag),
+      " else ",
+      closeTag(node.else_.whiteSpace.openTag),
+      indent(printBody(node.else_)),
+    ];
   }
 };
 
@@ -102,7 +122,8 @@ function printHubl(node) {
       });
     case "Set":
       return [
-        "{% set ",
+        openTag(node.whiteSpace.openTag),
+        " set ",
         join(
           ", ",
           node.targets.map((target) => {
@@ -111,7 +132,8 @@ function printHubl(node) {
         ),
         " = ",
         printHubl(node.value),
-        " %}",
+        " ",
+        closeTag(node.whiteSpace.openTag),
       ];
     case "Concat":
       return [printHubl(node.left), " ~ ", printHubl(node.right)];
@@ -121,13 +143,23 @@ function printHubl(node) {
       return [printHubl(node.left), " is ", printHubl(node.right)];
     case "If":
       const ifParts = [
-        group(["{% if ", printHubl(node.cond), " %}"]),
+        group([
+          openTag(node.whiteSpace.openTag),
+          " if ",
+          printHubl(node.cond),
+          " ",
+          closeTag(node.whiteSpace.openTag),
+        ]),
         indent(printBody(node.body)),
       ];
       if (node.else_) {
         ifParts.push(printElse(node));
       }
-      ifParts.push("{% endif %}");
+      ifParts.push(
+        openTag(node.whiteSpace.closingTag),
+        " endif ",
+        closeTag(node.whiteSpace.closingTag)
+      );
       return group(ifParts);
     case "InlineIf":
       if (node.else_) {
@@ -150,13 +182,23 @@ function printHubl(node) {
       ]);
     case "Unless":
       const unlessParts = [
-        group(["{% unless ", printHubl(node.cond), " %}"]),
+        group([
+          openTag(node.whiteSpace.openTag),
+          " unless ",
+          printHubl(node.cond),
+          " ",
+          closeTag(node.whiteSpace.openTag),
+        ]),
         indent(printBody(node.body)),
       ];
       if (node.else_) {
         unlessParts.push(printElse(node));
       }
-      unlessParts.push("{% endunless %}");
+      unlessParts.push([
+        openTag(node.whiteSpace.closingTag),
+        " endunless ",
+        closeTag(node.whiteSpace.closingTag),
+      ]);
       return group(unlessParts);
     case "Div":
       return group([printHubl(node.left), " / ", printHubl(node.right)]);
@@ -179,7 +221,13 @@ function printHubl(node) {
         if (child.typename === "TemplateData") {
           return printHubl(child);
         }
-        return ["{{ ", printHubl(child), " }}"];
+        return [
+          openVar(node.whiteSpace.openTag),
+          " ",
+          printHubl(child),
+          " ",
+          closeVar(node.whiteSpace.openTag),
+        ];
       });
     case "NodeList":
       return node.children.map((child) => {
@@ -256,14 +304,32 @@ function printHubl(node) {
     case "Block":
       return [
         [
-          "{% block ",
+          openTag(node.whiteSpace.openTag),
+          " block ",
           printHubl(node.name),
-          " %}",
+          " ",
+          closeTag(node.whiteSpace.openTag),
           indent(printBody(node.body)),
-          "{% endblock ",
+          openTag(node.whiteSpace.closingTag),
+          " endblock ",
           printHubl(node.name),
-          " %}",
+          " ",
+          closeTag(node.whiteSpace.closingTag),
         ],
+      ];
+    case "Raw":
+      return [
+        group([
+          openTag(node.whiteSpace.openTag),
+          " raw ",
+          closeTag(node.whiteSpace.openTag),
+        ]),
+        node.body,
+        group([
+          openTag(node.whiteSpace.closingTag),
+          " endraw ",
+          closeTag(node.whiteSpace.closingTag),
+        ]),
       ];
     case "KeywordArgs":
       return [
@@ -294,19 +360,24 @@ function printHubl(node) {
       const forCol = node.colno;
       return [
         group([
-          "{% for ",
+          openTag(node.whiteSpace.openTag),
+          " for ",
           printHubl(node.name),
           " in ",
           printHubl(node.arr),
-          " %}",
+          " ",
+          closeTag(node.whiteSpace.openTag),
         ]),
         printHubl(node.body),
-        "{% endfor %}",
+        openTag(node.whiteSpace.closingTag),
+        " endfor ",
+        closeTag(node.whiteSpace.closingTag),
       ];
     case "Macro":
       return [
         group([
-          `{% macro `,
+          openTag(node.whiteSpace.openTag),
+          " macro ",
           group([
             printHubl(node.name),
             "(",
@@ -317,11 +388,16 @@ function printHubl(node) {
               })
             ),
             ")",
-            " %}",
+            " ",
+            closeTag(node.whiteSpace.openTag),
           ]),
         ]),
         indent(printBody(node.body)),
-        group([`{% endmacro %}`]),
+        group([
+          openTag(node.whiteSpace.closingTag),
+          " endmacro ",
+          closeTag(node.whiteSpace.closingTag),
+        ]),
       ];
     case "Not":
       if (node.target.typename === "Is") {
@@ -342,24 +418,85 @@ function printHubl(node) {
         ")",
       ]);
     case "Extends":
-      return group(["{% extends ", printHubl(node.template), " %}"]);
+      return group([
+        openTag(node.whiteSpace.openTag),
+        " extends ",
+        printHubl(node.template),
+        " ",
+        closeTag(node.whiteSpace.openTag),
+      ]);
+    case "Include":
+      return group([
+        openTag(node.whiteSpace.openTag),
+        " include ",
+        printHubl(node.template),
+        " ",
+        closeTag(node.whiteSpace.openTag),
+      ]);
+    case "Import":
+      return group([
+        openTag(node.whiteSpace.openTag),
+        " import ",
+        printHubl(node.template),
+        [node.target ? [" as ", printHubl(node.target)] : []],
+        " ",
+        closeTag(node.whiteSpace.openTag),
+      ]);
+    case "FromImport":
+      return group([
+        openTag(node.whiteSpace.openTag),
+        " from ",
+        printHubl(node.template),
+        " import ",
+        join(", ", printHubl(node.names)),
+        ...[node.withContext ? [" with context"] : []],
+        " ",
+        closeTag(node.whiteSpace.openTag),
+      ]);
+    case "Pair":
+      return [printHubl(node.key), " as ", printHubl(node.value)];
+    case "Caller":
+      return [
+        group([
+          openTag(node.whiteSpace.openTag),
+          " call ",
+          printHubl(node.args),
+          " ",
+          closeTag(node.whiteSpace.openTag),
+        ]),
+        printHubl(node.body),
+        group([
+          openTag(node.whiteSpace.closingTag),
+          " endcall ",
+          closeTag(node.whiteSpace.closingTag),
+        ]),
+      ];
     default:
       if (node.type === "tag") {
         if (node.value) {
           if (node.value === "do") {
-            return group(["{% do ", printHubl(node.children), " %}"]);
+            return group([
+              openTag(node.whiteSpace.openTag),
+              " do ",
+              printHubl(node.children),
+              " ",
+              closeTag(node.whiteSpace.openTag),
+            ]);
           }
           return group([
-            `{% ${node.value}`,
+            openTag(node.whiteSpace.openTag),
+            ` ${node.value}`,
             align(node.colno - 1, printTagArgs(node.children)),
-            " %}",
+            " ",
+            closeTag(node.whiteSpace.openTag),
           ]);
         } else {
           return group([
-            "{% ",
+            openTag(node.whiteSpace.openTag),
             " ",
             align(node.colno - 1, printTagArgs(node.children)),
-            " %}",
+            " ",
+            closeTag(node.whiteSpace.openTag),
           ]);
         }
       } else if (node.type === "compound") {
@@ -375,12 +512,15 @@ function printHubl(node) {
         }
         return [
           group([
-            `{% ${node.value}`,
+            openTag(node.whiteSpace.openTag),
+            ` ${node.value}`,
             align(node.colno - 1, printTagArgs(node.children)),
-            " %}",
+            " ",
+            closeTag(node.whiteSpace.openTag),
           ]),
           indent(printBody(node.body)),
-          group([`{% end_${node.value} %}`]),
+          group([openTag(node.whiteSpace.closingTag), ` end_${node.value} `]),
+          closeTag(node.whiteSpace.closingTag),
         ];
       }
       return `unknown type: ${node.typename}`;

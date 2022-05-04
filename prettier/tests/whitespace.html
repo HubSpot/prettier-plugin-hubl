@@ -1,0 +1,60 @@
+{{- foo }}
+{{- bar -}}
+{{ baz -}}
+
+{%- set foo = bar %}
+{%- set foo = bar -%}
+{% set foo = bar -%}
+
+{%- if x -%}
+{% elif x -%}
+{%- else %}
+{%- endif %}
+
+{%- raw -%}
+{% set x=true %}
+{%- endraw %}
+
+{%- for foo in bar %}
+{% endfor -%}
+
+{%- unless foo -%}
+Content
+{%- else -%}
+{%- endunless -%}
+
+{%- block a -%}
+{%- endblock -%}
+
+{%- extends 'foo.html' -%}
+
+{%- include 'bar.html' -%}
+
+{%- set foo = "bar" -%}
+
+{%- macro foo() -%}
+Content
+{%- endmacro -%}
+
+{%- import 'foo.html' %}
+
+{%- import 'custom/page/web_page_basic/my_macros.html' as header_footer -%}
+
+{%- from 'custom/page/web_page_basic/my_macros.html' import footer -%}
+
+{% from "forms.html" import field, label as description %}
+
+{% from "forms.html" import field with context %}
+
+{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}
+
+{%- do foo.append('bar') -%}
+
+{%- form form_id=123 -%}
+
+{%- widget_attribute -%}
+{%- end_widget_attribute -%}
+
+{%- call render_dialog("Hello World", "greeting") -%}
+<p>This is a paragraph tag that I want to render in my.</p>
+{%- endcall -%}

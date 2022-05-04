@@ -96,7 +96,9 @@ NO
                              test3=None,
                              test4=False,
                              title="" %}</div>
-  <img src="" />{{ variable|upper }}{% if x == "T" %}
+  <img src="" />
+  {{- variable|upper -}}
+  {% if x == "T" %}
     GO
   {% else %}
     NO
@@ -1467,7 +1469,23 @@ Infinity
 <{{ module.list_type }} class="list">
 What is this element?
 </{{ module.list_type }}>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ foo is equalto "bar" }}
+{{ foo is equalto("bar") }}
+
+{{ foo is equalto var }}
+{{ foo is equalto(var) }}
+
+{{ foo is not equalto "baz" }}
+{{ foo is not equalto("baz") }}
+
+{% if var is string_startingwith "v" %}{% endif %}
+{% if var is string_startingwith("v") %}{% endif %}
+
+{{ foo in bar }}
+{{ foo % bar }}
+{{ foo ** bar }}
+{{ foo * bar }}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% if sky != "blue" %}
   Clouds
 {% endif %}
@@ -1617,6 +1635,23 @@ What is this element?
 {% endunless %}
 
 <{{ module.list_type }} class="list"> What is this element? </{{ module.list_type }}>
+
+{{ foo is equalto("bar") }}
+{{ foo is equalto("bar") }}
+
+{{ foo is equalto(var) }}
+{{ foo is equalto(var) }}
+
+{{ foo is not equalto("baz") }}
+{{ foo is not equalto("baz") }}
+
+{% if var is string_startingwith("v") %}{% endif %}
+{% if var is string_startingwith("v") %}{% endif %}
+
+{{ foo in bar }}
+{{ foo % bar }}
+{{ foo ** bar }}
+{{ foo * bar }}
 
 `;
 
@@ -3403,20 +3438,28 @@ class="dialog") %}
   </div>
 {% endmacro %}
 
-{{ render_dialog("Hello World",
-caller=unknown type: Caller) }}
+{% call render_dialog("Hello World") %}
+This is a simple dialog rendered by using a macro and a call block.
+{% endcall %}
 {% macro dump_users(users) %}
   <ul>
     {% for user in users %}
     <li>
       <p>{{ user.username|e }}</p>
       {{ caller(user) }}
-    </li>{% endfor %}
+    </li>
+    {%- endfor %}
   </ul>
 {% endmacro %}
 
-{{ dump_users(list_of_user,
-caller=unknown type: Caller) }}
+{% call dump_users(list_of_user) %}
+<dl>
+  <dl>Realname</dl>
+  <dd>{{ user.realname|e }}</dd>
+  <dl>Description</dl>
+  <dd>{{ user.description }}</dd>
+</dl>
+{% endcall %}
 {% choice "flip_layout"
   value="left",
   choices="left,right",
@@ -3607,7 +3650,7 @@ caller=unknown type: Caller) }}
     custom_form_html=None,
     no_title=False,
     title="" %}
-  unknown type: FromImport
+  {% from "custom/page/web_page_basic/my_macros.html" import footer %}
   {{ footer("h2", "My footer info") }}
   {% gallery "gallery" %}
   {% widget_block gallery "crm_slider"
@@ -3707,8 +3750,8 @@ caller=unknown type: Caller) }}
  {% end_widget_block %} {% image_src "image_src" %} {% image_src
                                                                                                            "executve_image_src"
                                                                                                            src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
-                                                                                                           no_wrapper=True %} unknown type: Import {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }}
-  unknown type: Include unknown type: Include unknown type: Include {% inline_rich_text
+                                                                                                           no_wrapper=True %} {% import "custom/page/web_page_basic/my_macros.html" as header_footer %} {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }}
+  {% include "custom/page/web_page_basic/my_footer.html" %} {% include "generated_global_groups/2781996615.html" %} {% include "hubspot/styles/patches/recommended.css" %} {% inline_rich_text
                                                                                                                                                                              "inline_rich_text"
                                                                                                                                                                              field="my_text_field" %}
   {% inline_rich_text "inline_rich_text"
@@ -3836,10 +3879,10 @@ caller=unknown type: Caller) }}
     select_blog="default" %}
   {% set string_to_echo = "Print me" %}
   {% print string_to_echo %}
-
+  {% raw %}
   The personalization token for a contact's first name is
   {{ contact.firstname }}
-
+  {% endraw %}
   {% raw_html "raw_html" %}
   {% raw_html "my_raw_html"
     label="Enter HTML here",
@@ -4193,5 +4236,131 @@ exports[`website-header.html 1`] = `
     class="content-wrapper" %}
   {% end_dnd_area %}
 </header>
+
+`;
+
+exports[`whitespace.html 1`] = `
+{{- foo }}
+{{- bar -}}
+{{ baz -}}
+
+{%- set foo = bar %}
+{%- set foo = bar -%}
+{% set foo = bar -%}
+
+{%- if x -%}
+{% elif x -%}
+{%- else %}
+{%- endif %}
+
+{%- raw -%}
+{% set x=true %}
+{%- endraw %}
+
+{%- for foo in bar %}
+{% endfor -%}
+
+{%- unless foo -%}
+Content
+{%- else -%}
+{%- endunless -%}
+
+{%- block a -%}
+{%- endblock -%}
+
+{%- extends 'foo.html' -%}
+
+{%- include 'bar.html' -%}
+
+{%- set foo = "bar" -%}
+
+{%- macro foo() -%}
+Content
+{%- endmacro -%}
+
+{%- import 'foo.html' %}
+
+{%- import 'custom/page/web_page_basic/my_macros.html' as header_footer -%}
+
+{%- from 'custom/page/web_page_basic/my_macros.html' import footer -%}
+
+{% from "forms.html" import field, label as description %}
+
+{% from "forms.html" import field with context %}
+
+{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}
+
+{%- do foo.append('bar') -%}
+
+{%- form form_id=123 -%}
+
+{%- widget_attribute -%}
+{%- end_widget_attribute -%}
+
+{%- call render_dialog("Hello World", "greeting") -%}
+<p>This is a paragraph tag that I want to render in my.</p>
+{%- endcall -%}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{- foo }}
+{{- bar -}}
+{{ baz -}}
+
+{%- set foo = bar %}
+{%- set foo = bar -%}
+{% set foo = bar -%}
+
+{%- if x -%}
+{% elif x -%}
+{%- else %}
+{%- endif %}
+
+{%- raw -%}
+{% set x=true %}
+{%- endraw %}
+
+{%- for foo in bar %}
+{% endfor -%}
+
+{%- unless foo -%}
+  Content
+{%- else -%}
+{%- endunless -%}
+
+{%- block a -%}
+{%- endblock a -%}
+
+{%- extends "foo.html" -%}
+
+{%- include "bar.html" -%}
+
+{%- set foo = "bar" -%}
+
+{%- macro foo() -%}
+  Content
+{%- endmacro -%}
+
+{%- import "foo.html" %}
+
+{%- import "custom/page/web_page_basic/my_macros.html" as header_footer -%}
+
+{%- from "custom/page/web_page_basic/my_macros.html" import footer -%}
+
+{% from "forms.html" import field, label as description %}
+
+{% from "forms.html" import field with context %}
+
+{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}
+
+{%- do foo.append("bar") -%}
+
+{%- form
+   form_id=123 -%}
+
+{%- widget_attribute -%}
+{%- end_widget_attribute -%}
+
+{%- call render_dialog("Hello World", "greeting") -%}
+<p>This is a paragraph tag that I want to render in my.</p>
+{%- endcall -%}
 
 `;

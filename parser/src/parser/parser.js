@@ -1,11 +1,10 @@
 "use strict";
 
-var lexer = require("./lexer");
-var nodes = require("./nodes");
-var Obj = require("./object").Obj;
-var lib = require("./lib");
-var { builtInTests } = require("./tests");
-
+const lexer = require("./lexer");
+const nodes = require("./nodes");
+const Obj = require("./object").Obj;
+const lib = require("./lib");
+const { builtInTests } = require("./tests");
 class Parser extends Obj {
   init(tokens) {
     this.tokens = tokens;
@@ -129,6 +128,8 @@ class Parser extends Obj {
     if (tok && tok.type === lexer.TOKEN_BLOCK_END) {
       if (tok.value.charAt(0) === "-") {
         this.dropLeadingWhitespace = true;
+      } else {
+        this.dropLeadingWhitespace = false;
       }
     } else {
       this.fail("expected block end in " + name + " statement");
@@ -168,6 +169,7 @@ class Parser extends Obj {
     } else {
       this.fail("parseFor: expected for{Async}", forTok.lineno, forTok.colno);
     }
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
 
     node.name = this.parsePrimary();
 
@@ -199,7 +201,11 @@ class Parser extends Obj {
     node.arr = this.parseExpression();
     this.advanceAfterBlockEnd(forTok.value);
 
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     node.body = this.parseUntilBlocks(endBlock, "else");
+
+    node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
 
     if (this.skipSymbol("else")) {
       this.advanceAfterBlockEnd("else");
@@ -207,6 +213,8 @@ class Parser extends Obj {
     }
 
     this.advanceAfterBlockEnd();
+
+    node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
 
     return node;
   }
@@ -221,14 +229,29 @@ class Parser extends Obj {
     const args = this.parseSignature();
     const node = new nodes.Macro(macroTok.lineno, macroTok.colno, name, args);
 
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
+
     this.advanceAfterBlockEnd(macroTok.value);
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     node.body = this.parseUntilBlocks("endmacro");
+
+    node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
+
     this.advanceAfterBlockEnd();
+
+    node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
 
     return node;
   }
 
   parseCall() {
+    const callWhiteSpace = {
+      openTag: { start: this.dropLeadingWhitespace, end: false },
+      closingTag: { start: false, end: false },
+    };
+
     // a call block is parsed as a normal FunCall, but with an added
     // 'caller' kwarg which is a Caller node.
     var callTok = this.peekToken();
@@ -240,33 +263,27 @@ class Parser extends Obj {
     const macroCall = this.parsePrimary();
 
     this.advanceAfterBlockEnd(callTok.value);
+
+    callWhiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     const body = this.parseUntilBlocks("endcall");
+
+    callWhiteSpace.closingTag.start = this.dropLeadingWhitespace;
+
     this.advanceAfterBlockEnd();
 
-    const callerName = new nodes.Symbol(
+    callWhiteSpace.closingTag.end = this.dropLeadingWhitespace;
+
+    const callNode = new nodes.Caller(
       callTok.lineno,
       callTok.colno,
-      "caller"
-    );
-    const callerNode = new nodes.Caller(
-      callTok.lineno,
-      callTok.colno,
-      callerName,
       callerArgs,
+      macroCall,
       body
     );
 
-    // add the additional caller kwarg, adding kwargs if necessary
-    const args = macroCall.args.children;
-    if (!(args[args.length - 1] instanceof nodes.KeywordArgs)) {
-      args.push(new nodes.KeywordArgs());
-    }
-    const kwargs = args[args.length - 1];
-    kwargs.addChild(
-      new nodes.Pair(callTok.lineno, callTok.colno, callerName, callerNode)
-    );
-
-    return new nodes.Output(callTok.lineno, callTok.colno, [macroCall]);
+    callNode.whiteSpace = callWhiteSpace;
+    return callNode;
   }
 
   parseWithContext() {
@@ -304,31 +321,36 @@ class Parser extends Obj {
     }
 
     const template = this.parseExpression();
-
-    if (!this.skipSymbol("as")) {
-      this.fail(
-        'parseImport: expected "as" keyword',
+    let node;
+    if (this.skipSymbol("as")) {
+      const target = this.parseExpression();
+      const withContext = this.parseWithContext();
+      node = new nodes.Import(
         importTok.lineno,
-        importTok.colno
+        importTok.colno,
+        template,
+        target,
+        withContext
       );
+    } else {
+      node = new nodes.Import(importTok.lineno, importTok.colno, template);
     }
 
-    const target = this.parseExpression();
-    const withContext = this.parseWithContext();
-    const node = new nodes.Import(
-      importTok.lineno,
-      importTok.colno,
-      template,
-      target,
-      withContext
-    );
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
 
     this.advanceAfterBlockEnd(importTok.value);
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     return node;
   }
 
   parseFrom() {
+    const fromWhiteSpace = {
+      openTag: { start: this.dropLeadingWhitespace, end: false },
+      closingTag: { start: false, end: false },
+    };
+
     const fromTok = this.peekToken();
     if (!this.skipSymbol("from")) {
       this.fail("parseFrom: expected from");
@@ -360,6 +382,8 @@ class Parser extends Obj {
         // this is done in `advanceAfterBlockEnd`
         if (nextTok.value.charAt(0) === "-") {
           this.dropLeadingWhitespace = true;
+        } else {
+          this.dropLeadingWhitespace = false;
         }
 
         this.nextToken();
@@ -389,13 +413,17 @@ class Parser extends Obj {
       withContext = this.parseWithContext();
     }
 
-    return new nodes.FromImport(
+    fromWhiteSpace.openTag.end = this.dropLeadingWhitespace;
+
+    const fromNode = new nodes.FromImport(
       fromTok.lineno,
       fromTok.colno,
       template,
       names,
       withContext
     );
+    fromNode.whiteSpace = fromWhiteSpace;
+    return fromNode;
   }
 
   parseBlock() {
@@ -406,6 +434,8 @@ class Parser extends Obj {
 
     const node = new nodes.Block(tag.lineno, tag.colno);
 
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
+
     node.name = this.parsePrimary();
     if (!(node.name instanceof nodes.Symbol)) {
       this.fail("parseBlock: variable name expected", tag.lineno, tag.colno);
@@ -413,9 +443,13 @@ class Parser extends Obj {
 
     this.advanceAfterBlockEnd(tag.value);
 
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     node.body = this.parseUntilBlocks("endblock");
     this.skipSymbol("endblock");
     this.skipSymbol(node.name.value);
+
+    node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
 
     const tok = this.peekToken();
     if (!tok) {
@@ -423,6 +457,8 @@ class Parser extends Obj {
     }
 
     this.advanceAfterBlockEnd(tok.value);
+
+    node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
 
     return node;
   }
@@ -435,9 +471,14 @@ class Parser extends Obj {
     }
 
     const node = new nodes.Extends(tag.lineno, tag.colno);
-    node.template = this.parseExpression();
 
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
+
+    node.template = this.parseExpression();
     this.advanceAfterBlockEnd(tag.value);
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     return node;
   }
 
@@ -449,6 +490,9 @@ class Parser extends Obj {
     }
 
     const node = new nodes.Include(tag.lineno, tag.colno);
+
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
+
     node.template = this.parseExpression();
 
     if (this.skipSymbol("ignore") && this.skipSymbol("missing")) {
@@ -456,10 +500,13 @@ class Parser extends Obj {
     }
 
     this.advanceAfterBlockEnd(tag.value);
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     return node;
   }
 
-  parseIf() {
+  parseIf(parentIf) {
     const tag = this.peekToken();
     let node;
 
@@ -469,31 +516,54 @@ class Parser extends Obj {
       this.skipSymbol("elseif")
     ) {
       node = new nodes.If(tag.lineno, tag.colno);
+      node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
     } else if (this.skipSymbol("ifAsync")) {
       node = new nodes.IfAsync(tag.lineno, tag.colno);
     } else {
       this.fail("parseIf: expected if, elif, or elseif", tag.lineno, tag.colno);
     }
-
     node.cond = this.parseExpression();
     this.advanceAfterBlockEnd(tag.value);
-
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
     node.body = this.parseUntilBlocks("elif", "elseif", "else", "endif");
     const tok = this.peekToken();
-
     switch (tok && tok.value) {
       case "elseif":
       case "elif":
-        node.else_ = this.parseIf();
+        node.else_ = this.parseIf(node);
         break;
       case "else":
+        let elseNode = { openTag: { start: this.dropLeadingWhitespace } };
         this.advanceAfterBlockEnd();
+        elseNode.openTag.end = this.dropLeadingWhitespace;
         node.else_ = this.parseUntilBlocks("endif");
+        node.else_.whiteSpace = elseNode;
+        if (parentIf) {
+          parentIf.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
+        } else {
+          node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
+        }
         this.advanceAfterBlockEnd();
+        if (parentIf) {
+          parentIf.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
+        } else {
+          node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
+        }
+
         break;
       case "endif":
         node.else_ = null;
+        if (parentIf) {
+          parentIf.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
+        } else {
+          node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
+        }
         this.advanceAfterBlockEnd();
+        if (parentIf) {
+          parentIf.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
+        } else {
+          node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
+        }
         break;
       default:
         this.fail("parseIf: expected elif, else, or endif, got end of file");
@@ -503,34 +573,42 @@ class Parser extends Obj {
   }
 
   parseUnless() {
-    const Unless = nodes.Node.extend("Unless", {
-      fields: ["cond", "body", "_else"],
-    });
-
     const tag = this.peekToken();
     let node;
 
     if (this.skipSymbol("unless")) {
-      node = new Unless(tag.lineno, tag.colno);
+      node = new nodes.Unless(tag.lineno, tag.colno);
     } else {
       this.fail("parseUnless: expected unless, else", tag.lineno, tag.colno);
     }
-
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
     node.cond = this.parseExpression();
     this.advanceAfterBlockEnd(tag.value);
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     node.body = this.parseUntilBlocks("else", "endunless");
     const tok = this.peekToken();
 
     switch (tok && tok.value) {
       case "else":
+        const elseWhiteSpace = {
+          openTag: { start: this.dropLeadingWhitespace, end: false },
+          closingTag: { start: false, end: false },
+        };
+        elseWhiteSpace.openTag.start = this.dropLeadingWhitespace;
         this.advanceAfterBlockEnd();
+        elseWhiteSpace.openTag.end = this.dropLeadingWhitespace;
         node.else_ = this.parseUntilBlocks("endunless");
+        node.else_.whiteSpace = elseWhiteSpace;
+        node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
         this.advanceAfterBlockEnd();
+        node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         break;
       case "endunless":
         node.else_ = null;
+        node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
         this.advanceAfterBlockEnd();
+        node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         break;
       default:
         this.fail("parseUnless: expected else, or endunless, got end of file");
@@ -546,6 +624,8 @@ class Parser extends Obj {
     }
 
     const node = new nodes.Set(tag.lineno, tag.colno, []);
+
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
 
     let target;
     while ((target = this.parsePrimary())) {
@@ -576,6 +656,8 @@ class Parser extends Obj {
       node.value = this.parseExpression();
       this.advanceAfterBlockEnd(tag.value);
     }
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     return node;
   }
@@ -719,19 +801,33 @@ class Parser extends Obj {
   }
 
   parseRaw(tagName) {
+    const rawWhiteSpace = {
+      openTag: { start: this.dropLeadingWhitespace, end: false },
+      closingTag: { start: false, end: false },
+    };
+    rawWhiteSpace.openTag.start = this.dropLeadingWhitespace;
     tagName = tagName || "raw";
     const endTagName = "end" + tagName;
     // Look for upcoming raw blocks (ignore all other kinds of blocks)
+    // Group 1: raw content
+    // Group 2: end tag delimiter
+    // Group 3: end tag name
+    // Group 4: end tag delimiter
     const rawBlockRegex = new RegExp(
-      "([\\s\\S]*?){%\\s*(" + tagName + "|" + endTagName + ")\\s*(?=%})%}"
+      "([\\s\\S]*?)({%-*)\\s*(" +
+        tagName +
+        "|" +
+        endTagName +
+        ")\\s*(?=-*%})(-*%})"
     );
     let rawLevel = 1;
     let str = "";
     let matches = null;
-
     // Skip opening raw token
     // Keep this token to track line and column numbers
     const begun = this.advanceAfterBlockEnd();
+
+    rawWhiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     // Exit when there's nothing to match
     // or when we've found the matching "endraw" block
@@ -741,7 +837,16 @@ class Parser extends Obj {
     ) {
       const all = matches[0];
       const pre = matches[1];
-      const blockName = matches[2];
+      const blockName = matches[3];
+
+      // Since we're not user the lexer to parse the end tag, we need to
+      // manually check the start and end tags
+      if (matches[2] === "{%-") {
+        rawWhiteSpace.closingTag.start = true;
+      }
+      if (matches[4] === "-%}") {
+        rawWhiteSpace.closingTag.end = true;
+      }
 
       // Adjust rawlevel
       if (blockName === tagName) {
@@ -761,9 +866,9 @@ class Parser extends Obj {
       }
     }
 
-    return new nodes.Output(begun.lineno, begun.colno, [
-      new nodes.TemplateData(begun.lineno, begun.colno, str),
-    ]);
+    const raw = new nodes.Raw(begun.lineno, begun.colno, str);
+    raw.whiteSpace = rawWhiteSpace;
+    return raw;
   }
 
   parsePostfix(node) {
@@ -1334,31 +1439,6 @@ class Parser extends Obj {
     while ((tok = this.nextToken())) {
       if (tok.type === lexer.TOKEN_DATA) {
         let data = tok.value;
-        const nextToken = this.peekToken();
-        const nextVal = nextToken && nextToken.value;
-
-        // If the last token has "-" we need to trim the
-        // leading whitespace of the data. This is marked with
-        // the `dropLeadingWhitespace` variable.
-        if (this.dropLeadingWhitespace) {
-          // TODO: this could be optimized (don't use regex)
-          data = data.replace(/^\s*/, "");
-          this.dropLeadingWhitespace = false;
-        }
-
-        // Same for the succeeding block start token
-        if (
-          nextToken &&
-          ((nextToken.type === lexer.TOKEN_BLOCK_START &&
-            nextVal.charAt(nextVal.length - 1) === "-") ||
-            (nextToken.type === lexer.TOKEN_VARIABLE_START &&
-              nextVal.charAt(this.tokens.tags.VARIABLE_START.length) === "-") ||
-            (nextToken.type === lexer.TOKEN_COMMENT &&
-              nextVal.charAt(this.tokens.tags.COMMENT_START.length) === "-"))
-        ) {
-          // TODO: this could be optimized (don't use regex)
-          data = data.replace(/\s*$/, "");
-        }
 
         buf.push(
           new nodes.Output(tok.lineno, tok.colno, [
@@ -1366,17 +1446,20 @@ class Parser extends Obj {
           ])
         );
       } else if (tok.type === lexer.TOKEN_BLOCK_START) {
-        this.dropLeadingWhitespace = false;
+        this.dropLeadingWhitespace = tok.value.charAt(2) === "-";
         const n = this.parseStatement();
         if (!n) {
           break;
         }
         buf.push(n);
       } else if (tok.type === lexer.TOKEN_VARIABLE_START) {
+        this.dropLeadingWhitespace = tok.value.charAt(2) === "-";
         const e = this.parseExpression();
-        this.dropLeadingWhitespace = false;
+        const variableNode = new nodes.Output(tok.lineno, tok.colno, [e]);
+        variableNode.whiteSpace.openTag.start = this.dropLeadingWhitespace;
         this.advanceAfterVariableEnd();
-        buf.push(new nodes.Output(tok.lineno, tok.colno, [e]));
+        variableNode.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+        buf.push(variableNode);
       } else if (tok.type === lexer.TOKEN_COMMENT) {
         this.dropLeadingWhitespace =
           tok.value.charAt(
