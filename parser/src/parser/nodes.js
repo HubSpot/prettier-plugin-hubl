@@ -92,6 +92,7 @@ const Pair = Node.extend("Pair", { fields: ["key", "value"] });
 const Dict = NodeList.extend("Dict");
 const LookupVal = Node.extend("LookupVal", { fields: ["target", "val"] });
 const If = Node.extend("If", { fields: ["cond", "body", "else_"] });
+const Unless = Node.extend("Unless", { fields: ["cond", "body", "_else"] });
 const IfAsync = If.extend("IfAsync");
 const InlineIf = Node.extend("InlineIf", { fields: ["cond", "body", "else_"] });
 const Ternary = Node.extend("Ternary", { fields: ["cond", "body", "else"] });
@@ -250,6 +251,7 @@ module.exports = {
   If: If,
   IfAsync: IfAsync,
   InlineIf: InlineIf,
+  Unless: Unless,
   Ternary: Ternary,
   For: For,
   AsyncEach: AsyncEach,

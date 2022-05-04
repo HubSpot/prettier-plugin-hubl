@@ -1,10 +1,10 @@
 "use strict";
 
-var lexer = require("./lexer");
-var nodes = require("./nodes");
-var Obj = require("./object").Obj;
-var lib = require("./lib");
-var { builtInTests } = require("./tests");
+const lexer = require("./lexer");
+const nodes = require("./nodes");
+const Obj = require("./object").Obj;
+const lib = require("./lib");
+const { builtInTests } = require("./tests");
 
 const whiteSpace = {
   openTag: { start: false, end: false },
@@ -541,34 +541,39 @@ class Parser extends Obj {
   }
 
   parseUnless() {
-    const Unless = nodes.Node.extend("Unless", {
-      fields: ["cond", "body", "_else"],
-    });
-
     const tag = this.peekToken();
     let node;
 
     if (this.skipSymbol("unless")) {
-      node = new Unless(tag.lineno, tag.colno);
+      node = new nodes.Unless(tag.lineno, tag.colno);
     } else {
       this.fail("parseUnless: expected unless, else", tag.lineno, tag.colno);
     }
-
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
     node.cond = this.parseExpression();
     this.advanceAfterBlockEnd(tag.value);
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     node.body = this.parseUntilBlocks("else", "endunless");
     const tok = this.peekToken();
 
     switch (tok && tok.value) {
       case "else":
+        const elseWhiteSpace = { ...whiteSpace };
+        elseWhiteSpace.openTag.start = this.dropLeadingWhitespace;
         this.advanceAfterBlockEnd();
+        elseWhiteSpace.openTag.end = this.dropLeadingWhitespace;
         node.else_ = this.parseUntilBlocks("endunless");
+        node.else_.whiteSpace = elseWhiteSpace;
+        node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
         this.advanceAfterBlockEnd();
+        node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         break;
       case "endunless":
         node.else_ = null;
+        node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
         this.advanceAfterBlockEnd();
+        node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         break;
       default:
         this.fail("parseUnless: expected else, or endunless, got end of file");

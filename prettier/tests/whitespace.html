@@ -17,3 +17,8 @@
 
 {%- for foo in bar %}
 {% endfor -%}
+
+{%- unless foo -%}
+Content
+{%- else -%}
+{%- endunless -%}

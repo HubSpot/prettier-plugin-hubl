@@ -180,13 +180,23 @@ function printHubl(node) {
       ]);
     case "Unless":
       const unlessParts = [
-        group(["{% unless ", printHubl(node.cond), " %}"]),
+        group([
+          openTag(node.whiteSpace.openTag),
+          " unless ",
+          printHubl(node.cond),
+          " ",
+          closeTag(node.whiteSpace.openTag),
+        ]),
         indent(printBody(node.body)),
       ];
       if (node.else_) {
         unlessParts.push(printElse(node));
       }
-      unlessParts.push("{% endunless %}");
+      unlessParts.push([
+        openTag(node.whiteSpace.closingTag),
+        " endunless ",
+        closeTag(node.whiteSpace.closingTag),
+      ]);
       return group(unlessParts);
     case "Div":
       return group([printHubl(node.left), " / ", printHubl(node.right)]);
