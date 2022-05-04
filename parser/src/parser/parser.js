@@ -477,6 +477,9 @@ class Parser extends Obj {
     }
 
     const node = new nodes.Include(tag.lineno, tag.colno);
+
+    node.whiteSpace.openTag.start = this.dropLeadingWhitespace;
+
     node.template = this.parseExpression();
 
     if (this.skipSymbol("ignore") && this.skipSymbol("missing")) {
@@ -484,6 +487,9 @@ class Parser extends Obj {
     }
 
     this.advanceAfterBlockEnd(tag.value);
+
+    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
     return node;
   }
 

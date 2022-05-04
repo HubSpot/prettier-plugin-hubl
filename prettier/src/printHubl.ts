@@ -411,6 +411,14 @@ function printHubl(node) {
         " ",
         closeTag(node.whiteSpace.openTag),
       ]);
+    case "Include":
+      return group([
+        openTag(node.whiteSpace.openTag),
+        " include ",
+        printHubl(node.template),
+        " ",
+        closeTag(node.whiteSpace.openTag),
+      ]);
     default:
       if (node.type === "tag") {
         if (node.value) {
