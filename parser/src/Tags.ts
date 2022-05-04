@@ -257,7 +257,6 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     "widget_container",
     "widget_wrapper",
     "end_flip",
-    "end_raw",
     "end_require_css",
     "end_require_head",
     "end_require_js",

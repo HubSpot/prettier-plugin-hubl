@@ -757,7 +757,7 @@ class Parser extends Obj {
     const endTagName = "end" + tagName;
     // Look for upcoming raw blocks (ignore all other kinds of blocks)
     const rawBlockRegex = new RegExp(
-      "([\\s\\S]*?){%\\s*(" + tagName + "|" + endTagName + ")\\s*(?=%})%}"
+      "([\\s\\S]*?){%-*\\s*(" + tagName + "|" + endTagName + ")\\s*(?=-*%})-*%}"
     );
     let rawLevel = 1;
     let str = "";
@@ -795,9 +795,7 @@ class Parser extends Obj {
       }
     }
 
-    return new nodes.Output(begun.lineno, begun.colno, [
-      new nodes.TemplateData(begun.lineno, begun.colno, str),
-    ]);
+    return new nodes.Raw(begun.lineno, begun.colno, str);
   }
 
   parsePostfix(node) {

@@ -120,6 +120,7 @@ const FilterAsync = Filter.extend("FilterAsync", {
   fields: ["name", "args", "symbol"],
 });
 const KeywordArgs = Dict.extend("KeywordArgs");
+const Raw = Node.extend("Raw", { fields: ["body"] });
 const Block = Node.extend("Block", { fields: ["name", "body"] });
 const Super = Node.extend("Super", { fields: ["blockName", "symbol"] });
 const TemplateRef = Node.extend("TemplateRef", { fields: ["template"] });
@@ -258,6 +259,7 @@ module.exports = {
   Filter: Filter,
   FilterAsync: FilterAsync,
   KeywordArgs: KeywordArgs,
+  Raw: Raw,
   Block: Block,
   Super: Super,
   Extends: Extends,
