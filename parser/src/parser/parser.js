@@ -1340,6 +1340,12 @@ class Parser extends Obj {
       }
 
       if (node instanceof nodes.Dict) {
+        // If the last item in a Dictionary is followed by a trailing comma, skip it
+        if (this.peekToken().type === lexer.TOKEN_RIGHT_CURLY) {
+          this.nextToken();
+          break;
+        }
+
         // TODO: check for errors
         const key = this.parsePrimary();
 
