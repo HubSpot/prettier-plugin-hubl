@@ -18,7 +18,7 @@
     "typescript": "^4.6.3"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf ./dist && tsc",
     "start": "yarn watch-all",
     "test": "tsc && ts-node ./tests/testConfig.ts",
     "watch": "nodemon --config nodemon.test.json",
@@ -33,6 +33,7 @@
     "type": "git",
     "url": "git@git.hubteam.com:HubSpot/hubl-prettier-plugin.git"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "HubSpot, Inc.",
+  "license": "Apache-2.0",
+  "private": true
 }

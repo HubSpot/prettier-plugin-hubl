@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf ./dist && tsc",
     "start": "nodemon --config ./configuration/nodemon.inline.json",
     "test": "tsc && jest -c ./configuration/jest.config.js",
     "update-test": "tsc && jest -c ./configuration/jest.config.js --update-snapshot",
@@ -12,8 +12,8 @@
     "watch-all": "yarn watch",
     "test-inline": "tsc && node ./src/test-inline.ts"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "HubSpot, Inc.",
+  "license": "Apache-2.0",
   "dependencies": {
     "nunjucks": "^3.2.3",
     "prettier": "^2.4.1"
@@ -27,5 +27,6 @@
     "nodemon": "^2.0.13",
     "ts-node": "^9.1.1",
     "typescript": "^4.6.3"
-  }
+  },
+  "private": true
 }
