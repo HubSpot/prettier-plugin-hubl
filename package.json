@@ -1,6 +1,6 @@
 {
-  "name": "prettier-plugin-hubl",
-  "version": "1.0.0",
+  "name": "@hubspot/prettier-plugin-hubl",
+  "version": "0.1.0",
   "main": "prettier-plugin-hubl.js",
   "dependencies": {},
   "devDependencies": {
@@ -13,12 +13,17 @@
     "watch-parser": "nf start -j ./configuration/watch-parser",
     "build:parser": "cd ./parser && npm install && npm run build",
     "build:prettier": "cd ./prettier && npm install && npm run build",
-    "prepare": "(npm run build:parser) && (npm run build:prettier)"
+    "prepare": "(npm run build:parser) && (npm run build:prettier)",
+    "npm:publish-beta": "npm publish . --tag beta"
   },
+  "files": [
+    "parser/dist",
+    "prettier/dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:HubSpot/prettier-plugin-hubl.git"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "HubSpot, Inc.",
+  "license": "Apache-2.0"
 }
