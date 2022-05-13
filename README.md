@@ -2,9 +2,9 @@
 
 A Prettier plugin that formats HubL templates for use with the HubSpot CMS
 
-## Plugin status: Alpha
+## Plugin status: Beta
 
-This plugin is currently in development and is not yet ready for production. Bug reports and questions [are welcomed](https://github.com/HubSpot/prettier-plugin-hubl/issues).
+This plugin is currently in active development. Bug reports and questions [are welcomed](https://github.com/HubSpot/prettier-plugin-hubl/issues).
 
 ## Philosophy
 In keeping with Prettier’s philosophy, this plugin is relatively opinionated and sometimes Prettier will prefer one syntax over another. For example:
