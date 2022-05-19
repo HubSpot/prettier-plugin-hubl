@@ -1,5 +1,5 @@
 {
-  "watch": ["src", "node_modules/nunjucks/src"],
+  "watch": ["src"],
   "exec": "tsc",
   "ext": "js, json, ts, proto, html",
   "ignoreRoot": [".git"]

@@ -15,7 +15,6 @@
   "author": "HubSpot, Inc.",
   "license": "Apache-2.0",
   "dependencies": {
-    "nunjucks": "^3.2.3",
     "prettier": "^2.4.1"
   },
   "devDependencies": {
