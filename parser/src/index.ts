@@ -11,7 +11,7 @@ type AST = any; //TODO Type me
 const parse = (text: string, parsers: object, options: object): AST => {
   //@ts-ignore
   const { parse } = parser.parser as Parser;
-  // We call into nunjucks' default parser, but we extend it by passing in our custom tags
+  // We call into parser, but we extend it by passing in our custom tags
   return parse(text, [new Tags()], { trimBlocks: false, lstripBlocks: false });
 };
 

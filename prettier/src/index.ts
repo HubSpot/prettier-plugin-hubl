@@ -153,7 +153,7 @@ const parsers = {
     preprocess: (text) => {
       let updatedText = text.trim();
 
-      // Nunjucks will strip comments, so this is a hack to keep them and the
+      // Parser will strip comments, so this is a hack to keep them and the
       // printer will transform them back to comments
 
       updatedText = tokenize(updatedText);
