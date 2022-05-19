@@ -1,5 +1,3 @@
-// import nunjucks from "nunjucks";
-
 type TemplateError = Error & {
   message: string;
   name: string;
@@ -228,5 +226,3 @@ export type Parser = {
   parse: (src: string, extensions?: Array<any>, opts?: any) => NodeType;
   Parser: ParserClassDef;
 };
-
-export type NunjucksPlaceholder = any;
