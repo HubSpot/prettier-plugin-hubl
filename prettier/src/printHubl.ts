@@ -69,13 +69,16 @@ const printBody = (node) => {
     return join(hardline, lines);
   };
   const getEndTemplateData = (item) => {
+    // If there are no newlines, return the value
+    if (!/\n+/.test(item.children[0].value)) {
+      return item.children[0].value;
+    }
     const childValue = item.children[0].value.replace(/\n$/, "");
     let lines = childValue.split("\n");
     if (/^\s+$/.test(lines[lines.length - 1])) {
       const lastLine = lines.pop();
       return [join(hardline, lines), dedent([hardline, lastLine])];
     }
-
     return [join(hardline, lines), dedent(hardline)];
   };
   for (let i = 0; i < node.children.length; i++) {
