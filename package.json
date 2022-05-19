@@ -4,7 +4,7 @@
   "main": "prettier-plugin-hubl.js",
   "dependencies": {},
   "peerDependencies": {
-    "pretter": "2.x"
+    "prettier": "2.x"
   },
   "devDependencies": {
     "foreman": "^3.0.1"
