@@ -1,6 +1,6 @@
 {
   "name": "@hubspot/prettier-plugin-hubl",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "prettier-plugin-hubl.js",
   "dependencies": {},
   "devDependencies": {
@@ -14,7 +14,8 @@
     "build:parser": "cd ./parser && npm install && npm run build",
     "build:prettier": "cd ./prettier && npm install && npm run build",
     "prepare": "(npm run build:parser) && (npm run build:prettier)",
-    "npm:publish-beta": "npm publish . --tag beta"
+    "npm:publish-beta": "npm publish . --tag beta",
+    "npm:publish-latest": "npm publish . --tag latest"
   },
   "files": [
     "parser/dist",
