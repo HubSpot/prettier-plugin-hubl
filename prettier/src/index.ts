@@ -124,17 +124,17 @@ const unTokenize = (input) => {
     // Placeholders in styleblocks need special treatment
     if (key.startsWith("/*styleblock")) {
       // The CSS comment needs to be escaped
-      const newKey = key.replace(/\//g, "\\/").replace(/\*/g, "\\*");
+      const escapedKey = key.replace(/\//g, "\\/").replace(/\*/g, "\\*");
       const STYLEBLOCK_REGEX = new RegExp(
         `${key.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\s;`,
         "gm"
       );
       // HTML formatter sometimes adds a space after the placeholder comment so we check for it and remove if it exists
       if (STYLEBLOCK_REGEX.test(input)) {
-        input = input.replace(new RegExp(newKey + " ;", "g"), value + ";");
+        input = input.replace(new RegExp(escapedKey + " ;", "g"), value + ";");
         return;
       } else {
-        input = input.replace(new RegExp(newKey, "g"), value);
+        input = input.replace(new RegExp(escapedKey, "g"), value);
         return;
       }
     }
