@@ -121,19 +121,24 @@ const tokenize = (input) => {
 };
 const unTokenize = (input) => {
   tokenMap.forEach((value, key) => {
-    // HTML formatter sometimes adds a space after the placeholder comment so we check for it and remove if it exists
+    // Placeholders in styleblocks need special treatment
     if (key.startsWith("/*styleblock")) {
-      const STYLEBLOCK_WITH_SPACE_PATTERN = `${key.replace(
-        /[-\/\\^$*+?.()|[\]{}]/g,
-        "\\$&"
-      )}\\s;`;
-      const STYLEBLOCK_REGEX = new RegExp(STYLEBLOCK_WITH_SPACE_PATTERN, "gm");
+      // The CSS comment needs to be escaped
+      const newKey = key.replace(/\//g, "\\/").replace(/\*/g, "\\*");
+      const STYLEBLOCK_REGEX = new RegExp(
+        `${key.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\s;`,
+        "gm"
+      );
+      // HTML formatter sometimes adds a space after the placeholder comment so we check for it and remove if it exists
       if (STYLEBLOCK_REGEX.test(input)) {
-        input = input.replace(key + " ;", value + ";");
+        input = input.replace(new RegExp(newKey + " ;", "g"), value + ";");
+        return;
+      } else {
+        input = input.replace(new RegExp(newKey, "g"), value);
         return;
       }
     }
-    input = input.replaceAll(key, value);
+    input = input.replace(new RegExp(key, "g"), value);
   });
   tokenMap.clear();
 
