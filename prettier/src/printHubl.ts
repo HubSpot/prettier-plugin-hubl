@@ -277,6 +277,8 @@ function printHubl(node) {
         return util.makeString(node.value, '"');
       }
       return `${node.value}`;
+    case "Comment":
+      return node.value;
     case "Filter":
       const leftHandSide = node.args.children.shift();
       const parts = [printHubl(leftHandSide), "|", printHubl(node.name)];

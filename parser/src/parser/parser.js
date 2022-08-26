@@ -1467,10 +1467,11 @@ class Parser extends Obj {
         variableNode.whiteSpace.openTag.end = this.dropLeadingWhitespace;
         buf.push(variableNode);
       } else if (tok.type === lexer.TOKEN_COMMENT) {
-        this.dropLeadingWhitespace =
-          tok.value.charAt(
-            tok.value.length - this.tokens.tags.COMMENT_END.length - 1
-          ) === "-";
+        this.dropLeadingWhitespace = false;
+        // Instead of parsing out the delimiters, we're going to capture
+        // the entire comment, delimeters and all
+        const commentNode = new nodes.Comment(tok.lineno, tok.colno, tok.value);
+        buf.push(commentNode);
       } else {
         // Ignore comments, otherwise this should be an error
         this.fail(
