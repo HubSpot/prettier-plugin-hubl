@@ -7,6 +7,7 @@ const languages = [
     name: "HubL",
     parsers: ["hubl"],
     extensions: [".hubl.html"],
+    vscodeLanguageIds: ["html-hubl"],
   },
 ];
 
