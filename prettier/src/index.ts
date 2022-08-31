@@ -171,11 +171,11 @@ const parsers = {
 
       updatedText = tokenize(updatedText);
       // Parse and format HTML first
-      let formattedText = format(updatedText, { parser: "html" });
+      updatedText = format(updatedText, { parser: "html" });
 
-      formattedText = preserveFormatting(updatedText);
+      updatedText = preserveFormatting(updatedText);
 
-      return unTokenize(formattedText);
+      return unTokenize(updatedText);
     },
   },
 };
