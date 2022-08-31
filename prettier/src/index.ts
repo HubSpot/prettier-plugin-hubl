@@ -150,12 +150,6 @@ const preserveFormatting = (input) => {
   const BEGIN_PRE_REGEX = /<pre.*?>/gms;
   const END_PRE_REGEX = /(?<!{% end_preserve %})<\/pre>/gms;
 
-  const beginPreTags = input.match(BEGIN_PRE_REGEX);
-  const endPreTags = input.match(END_PRE_REGEX);
-
-  if (beginPreTags && beginPreTags.length != endPreTags.length) {
-    throw new Error("Cannot find matching pair of <pre> tags");
-  }
   input = input.replace(BEGIN_PRE_REGEX, (match) => {
     return `${match}{% preserve %}`;
   });
