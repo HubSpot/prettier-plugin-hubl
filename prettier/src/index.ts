@@ -146,6 +146,26 @@ const unTokenize = (input) => {
   return input;
 };
 
+const preserveFormatting = (input) => {
+  const BEGIN_PRE_REGEX = /<pre.*?>/gms;
+  const END_PRE_REGEX = /(?<!{% end_preserve %})<\/pre>/gms;
+
+  const beginPreTags = input.match(BEGIN_PRE_REGEX);
+  const endPreTags = input.match(END_PRE_REGEX);
+
+  if (beginPreTags && beginPreTags.length != endPreTags.length) {
+    throw new Error("Cannot find matching pair of <pre> tags");
+  }
+  input = input.replace(BEGIN_PRE_REGEX, (match) => {
+    return `${match}{% preserve %}`;
+  });
+  input = input.replace(END_PRE_REGEX, (match) => {
+    return `{% endpreserve %}${match}`;
+  });
+
+  return input;
+};
+
 const parsers = {
   hubl: {
     astFormat: "hubl-ast",
@@ -155,12 +175,12 @@ const parsers = {
     preprocess: (text) => {
       let updatedText = text.trim();
 
-      // Parser will strip comments, so this is a hack to keep them and the
-      // printer will transform them back to comments
-
       updatedText = tokenize(updatedText);
       // Parse and format HTML first
-      const formattedText = format(updatedText, { parser: "html" });
+      let formattedText = format(updatedText, { parser: "html" });
+
+      formattedText = preserveFormatting(updatedText);
+
       return unTokenize(formattedText);
     },
   },

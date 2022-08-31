@@ -143,6 +143,7 @@ export type NodeType = Obj & {
 type TagName =
   | "raw"
   | "verbatim"
+  | "preserve"
   | "if"
   | "ifAsync"
   | "for"
