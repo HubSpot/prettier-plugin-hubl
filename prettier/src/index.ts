@@ -168,13 +168,14 @@ const parsers = {
     locEnd,
     preprocess: (text) => {
       let updatedText = text.trim();
-
+      // Swap HubL tags for placeholders
       updatedText = tokenize(updatedText);
-      // Parse and format HTML first
+      // Parse and format HTML
       updatedText = format(updatedText, { parser: "html" });
-
+      // Find <pre> tags and add {% preserve %} wrapper
+      // to tell the HubL parser to preserve formatting
       updatedText = preserveFormatting(updatedText);
-
+      // Swap back HubL tags and return
       return unTokenize(updatedText);
     },
   },
