@@ -146,6 +146,20 @@ const unTokenize = (input) => {
   return input;
 };
 
+const preserveFormatting = (input) => {
+  const BEGIN_PRE_REGEX = /<pre.*?>/gms;
+  const END_PRE_REGEX = /(?<!{% end_preserve %})<\/pre>/gms;
+
+  input = input.replace(BEGIN_PRE_REGEX, (match) => {
+    return `${match}{% preserve %}`;
+  });
+  input = input.replace(END_PRE_REGEX, (match) => {
+    return `{% endpreserve %}${match}`;
+  });
+
+  return input;
+};
+
 const parsers = {
   hubl: {
     astFormat: "hubl-ast",
@@ -154,14 +168,15 @@ const parsers = {
     locEnd,
     preprocess: (text) => {
       let updatedText = text.trim();
-
-      // Parser will strip comments, so this is a hack to keep them and the
-      // printer will transform them back to comments
-
+      // Swap HubL tags for placeholders
       updatedText = tokenize(updatedText);
-      // Parse and format HTML first
-      const formattedText = format(updatedText, { parser: "html" });
-      return unTokenize(formattedText);
+      // Parse and format HTML
+      updatedText = format(updatedText, { parser: "html" });
+      // Find <pre> tags and add {% preserve %} wrapper
+      // to tell the HubL parser to preserve formatting
+      updatedText = preserveFormatting(updatedText);
+      // Swap back HubL tags and return
+      return unTokenize(updatedText);
     },
   },
 };

@@ -84,6 +84,7 @@ class NodeList extends Node {
 }
 
 const Comment = Value.extend("Comment");
+const Preserve = Value.extend("Preserve");
 const Root = NodeList.extend("Root");
 const Literal = Value.extend("Literal");
 const Symbol = Value.extend("Symbol");
@@ -296,5 +297,6 @@ module.exports = {
   CallExtension: CallExtension,
   CallExtensionAsync: CallExtensionAsync,
   Comment: Comment,
+  Preserve: Preserve,
   printNodes: printNodes,
 };

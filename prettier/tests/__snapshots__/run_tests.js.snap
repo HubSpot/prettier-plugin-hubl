@@ -1681,6 +1681,111 @@ What is this element?
 
 `;
 
+exports[`pre.html 1`] = `
+{% block x %}
+<div>
+  <pre>
+    Is this indented twice?
+  </pre>
+</div>
+
+<div>
+  <pre>
+        Is this indented 4 times?
+  </pre>
+</div>
+
+<div>
+  <pre>
+  {{ 2_spaces }}
+  </pre>
+</div>
+
+<code>
+  <pre>
+   {{ 3_spaces }}
+    </pre>
+</code>
+
+<div hidden>
+  <!-- Debug data_query -->
+  <code>
+    <pre>
+       {{ 7_spaces }}
+                </pre>
+  </code>
+
+  <!-- Debug data -->
+  <code>
+    <pre>{% raw %}
+         {{ 10_spaces }}
+    {% endraw %}</pre>
+  </code>
+
+  <!-- Debug data|tojson -->
+  <code>
+  <pre>
+      {{ data|tojson }}
+            </pre>
+  </code>
+  <div>
+
+</div>
+</div>
+{% endblock %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% block x %}
+  <div>
+    <pre>
+    Is this indented twice?
+  </pre>
+  </div>
+
+  <div>
+    <pre>
+        Is this indented 4 times?
+  </pre>
+  </div>
+
+  <div>
+    <pre>
+  {{ 2_spaces }}
+  </pre>
+  </div>
+
+  <code>
+    <pre>
+   {{ 3_spaces }}
+    </pre>
+  </code>
+
+  <div hidden>
+    <!-- Debug data_query -->
+    <code>
+      <pre>
+       {{ 7_spaces }}
+                </pre>
+    </code>
+
+    <!-- Debug data -->
+    <code>
+      <pre>{% raw %}
+         {{ 10_spaces }}
+    {% endraw %}</pre>
+    </code>
+
+    <!-- Debug data|tojson -->
+    <code>
+      <pre>
+      {{ data|tojson }}
+            </pre>
+    </code>
+    <div></div>
+  </div>
+{% endblock x %}
+
+`;
+
 exports[`qatest.html 1`] = `
 <!--
   templateType: page

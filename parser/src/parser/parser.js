@@ -756,6 +756,8 @@ class Parser extends Obj {
         return this.parseRaw();
       case "verbatim":
         return this.parseRaw("verbatim");
+      case "preserve":
+        return this.parseRaw("preserve");
       case "if":
       case "ifAsync":
         return this.parseIf();
@@ -866,6 +868,9 @@ class Parser extends Obj {
       }
     }
 
+    if (tagName === "preserve") {
+      return new nodes.Preserve(begun.lineno, begun.colno, str);
+    }
     const raw = new nodes.Raw(begun.lineno, begun.colno, str);
     raw.whiteSpace = rawWhiteSpace;
     return raw;

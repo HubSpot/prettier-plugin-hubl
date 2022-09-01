@@ -96,21 +96,6 @@ const printBody = (node) => {
   return bodyElements;
 };
 
-const printComment = (node) => {
-  let commentText;
-  try {
-    // We'd normally recurse here, but comments should always have the same shape.
-    commentText = node.body.children[0].children[0].value;
-    commentText = commentText
-      .replace(/^.*?<!--/gms, "")
-      .replace(/-->.*?$/g, "");
-
-    return group(["{#", commentText, "#}"]);
-  } catch (e) {
-    throw new Error(`Error printing comment`);
-  }
-};
-
 // This is the main print function, which will determine the type of node and
 // print accordingly. It is recursive, so it will call itself to print nested
 // nodes.
@@ -123,6 +108,8 @@ function printHubl(node) {
       return node.children.map((child) => {
         return printHubl(child);
       });
+    case "Preserve":
+      return node.value;
     case "Set":
       return [
         openTag(node.whiteSpace.openTag),
@@ -512,9 +499,6 @@ function printHubl(node) {
           return printHubl(child);
         });
       } else if (node.type === "block_tag") {
-        if (node.value === "comment") {
-          return printComment(node);
-        }
         return [
           group([
             openTag(node.whiteSpace.openTag),
