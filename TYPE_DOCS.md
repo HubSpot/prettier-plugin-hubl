@@ -226,18 +226,18 @@ function(list, of, params)
 ### Not
 
 ```
-{{ left is not right }}
-{{ not variable }}
+left is not right
+not variable
 ```
 
 ### LookupVal
 
 ```
-{{ variable.property }}
-{{ variable[symbol] }}
+variable.property
+variable[symbol]
 ```
 
-Note: `variable['property']` will be converted to `variable.property`
+Note: When the key is string (`variable['property']`) it will be converted to `variable.property`
 
 ### KeywordArgs
 
@@ -254,16 +254,24 @@ Note: `variable['property']` will be converted to `variable.property`
 ### Array
 
 ```
-{{ [ "list", "of", "items"] }}
+[ "list", "of", "items"]
+[
+  "long",
+  "list",
+  "of",
+  "items"
+]
 ```
 
 ### Dict
 
 ```
-{{ {
-  "item1": true,
-  "item2": false
-} }}
+{ a: true, b: false }
+{
+  item1: true,
+  item2: false
+  item3: 100
+}
 ```
 
 ### Pair
