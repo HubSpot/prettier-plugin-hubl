@@ -1,3 +1,21 @@
+# Formatting logic
+
+This plugin makes two passes when formatting a HubL document. The first pass utilizes Prettier's built in HTML formatter which has it's own specific formatting rules. Two notables rules are:
+
+- Self closing tags will contain a `/`: `<img src="" />`
+- Whitespace-sensitive tags will break the tag itself onto multiple lines:
+
+```
+<a class="blog-post__tag-link" href="{{ url }}" rel="tag"
+            >{{ tag.name }}</a
+          >
+```
+
+## HubL formatting rules
+
+- The `body` or children of a block tag will be generally be indented one level deeper
+- No specific quote type is enforced. However, quotes inside of quotes will be adjusted or escaped as needed
+
 ## Tags
 
 ### Set
@@ -8,13 +26,19 @@
 
 ### If
 
+May be printed on a single line if it will fit
+
+```
+{% if true %}Hello{% endif %}
+```
+
 ```
 {% if condition %}
-  [body indented]
+  [indented content]
 {% elif condition %}
-  [body indented]
+  [indented content]
 {% else %}
-  [body indented]
+  [indented content]
 {% endif %}
 ```
 
@@ -22,7 +46,7 @@
 
 ```
 {% unless condition %}
-  [body indented]
+  [indented content]
 {% endunless %}
 ```
 
@@ -38,7 +62,7 @@ Raw
 
 ```
 {% for item in list %}
-  [body indented]
+  [indented content]
 {% endfor %}
 ```
 
@@ -46,7 +70,7 @@ Macro
 
 ```
 {% macro macro_name(list, of, params) %}
-  [body indented]
+  [indented content]
 {% endmacro %}
 ```
 
@@ -80,99 +104,108 @@ Macro
 {% do variable.method() %}
 ```
 
-### Single ### Block
+### Block
 
 ```
 {% block name %}
+  [indented content]
 {% endblock name %}
 ```
 
-Body\*
-
 ## Operators
 
-### Concat
+### Concatenate
 
 ```
-{{ left ~ right }}
+foo ~ bar
 ```
 
 ### And
 
 ```
-{{ left and right }}
+foo and bar
 ```
+
+Note: `&&` is converted to `and`
+
+### Or
+
+```
+foor or bar
+```
+
+Note: `||` is converted to `or`
 
 ### Is
 
 ```
-{{ left is right }}
+foo is bar
 ```
 
 ### Ternary
 
 ```
-{{ condition ? one : two }}
+condition ? foo : bar
 ```
 
-### InlineIf
+### Inline If
 
 ```
-{{ variable if positive else negative }}
+foo if condition else bar
 ```
 
-### Div
+### Divide
 
 ```
-{{ one / two }}
+foo / bar
 ```
 
-### Mul
+### Multiply
 
 ```
-{{ one * two }}
+foo * bar
 ```
 
-### Mod
+### Modulus
 
 ```
-{{ one % two }}
+foo % bar
 ```
 
-### Pow
+### Power
 
 ```
-{{ one ** two }}
+foo ** bar
 ```
 
-### Neg
+### Negate
 
 ```
-{{ -variable }}
+-variable
 ```
 
-### Sub
+### Subtract
 
 ```
-{{ left - right }}
+foo - bar
 ```
 
 ### Add
 
 ```
-{{ left + right }}
+foo + bar
 ```
 
 ### In
 
 ```
-{{ left in right }}
+foo in bar
 ```
 
 ### Group
 
 ```
-(epxression)
+(foo + bar)
 ```
 
 ### Filter
@@ -188,7 +221,7 @@ Body\*
 function(list, of, params)
 ```
 
-### Compare //TODO
+### Compare
 
 ### Not
 
@@ -200,12 +233,21 @@ function(list, of, params)
 ### LookupVal
 
 ```
-variable['property']
 {{ variable.property }}
 {{ variable[symbol] }}
 ```
 
+Note: `variable['property']` will be converted to `variable.property`
+
 ### KeywordArgs
+
+```
+{% tag 'name' foo="bar", bar="foo" %}
+{% longerTag 'name'
+  item1=true,
+  item2="foo",
+  item3=bar %}
+```
 
 ## Data Types
 
@@ -224,22 +266,20 @@ variable['property']
 } }}
 ```
 
-### Pair //TODO: not parsing
+### Pair
 
 ```
-{# key as value #}
+key as value
 ```
 
-### Symbol
+### Symbol / Variable
 
 ```
-{{ symbol }}
+symbol
 ```
 
-### Literal
+### String Literal
 
 ```
-{{ "string" }}
+"string"
 ```
-
-// TODO: Explain quote logic
