@@ -147,8 +147,10 @@ Note: `||` is converted to `or`
 ### Is
 
 ```
-foo is bar
+foo is string_containing(“bar”)
 ```
+
+Note: `string_containing “bar”` will be converted to `string_containing(“bar”)`
 
 ### Ternary
 
