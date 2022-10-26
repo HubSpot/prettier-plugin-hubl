@@ -1,0 +1,19 @@
+<div class="{% if true %}foo{% endif %}">
+  Content
+</div>
+<div class="{% if reallyLongVariableName === true %} also a reall long text node that should wrap{% endif %}">
+  Content
+</div>
+<div class="{% if reallyLongVariableName === true and anotherVariable === 'string' %}another long string that should wrap{% endif %}">
+  Content
+</div>
+{% if foo === bar %}
+Text that should get indented
+{% endif %}
+{% if true %}
+{% block a%}
+{% linked_image src="string" %}
+{% if false %}
+{% endif %}
+{% endblock %}
+{% endif %}
