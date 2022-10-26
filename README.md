@@ -59,7 +59,7 @@ npx prettier --write '**/*.html'
 
 ## Troubleshooting Errors
 
-Check under “Known Issues” to see if your error has been reported already. If not, feel free to [open up a new issue](https://github.com/HubSpot/prettier-plugin-hubl/issues/new).
+Check under “Known Issues” to see if your error has been reported already. If not, feel free to [open up a new issue](https://github.com/HubSpot/prettier-plugin-hubl/issues/new). You can also review the expected formatting of different elements [here](./TYPE_DOCS.md).
 
 ## Community
 
