@@ -3,7 +3,7 @@
 This plugin makes two passes when formatting a HubL document. The first pass utilizes Prettier's built in HTML formatter which has it's own specific formatting rules. Two notables rules are:
 
 - Self closing tags will contain a `/`: `<img src="" />`
-- Whitespace-sensitive tags will break the tag itself onto multiple lines:
+- HTML tags may be broken up in order to preserve whitespace:
 
 ```
 <a class="blog-post__tag-link" href="{{ url }}" rel="tag"
@@ -50,7 +50,7 @@ May be printed on a single line if it will fit
 {% endunless %}
 ```
 
-Raw
+### Raw
 
 ```
 {% raw %}
@@ -66,7 +66,7 @@ Raw
 {% endfor %}
 ```
 
-Macro
+### Macro
 
 ```
 {% macro macro_name(list, of, params) %}
@@ -98,7 +98,15 @@ Macro
 {# import variable from 'path/to/file' #}
 ```
 
-### Caller ### Do
+### Caller
+
+```
+{% call macro_name("string") %}
+  [indented content]
+{% endcall %}
+```
+
+### Do
 
 ```
 {% do variable.method() %}
