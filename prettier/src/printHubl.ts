@@ -52,7 +52,6 @@ const printTagArgs = (node) => {
   });
 };
 
-// Nested HubL tags get special treatment to indent correctly
 const printJsonBody = (node) => {
   try {
     const bodyText = node.children[0].children[0].value;
@@ -60,11 +59,12 @@ const printJsonBody = (node) => {
     const lines = formatted.split("\n");
     return [line, join(line, lines)];
   } catch (e) {
-    console.log(e);
     // If JSON parsing fails, we can fall back on the normal printer
     return printBody(node);
   }
 };
+
+// Nested HubL tags get special treatment to indent correctly
 const printBody = (node) => {
   let bodyElements: Doc = [];
   const isTemplateData = (item) => {
@@ -511,20 +511,8 @@ function printHubl(node) {
           return printHubl(child);
         });
       } else if (node.type === "block_tag") {
-        const isJson = node.children.meta?.body === "json";
-        if (isJson) {
-          return [
-            group([
-              openTag(node.whiteSpace.openTag),
-              ` ${node.value}`,
-              align(node.colno - 1, printTagArgs(node.children)),
-              " ",
-              closeTag(node.whiteSpace.openTag),
-            ]),
-            indent(printJsonBody(node.body)),
-            group([openTag(node.whiteSpace.closingTag), ` end_${node.value} `]),
-            closeTag(node.whiteSpace.closingTag),
-          ];
+        if (node.value === "json_block") {
+          return [printJsonBody(node.body)];
         } else {
           return [
             group([

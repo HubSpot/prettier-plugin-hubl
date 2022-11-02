@@ -206,6 +206,7 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     "follow_me",
     "form",
     "icon",
+    "json_block",
     "module",
     "module_attribute",
     "widget_attribute",
@@ -271,6 +272,7 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     "end_targeted_widget_attribute",
     "end_widget_container",
     "end_widget_wrapper",
+    "end_json_block",
   ];
 
   /**
@@ -306,6 +308,7 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     { start: "widget_block", end: "end_widget_block" },
     { start: "widget_container", end: "end_widget_container" },
     { start: "widget_wrapper", end: "end_widget_wrapper" },
+    { start: "json_block", end: "end_json_block" },
   ];
   this.parse = function (parser: ParserClass, nodes: Nodes, lexer: Lexer) {
     const tagWhiteSpace = {

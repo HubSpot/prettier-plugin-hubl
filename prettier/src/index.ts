@@ -38,6 +38,8 @@ const tokenize = (input) => {
   const VARIABLE_REGEX = /({{.+?}})/gs;
   const HTML_TAG_WITH_HUBL_TAG_REGEX = /<[^>]*?(?={%|{{).*?>/gms;
   const STYLE_BLOCK_WITH_HUBL_REGEX = /<style.[^>]*?(?={%|{{).*?style>/gms;
+  const JSON_BLOCK =
+    /(?<={% widget_attribute.*is_json="?true"? %}|{% module_attribute.*is_json="?true"? %}).*?(?={%.*?end_module_attribute.*?%}|{%.*?end_widget_attribute.*?%})/gims;
 
   // Replace tags in style block
   const nestedStyleTags = input.match(STYLE_BLOCK_WITH_HUBL_REGEX);
@@ -94,6 +96,19 @@ const tokenize = (input) => {
       tokenIndex++;
       tokenMap.set(`<!--${tokenIndex}-->`, comment);
       input = input.replace(comment, `<!--${tokenIndex}-->`);
+    });
+  }
+
+  const jsons = input.match(JSON_BLOCK);
+
+  if (jsons) {
+    jsons.forEach((match) => {
+      tokenIndex++;
+      tokenMap.set(
+        `<!--placeholder-${tokenIndex}-->`,
+        `{% json_block %}${match}{% end_json_block %}`
+      );
+      input = input.replace(match, `<!--placeholder-${tokenIndex}-->`);
     });
   }
 
