@@ -38,29 +38,38 @@ const tokenize = (input) => {
   const VARIABLE_REGEX = /({{.+?}})/gs;
   const HTML_TAG_WITH_HUBL_TAG_REGEX = /<[^>]*?(?={%|{{).*?>/gms;
   const STYLE_BLOCK_WITH_HUBL_REGEX = /<style.[^>]*?(?={%|{{).*?style>/gms;
-  const JSON_BLOCK =
+  const JSON_BLOCK_REGEX =
     /(?<={% widget_attribute.*is_json="?true"? %}|{% module_attribute.*is_json="?true"? %}).*?(?={%.*?end_module_attribute.*?%}|{%.*?end_widget_attribute.*?%})/gims;
+
+  const createToken = (sourceString, re, placeholder, fn?) => {
+    return sourceString.replace(re, (match) => {
+      const token = getToken(match);
+      if (token) {
+        return token;
+      }
+
+      tokenIndex++;
+      const newPlaceholder = placeholder.replace("$t", tokenIndex);
+      if (fn) {
+        tokenMap.set(newPlaceholder, fn(match));
+      } else {
+        tokenMap.set(newPlaceholder, match);
+      }
+
+      return newPlaceholder;
+    });
+  };
 
   // Replace tags in style block
   const nestedStyleTags = input.match(STYLE_BLOCK_WITH_HUBL_REGEX);
   if (nestedStyleTags) {
     nestedStyleTags.forEach((tag) => {
-      let newString;
-      newString = tag.replace(HUBL_TAG_REGEX, (match) => {
-        tokenIndex++;
-        tokenMap.set(`/*styleblock${tokenIndex}*/`, match);
-        return `/*styleblock${tokenIndex}*/`;
-      });
-      newString = newString.replace(VARIABLE_REGEX, (match) => {
-        tokenIndex++;
-        tokenMap.set(`/*styleblock${tokenIndex}*/`, match);
-        return `/*styleblock${tokenIndex}*/`;
-      });
-      newString = newString.replace(COMMENT_REGEX, (match) => {
-        tokenIndex++;
-        tokenMap.set(`/*styleblock${tokenIndex}*/`, match);
-        return `/*styleblock${tokenIndex}*/`;
-      });
+      let newString = tag;
+
+      newString = createToken(newString, HUBL_TAG_REGEX, "/*styleblock$t*/");
+      newString = createToken(newString, VARIABLE_REGEX, "/*styleblock$t*/");
+      newString = createToken(newString, COMMENT_REGEX, "/*styleblock$t*/");
+
       input = input.replace(tag, newString);
     });
   }
@@ -69,48 +78,34 @@ const tokenize = (input) => {
   const nestedHtmlTags = input.match(HTML_TAG_WITH_HUBL_TAG_REGEX);
   if (nestedHtmlTags) {
     nestedHtmlTags.forEach((tag) => {
-      let newString;
-      newString = tag.replace(HUBL_TAG_REGEX, (match) => {
-        tokenIndex++;
-        tokenMap.set(`npe${tokenIndex}_`, match);
-        return `npe${tokenIndex}_`;
-      });
-      newString = newString.replace(VARIABLE_REGEX, (match) => {
-        // Variables are sometimes used as HTML tag names
-        const token = getToken(match);
-        if (token) {
-          return token;
-        }
+      let newString = tag;
 
-        tokenIndex++;
-        tokenMap.set(`npe${tokenIndex}_`, match);
-        return `npe${tokenIndex}_`;
-      });
+      newString = createToken(newString, HUBL_TAG_REGEX, "npe$t_");
+      newString = createToken(newString, VARIABLE_REGEX, "npe$t_");
+
       input = input.replace(tag, newString);
     });
   }
 
-  const comments = input.match(COMMENT_REGEX);
-  if (comments) {
-    comments.forEach((comment) => {
-      tokenIndex++;
-      tokenMap.set(`<!--${tokenIndex}-->`, comment);
-      input = input.replace(comment, `<!--${tokenIndex}-->`);
-    });
-  }
+  input = createToken(input, COMMENT_REGEX, `<!--$t-->`);
 
-  const jsons = input.match(JSON_BLOCK);
+  input = createToken(
+    input,
+    JSON_BLOCK_REGEX,
+    `<!--placeholder-$t-->`,
+    (match) => {
+      return `{% json_block %}${match}{% end_json_block %}`;
+    }
+  );
 
-  if (jsons) {
-    jsons.forEach((match) => {
-      tokenIndex++;
-      tokenMap.set(
-        `<!--placeholder-${tokenIndex}-->`,
-        `{% json_block %}${match}{% end_json_block %}`
-      );
-      input = input.replace(match, `<!--placeholder-${tokenIndex}-->`);
-    });
-  }
+  // input = createToken(
+  //   input,
+  //   HUBL_TAG_REGEX,
+  //   `<!--placeholder-$t-->`,
+  //   (match) => {
+  //     return match.replace(LINE_BREAK_REGEX, " ");
+  //   }
+  // );
 
   const matches = input.match(HUBL_TAG_REGEX);
   if (matches) {

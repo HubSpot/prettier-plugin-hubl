@@ -512,7 +512,7 @@ function printHubl(node) {
         });
       } else if (node.type === "block_tag") {
         if (node.value === "json_block") {
-          return [printJsonBody(node.body)];
+          return printJsonBody(node.body);
         } else {
           return [
             group([
