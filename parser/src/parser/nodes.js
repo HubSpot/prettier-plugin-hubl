@@ -71,7 +71,7 @@ class NodeList extends Node {
     return "NodeList";
   }
   get fields() {
-    return ["children", "meta"];
+    return ["children"];
   }
 
   init(lineno, colno, nodes) {
