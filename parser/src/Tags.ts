@@ -97,11 +97,6 @@ const parseSignature = (parser: ParserClass, nodes: Nodes, lexer: Lexer) => {
       lhs.type = "kw_key";
       let rhs;
 
-      // If is_json=true, add some meta so printer can be aware
-      if (expression.value === "is_json") {
-        parsedSignature.meta = { body: "json" };
-      }
-
       // In HubL, values can be Dicts with nested variables, so we need to parse them
       //@ts-ignore
       if (parser.tokens._extractString("{{")) {
