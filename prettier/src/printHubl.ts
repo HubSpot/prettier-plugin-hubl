@@ -57,7 +57,7 @@ const printJsonBody = (node) => {
     // This is a predictable tag structure
     const bodyText = node.children[0].children[0].value;
     const formattedBodyText = format(bodyText, { parser: "json" });
-    return [line, join(line, formattedBodyText.split("\n"))];
+    return join(line, formattedBodyText.trim().split("\n"));
   } catch (e) {
     // If JSON parsing fails, we can fall back on the normal printer
     return printBody(node);
@@ -505,7 +505,7 @@ function printHubl(node) {
         }
       } else if (node.type === "block_tag") {
         if (node.value === "json_block") {
-          return printJsonBody(node.body);
+          return [indent([line, printJsonBody(node.body)]), line];
         }
         return [
           group([
