@@ -38,7 +38,7 @@ const tokenize = (input) => {
   const VARIABLE_REGEX = /({{.+?}})/gs;
   const HTML_TAG_WITH_HUBL_TAG_REGEX = /<[^>]*?(?={%|{{).*?>/gms;
   const STYLE_BLOCK_WITH_HUBL_REGEX = /<style.[^>]*?(?={%|{{).*?style>/gms;
-  const JSON_BLOCK =
+  const JSON_BLOCK_REGEX =
     /(?<={% widget_attribute.*is_json="?true"? %}|{% module_attribute.*is_json="?true"? %}).*?(?={%.*?end_module_attribute.*?%}|{%.*?end_widget_attribute.*?%})/gims;
 
   // Replace tags in style block
@@ -99,10 +99,9 @@ const tokenize = (input) => {
     });
   }
 
-  const jsons = input.match(JSON_BLOCK);
-
-  if (jsons) {
-    jsons.forEach((match) => {
+  const jsonBlocks = input.match(JSON_BLOCK_REGEX);
+  if (jsonBlocks) {
+    jsonBlocks.forEach((match) => {
       tokenIndex++;
       tokenMap.set(
         `<!--placeholder-${tokenIndex}-->`,
