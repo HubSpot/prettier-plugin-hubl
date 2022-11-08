@@ -54,10 +54,10 @@ const printTagArgs = (node) => {
 
 const printJsonBody = (node) => {
   try {
+    // This is a predictable tag structure
     const bodyText = node.children[0].children[0].value;
-    const formatted = format(bodyText, { parser: "json" });
-    const lines = formatted.split("\n");
-    return [line, join(line, lines)];
+    const formattedBodyText = format(bodyText, { parser: "json" });
+    return [line, join(line, formattedBodyText.split("\n"))];
   } catch (e) {
     // If JSON parsing fails, we can fall back on the normal printer
     return printBody(node);
