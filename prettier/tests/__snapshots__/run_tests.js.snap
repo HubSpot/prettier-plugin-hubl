@@ -1203,10 +1203,10 @@ exports[`json.html 1`] = `
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% module_attribute "social_link"
   is_json=True %}
-  [
-    { "social_account": "facebook-f", "social_account": "linkedin-f" },
-    { "social_account": "twitter", "social_account": "instagram" }
-  ]
+    [
+      { "social_account": "facebook-f", "social_account": "linkedin-f" },
+      { "social_account": "twitter", "social_account": "instagram" }
+    ]
   {% end_module_attribute %}
 
 `;
@@ -3855,24 +3855,24 @@ This is a simple dialog rendered by using a macro and a call block.
     version="1" %}
     {% widget_attribute "slides"
       is_json=True %}
-    [
-      {
-        "caption": "CRM Contacts App",
-        "show_caption": true,
-        "link_url": "http://www.hubspot.com/crm",
-        "alt_text": "Screenshot of CRM Contacts",
-        "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
-        "open_in_new_tab": true
-      },
-      {
-        "caption": "HubSpot CRM Contact Profile",
-        "show_caption": true,
-        "link_url": "http://www.hubspot.com/",
-        "alt_text": "HubSpot CRM Contact Profile",
-        "img_src": "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
-        "open_in_new_tab": true
-      }
-    ]
+      [
+        {
+          "caption": "CRM Contacts App",
+          "show_caption": true,
+          "link_url": "http://www.hubspot.com/crm",
+          "alt_text": "Screenshot of CRM Contacts",
+          "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+          "open_in_new_tab": true
+        },
+        {
+          "caption": "HubSpot CRM Contact Profile",
+          "show_caption": true,
+          "link_url": "http://www.hubspot.com/",
+          "alt_text": "HubSpot CRM Contact Profile",
+          "img_src": "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
+          "open_in_new_tab": true
+        }
+      ]
     {% end_widget_attribute %}
   {% end_widget_block %}
   {% global_widget "global_widget" %}
@@ -4130,49 +4130,49 @@ This is a simple dialog rendered by using a macro and a call block.
     overrideable=True %}
     {% widget_attribute "pinterest"
       is_json=True %}
-    {
-      "custom_link_format": "",
-      "pinterest_media": "http://cdn2.hubspot.net/hub/158015/305390_10100548508246879_837195_59275782_6882128_n.jpg",
-      "enabled": true,
-      "network": "pinterest",
-      "img_src": "https://static.hubspot.com/final/img/common/icons/social/pinterest-24x24.png"
-    }
+      {
+        "custom_link_format": "",
+        "pinterest_media": "http://cdn2.hubspot.net/hub/158015/305390_10100548508246879_837195_59275782_6882128_n.jpg",
+        "enabled": true,
+        "network": "pinterest",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/pinterest-24x24.png"
+      }
     {% end_widget_attribute %}
     {% widget_attribute "twitter"
       is_json=True %}
-    {
-      "custom_link_format": "",
-      "enabled": true,
-      "network": "twitter",
-      "img_src": "https://static.hubspot.com/final/img/common/icons/social/twitter-24x24.png"
-    }
+      {
+        "custom_link_format": "",
+        "enabled": true,
+        "network": "twitter",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/twitter-24x24.png"
+      }
     {% end_widget_attribute %}
     {% widget_attribute "linkedin"
       is_json=True %}
-    {
-      "custom_link_format": "",
-      "enabled": true,
-      "network": "linkedin",
-      "img_src": "https://static.hubspot.com/final/img/common/icons/social/linkedin-24x24.png"
-    }
+      {
+        "custom_link_format": "",
+        "enabled": true,
+        "network": "linkedin",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/linkedin-24x24.png"
+      }
     {% end_widget_attribute %}
     {% widget_attribute "facebook"
       is_json=True %}
-    {
-      "custom_link_format": "",
-      "enabled": true,
-      "network": "facebook",
-      "img_src": "https://static.hubspot.com/final/img/common/icons/social/facebook-24x24.png"
-    }
+      {
+        "custom_link_format": "",
+        "enabled": true,
+        "network": "facebook",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/facebook-24x24.png"
+      }
     {% end_widget_attribute %}
     {% widget_attribute "email"
       is_json=True %}
-    {
-      "custom_link_format": "",
-      "enabled": true,
-      "network": "email",
-      "img_src": "https://static.hubspot.com/final/img/common/icons/social/email-24x24.png"
-    }
+      {
+        "custom_link_format": "",
+        "enabled": true,
+        "network": "email",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/email-24x24.png"
+      }
     {% end_widget_attribute %}
   {% end_widget_block %}
   {% space "space" %}
