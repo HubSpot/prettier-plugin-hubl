@@ -74,7 +74,7 @@ const tokenize = (input) => {
   };
 
   const createToken = (sourceString, re, type) => {
-    const { fn, placeholder } = tokenTypes[type];
+    const { tokenReplacer, placeholder } = tokenTypes[type];
     return sourceString.replace(re, (match) => {
       const token = getToken(match, type);
       if (token) {
@@ -83,8 +83,8 @@ const tokenize = (input) => {
 
       tokenIndex++;
       const newPlaceholder = placeholder.replace("$t", tokenIndex);
-      if (fn) {
-        tokenMap.set(newPlaceholder, { token: fn(match), type });
+      if (!!tokenReplacer) {
+        tokenMap.set(newPlaceholder, { token: tokenReplacer(match), type });
       } else {
         tokenMap.set(newPlaceholder, { token: match, type });
       }
