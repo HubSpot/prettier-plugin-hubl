@@ -1,5 +1,5 @@
 import { Doc } from "prettier";
-import { doc, util } from "prettier";
+import { doc, util, format } from "prettier";
 const {
   builders: { group, indent, dedent, join, hardline, line, softline, align },
 } = doc;
@@ -50,6 +50,18 @@ const printTagArgs = (node) => {
       return group([line, printHubl(child)]);
     }
   });
+};
+
+const printJsonBody = (node) => {
+  try {
+    // This is a predictable tag structure
+    const bodyText = node.children[0].children[0].value;
+    const formattedBodyText = format(bodyText, { parser: "json" });
+    return join(line, formattedBodyText.trim().split("\n"));
+  } catch (e) {
+    // If JSON parsing fails, we can fall back on the normal printer
+    return printBody(node);
+  }
 };
 
 // Nested HubL tags get special treatment to indent correctly
@@ -491,14 +503,10 @@ function printHubl(node) {
             closeTag(node.whiteSpace.openTag),
           ]);
         }
-      } else if (node.type === "compound") {
-        return node.children.map((child) => {
-          if (typeof child === "string") {
-            return child;
-          }
-          return printHubl(child);
-        });
       } else if (node.type === "block_tag") {
+        if (node.value === "json_block") {
+          return [indent([line, printJsonBody(node.body)]), line];
+        }
         return [
           group([
             openTag(node.whiteSpace.openTag),
@@ -512,6 +520,7 @@ function printHubl(node) {
           closeTag(node.whiteSpace.closingTag),
         ];
       }
+
       return `unknown type: ${node.typename}`;
   }
 }
