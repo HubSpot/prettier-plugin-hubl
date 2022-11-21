@@ -505,22 +505,22 @@ function printHubl(node) {
         }
       } else if (node.type === "block_tag") {
         if (node.value === "json_block") {
-          return [indent([line, printJsonBody(node.body)]), line];
+          return printJsonBody(node.body);
+        } else {
+          return [
+            group([
+              openTag(node.whiteSpace.openTag),
+              ` ${node.value}`,
+              align(node.colno - 1, printTagArgs(node.children)),
+              " ",
+              closeTag(node.whiteSpace.openTag),
+            ]),
+            indent(printBody(node.body)),
+            group([openTag(node.whiteSpace.closingTag), ` end_${node.value} `]),
+            closeTag(node.whiteSpace.closingTag),
+          ];
         }
-        return [
-          group([
-            openTag(node.whiteSpace.openTag),
-            ` ${node.value}`,
-            align(node.colno - 1, printTagArgs(node.children)),
-            " ",
-            closeTag(node.whiteSpace.openTag),
-          ]),
-          indent(printBody(node.body)),
-          group([openTag(node.whiteSpace.closingTag), ` end_${node.value} `]),
-          closeTag(node.whiteSpace.closingTag),
-        ];
       }
-
       return `unknown type: ${node.typename}`;
   }
 }
