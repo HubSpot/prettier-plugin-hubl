@@ -224,7 +224,9 @@ screenshotPath: ../images/template-previews/blog-index.png
           {% end_dnd_module %}
         {% end_dnd_row %}
         {% dnd_row %}
-          {% dnd_module path="@hubspot/blog_subscribe", title="" %}
+          {% dnd_module
+            path="@hubspot/blog_subscribe",
+            title="" %}
           {% end_dnd_module %}
         {% end_dnd_row %}
       {% end_dnd_column %}
@@ -370,7 +372,10 @@ screenshotPath: ../images/template-previews/blog-post.png
         </div>
         {% if content.tag_list %}
           <div class="blog-post__tags">
-            {% icon name="tag", purpose="decorative", style="SOLID" %}
+            {% icon
+              name="tag",
+              purpose="decorative",
+              style="SOLID" %}
             {% for tag in content.tag_list %}
             <a class="blog-post__tag-link" href="{{ blog_tag_url(group.id, tag.slug) }}" rel="tag"
               >{{ tag.name }}</a
@@ -856,7 +861,9 @@ exports[`home.html 1`] = `
 
     {# Two column image left #}
 
-    {% dnd_section background_color="#f8fafc", vertical_alignment="MIDDLE" %}
+    {% dnd_section
+      background_color="#f8fafc",
+      vertical_alignment="MIDDLE" %}
       {% dnd_module
         path="@hubspot/linked_image",
         img={
@@ -2611,9 +2618,15 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="@hubspot/form", offset=0, width=6 %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=0,
+            width=6 %}
           {% end_dnd_module %}
-          {% dnd_module path="@hubspot/form", offset=6, width=6 %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=6,
+            width=6 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2623,11 +2636,20 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="@hubspot/form", offset=0, width=4 %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=0,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="@hubspot/form", offset=4, width=4 %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=4,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="@hubspot/form", offset=8, width=4 %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=8,
+            width=4 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
       {% end_dnd_column %}
@@ -2675,9 +2697,15 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="../modules/card", offset=0, width=6 %}
+          {% dnd_module
+            path="../modules/card",
+            offset=0,
+            width=6 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/card", offset=6, width=6 %}
+          {% dnd_module
+            path="../modules/card",
+            offset=6,
+            width=6 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2687,11 +2715,20 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="../modules/card", offset=0, width=4 %}
+          {% dnd_module
+            path="../modules/card",
+            offset=0,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/card", offset=4, width=4 %}
+          {% dnd_module
+            path="../modules/card",
+            offset=4,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/card", offset=8, width=4 %}
+          {% dnd_module
+            path="../modules/card",
+            offset=8,
+            width=4 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2724,9 +2761,15 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="../modules/button", offset=0, width=6 %}
+          {% dnd_module
+            path="../modules/button",
+            offset=0,
+            width=6 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/button", offset=6, width=6 %}
+          {% dnd_module
+            path="../modules/button",
+            offset=6,
+            width=6 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2736,11 +2779,20 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="../modules/button", offset=0, width=4 %}
+          {% dnd_module
+            path="../modules/button",
+            offset=0,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/button", offset=4, width=4 %}
+          {% dnd_module
+            path="../modules/button",
+            offset=4,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/button", offset=8, width=4 %}
+          {% dnd_module
+            path="../modules/button",
+            offset=8,
+            width=4 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2790,9 +2842,15 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="../modules/pricing-card", offset=0, width=6 %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=0,
+            width=6 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/pricing-card", offset=6, width=6 %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=6,
+            width=6 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2802,11 +2860,20 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="../modules/pricing-card", offset=0, width=4 %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=0,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/pricing-card", offset=4, width=4 %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=4,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/pricing-card", offset=8, width=4 %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=8,
+            width=4 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2839,9 +2906,15 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="../modules/social-follow", offset=0, width=6 %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=0,
+            width=6 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/social-follow", offset=6, width=6 %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=6,
+            width=6 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2851,11 +2924,20 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module path="../modules/social-follow", offset=0, width=4 %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=0,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/social-follow", offset=4, width=4 %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=4,
+            width=4 %}
           {% end_dnd_module %}
-          {% dnd_module path="../modules/social-follow", offset=8, width=4 %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=8,
+            width=4 %}
           {% end_dnd_module %}
         {% end_dnd_row %}
       {% end_dnd_column %}
@@ -3469,7 +3551,10 @@ Smart content rule 1
   label="Blog Email Subscription",
   overrideable=False %}
 {% boolean "boolean" %}
-{% boolean "nav_toggle" label="Hide navigation", value=False, no_wrapper=True %}
+{% boolean "nav_toggle"
+  label="Hide navigation",
+  value=False,
+  no_wrapper=True %}
 {% macro render_dialog(title, class="dialog") %}
   <div class="{{ class }}">
     <h2>{{ title }}</h2>
@@ -3546,7 +3631,10 @@ This is a simple dialog rendered by using a macro and a call block.
   } %}
 
 {% end_dnd_column %}
-{% dnd_module path="@hubspot/rich_text", offset=0, width=8 %}
+{% dnd_module
+  path="@hubspot/rich_text",
+  offset=0,
+  width=8 %}
   {% module_attribute "html" %}
     <h1>Hello, world!</h1>
   {% end_module_attribute %}
@@ -3596,7 +3684,9 @@ This is a simple dialog rendered by using a macro and a call block.
   <td>
     {{ item.price }}
   {% end_email_each %}
-  {% email_each list="custom.cart_items", item="line_item" %}
+  {% email_each
+    list="custom.cart_items",
+    item="line_item" %}
   </td>
 
   <td>{{ line_item.name }}</td>
@@ -3660,7 +3750,9 @@ This is a simple dialog rendered by using a macro and a call block.
     <p class="important">Welcome to my awesome homepage.</p>
   {% endblock content %}
   {% follow_me "follow_me" %}
-  {% follow_me "follow_us" title="Follow Us", module_title_tag="h2" %}
+  {% follow_me "follow_us"
+    title="Follow Us",
+    module_title_tag="h2" %}
   {% for item in items %}
   {{ item }}
   {% endfor %}
@@ -4189,7 +4281,9 @@ exports[`website-header.html 1`] = `
 
   {# Top header drag and drop area #}
 
-  {% dnd_area "header-top" label="Top header", class="content-wrapper" %}
+  {% dnd_area "header-top"
+    label="Top header",
+    class="content-wrapper" %}
   {% end_dnd_area %}
 
   {# Main header #}
@@ -4249,7 +4343,9 @@ exports[`website-header.html 1`] = `
 
   {# Bottom header drag and drop area #}
 
-  {% dnd_area "header-bottom" label="Bottom header", class="content-wrapper" %}
+  {% dnd_area "header-bottom"
+    label="Bottom header",
+    class="content-wrapper" %}
   {% end_dnd_area %}
 </header>
 
