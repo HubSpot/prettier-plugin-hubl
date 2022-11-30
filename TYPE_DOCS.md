@@ -252,12 +252,17 @@ Note: When the key is string (`variable['property']`) it will be converted to `v
 ### KeywordArgs
 
 ```
-{% tag 'name' foo="bar", bar="foo" %}
+{% tag 'name' foo="bar" %}
+{% tag 'name'
+  foo="bar",
+  bar="foo" %}
 {% longerTag 'name'
   item1=true,
   item2="foo",
   item3=bar %}
 ```
+
+Note: When there are 2 or more keyword arguments, they will be displayed on multiple lines
 
 ## Data Types
 
