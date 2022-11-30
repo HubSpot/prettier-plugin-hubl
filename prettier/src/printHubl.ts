@@ -334,10 +334,11 @@ function printHubl(node) {
         ]),
       ];
     case "KeywordArgs":
+      const lineType = node.children.length > 1 ? hardline : line;
       return [
         softline,
         join(
-          [",", line],
+          [",", lineType],
           node.children.map((kw) => {
             return group([kw.key.value, "=", printHubl(kw.value)]);
           })
