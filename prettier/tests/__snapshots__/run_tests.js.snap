@@ -234,17 +234,14 @@ screenshotPath: ../images/template-previews/blog-index.png
 
     {# Blog listings and pagination #}
 
-    {% dnd_section
-      vertical_alignment="TOP" %}
+    {% dnd_section vertical_alignment="TOP" %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="../modules/blog-listings" %}
+          {% dnd_module path="../modules/blog-listings" %}
           {% end_dnd_module %}
         {% end_dnd_row %}
         {% dnd_row %}
-          {% dnd_module
-            path="../modules/blog-pagination" %}
+          {% dnd_module path="../modules/blog-pagination" %}
           {% end_dnd_module %}
         {% end_dnd_row %}
       {% end_dnd_column %}
@@ -551,8 +548,7 @@ templateType: none
     <div class="body-wrapper {{ builtin_body_classes }}">
       {% block header %}
 
-        {% global_partial
-          path="../partials/header.html" %}
+        {% global_partial path="../partials/header.html" %}
       {% endblock header %}
 
       {# The main-content ID is used for the navigation skipper in the header.html file. More information on the navigation skipper can be found here: https://github.com/HubSpot/cms-theme-boilerplate/wiki/Accessibility #}
@@ -563,8 +559,7 @@ templateType: none
       </main>
 
       {% block footer %}
-        {% global_partial
-          path="../partials/footer.html" %}
+        {% global_partial path="../partials/footer.html" %}
       {% endblock footer %}
     </div>
     {{ require_js(get_asset_url("../../js/main.js")) }}
@@ -612,8 +607,7 @@ exports[`contact.html 1`] = `
 
     {# Cards #}
 
-    {% include_dnd_partial
-      path="../sections/cards.html" %}
+    {% include_dnd_partial path="../sections/cards.html" %}
 
   {% end_dnd_area %}
 {% endblock body %}
@@ -859,13 +853,11 @@ exports[`home.html 1`] = `
 
     {# Hero banner #}
 
-    {% include_dnd_partial
-      path="../sections/hero-banner.html" %}
+    {% include_dnd_partial path="../sections/hero-banner.html" %}
 
     {# Two column image right #}
 
-    {% include_dnd_partial
-      path="../sections/multi-row-content.html" %}
+    {% include_dnd_partial path="../sections/multi-row-content.html" %}
 
     {# Two column image left #}
 
@@ -895,13 +887,11 @@ exports[`home.html 1`] = `
 
     {# Call to action #}
 
-    {% include_dnd_partial
-      path="../sections/call-to-action.html" %}
+    {% include_dnd_partial path="../sections/call-to-action.html" %}
 
     {# Three column image with text #}
 
-    {% include_dnd_partial
-      path="../sections/multi-column-content.html" %}
+    {% include_dnd_partial path="../sections/multi-column-content.html" %}
 
   {% end_dnd_area %}
 {% endblock body %}
@@ -1187,8 +1177,7 @@ Text that should get indented
 {% endif %}
 {% if true %}
   {% block a %}
-    {% linked_image
-      src="string" %}
+    {% linked_image src="string" %}
     {% if false %}
     {% endif %}
   {% endblock a %}
@@ -1260,8 +1249,7 @@ exports[`landing-page.html 1`] = `
 {% extends "./layouts/base.html" %}
 
 {% block header %}
-  {% global_partial
-    path="./partials/header-no-navigation.html" %}
+  {% global_partial path="./partials/header-no-navigation.html" %}
 {% endblock header %}
 
 {% block body %}
@@ -1395,8 +1383,7 @@ exports[`minimal_nested.html 1`] = `
 <div class="what">
   {% dnd_column %}
     {% dnd_row %}
-      {% dnd_module
-        path="@hubspot/rich_text" %}
+      {% dnd_module path="@hubspot/rich_text" %}
         {% module_attribute "html" %}
           <title>{{ page_meta.html_title or pageTitle }}</title>
           <h3>Nested heading</h3>
@@ -2510,8 +2497,7 @@ exports[`qatest.html 1`] = `
     {% dnd_section %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h1>Typography</h1>
               <hr />
@@ -2519,8 +2505,7 @@ exports[`qatest.html 1`] = `
           {% end_dnd_module %}
         {% end_dnd_row %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h1>Heading 1</h1>
               <h2>Heading 2</h2>
@@ -2611,8 +2596,7 @@ exports[`qatest.html 1`] = `
     {% dnd_section %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h2>Default modules</h2>
               <hr />
@@ -2626,8 +2610,7 @@ exports[`qatest.html 1`] = `
           margin={
             "top": 35
           } %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Forms</h3>
             {% end_module_attribute %}
@@ -2640,8 +2623,7 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module
-            path="@hubspot/form" %}
+          {% dnd_module path="@hubspot/form" %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2693,8 +2675,7 @@ exports[`qatest.html 1`] = `
     {% dnd_section %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h2>Theme modules</h2>
               <hr />
@@ -2708,8 +2689,7 @@ exports[`qatest.html 1`] = `
           margin={
             "top": 35
           } %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Card</h3>
             {% end_module_attribute %}
@@ -2722,8 +2702,7 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module
-            path="../modules/card" %}
+          {% dnd_module path="../modules/card" %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2774,8 +2753,7 @@ exports[`qatest.html 1`] = `
           margin={
             "top": 35
           } %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Button</h3>
             {% end_module_attribute %}
@@ -2788,8 +2766,7 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module
-            path="../modules/button" %}
+          {% dnd_module path="../modules/button" %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2840,16 +2817,14 @@ exports[`qatest.html 1`] = `
           margin={
             "top": 35
           } %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Menu section</h3>
             {% end_module_attribute %}
           {% end_dnd_module %}
         {% end_dnd_row %}
         {% dnd_row %}
-          {% dnd_module
-            path="../modules/menu" %}
+          {% dnd_module path="../modules/menu" %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2859,8 +2834,7 @@ exports[`qatest.html 1`] = `
           margin={
             "top": 35
           } %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Pricing card</h3>
             {% end_module_attribute %}
@@ -2873,8 +2847,7 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module
-            path="../modules/pricing-card" %}
+          {% dnd_module path="../modules/pricing-card" %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2925,8 +2898,7 @@ exports[`qatest.html 1`] = `
           margin={
             "top": 35
           } %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Social follow</h3>
             {% end_module_attribute %}
@@ -2939,8 +2911,7 @@ exports[`qatest.html 1`] = `
           padding={
             "top": 35
           } %}
-          {% dnd_module
-            path="../modules/social-follow" %}
+          {% dnd_module path="../modules/social-follow" %}
           {% end_dnd_module %}
         {% end_dnd_row %}
 
@@ -2992,8 +2963,7 @@ exports[`qatest.html 1`] = `
     {% dnd_section %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h2>Theme sections</h2>
               <hr />
@@ -3015,8 +2985,7 @@ exports[`qatest.html 1`] = `
       } %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Call to action</h3>
             {% end_module_attribute %}
@@ -3025,8 +2994,7 @@ exports[`qatest.html 1`] = `
       {% end_dnd_column %}
     {% end_dnd_section %}
 
-    {% include_dnd_partial
-      path="../sections/call-to-action.html" %}
+    {% include_dnd_partial path="../sections/call-to-action.html" %}
 
     {# Cards #}
 
@@ -3040,8 +3008,7 @@ exports[`qatest.html 1`] = `
       } %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Cards</h3>
             {% end_module_attribute %}
@@ -3050,8 +3017,7 @@ exports[`qatest.html 1`] = `
       {% end_dnd_column %}
     {% end_dnd_section %}
 
-    {% include_dnd_partial
-      path="../sections/cards.html" %}
+    {% include_dnd_partial path="../sections/cards.html" %}
 
     {# Hero banner #}
 
@@ -3065,8 +3031,7 @@ exports[`qatest.html 1`] = `
       } %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Hero banner</h3>
             {% end_module_attribute %}
@@ -3075,8 +3040,7 @@ exports[`qatest.html 1`] = `
       {% end_dnd_column %}
     {% end_dnd_section %}
 
-    {% include_dnd_partial
-      path="../sections/hero-banner.html" %}
+    {% include_dnd_partial path="../sections/hero-banner.html" %}
 
     {# Multi-column content #}
 
@@ -3090,8 +3054,7 @@ exports[`qatest.html 1`] = `
       } %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Multi-column content</h3>
             {% end_module_attribute %}
@@ -3100,8 +3063,7 @@ exports[`qatest.html 1`] = `
       {% end_dnd_column %}
     {% end_dnd_section %}
 
-    {% include_dnd_partial
-      path="../sections/multi-column-content.html" %}
+    {% include_dnd_partial path="../sections/multi-column-content.html" %}
 
     {# Multi-row content #}
 
@@ -3115,8 +3077,7 @@ exports[`qatest.html 1`] = `
       } %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Multi-row content</h3>
             {% end_module_attribute %}
@@ -3125,8 +3086,7 @@ exports[`qatest.html 1`] = `
       {% end_dnd_column %}
     {% end_dnd_section %}
 
-    {% include_dnd_partial
-      path="../sections/multi-row-content.html" %}
+    {% include_dnd_partial path="../sections/multi-row-content.html" %}
 
     {# Pricing #}
 
@@ -3140,8 +3100,7 @@ exports[`qatest.html 1`] = `
       } %}
       {% dnd_column %}
         {% dnd_row %}
-          {% dnd_module
-            path="@hubspot/rich_text" %}
+          {% dnd_module path="@hubspot/rich_text" %}
             {% module_attribute "html" %}
               <h3>Pricing</h3>
             {% end_module_attribute %}
@@ -3150,8 +3109,7 @@ exports[`qatest.html 1`] = `
       {% end_dnd_column %}
     {% end_dnd_section %}
 
-    {% include_dnd_partial
-      path="../sections/pricing.html" %}
+    {% include_dnd_partial path="../sections/pricing.html" %}
 
   {% end_dnd_area %}
 {% endblock body %}
@@ -3598,11 +3556,9 @@ Smart content rule 1
   <!--Content that will render within a block of the same name in the parent template-->
 {% endblock my_sidebar %}
 {% blog_comments "blog_comments" %}
-{% blog_comments "default_blog_comments"
-  select_blog="359485112" %}
+{% blog_comments "default_blog_comments" select_blog="359485112" %}
 {% blog_social_sharing "blog_social_sharing" %}
-{% blog_social_sharing "my_blog_social_sharing"
-  select_blog="359485112" %}
+{% blog_social_sharing "my_blog_social_sharing" select_blog="359485112" %}
 {% blog_subscribe "blog_subscribe" %}
 {% blog_subscribe "subscribe_designers_blog"
   select_blog="default",
@@ -3615,8 +3571,7 @@ Smart content rule 1
   label="Hide navigation",
   value=False,
   no_wrapper=True %}
-{% macro render_dialog(title,
-class="dialog") %}
+{% macro render_dialog(title, class="dialog") %}
   <div class="{{ class }}">
     <h2>{{ title }}</h2>
     <div class="contents">
@@ -3668,16 +3623,14 @@ This is a simple dialog rendered by using a macro and a call block.
   label="Select a CTA",
   guid="ccd39b7c-ae18-4c4e-98ee-547069bfbc5b",
   image_src="https://no-cache.hubspot.com/cta/default/53/c7335b66-a0d4-4d19-82eb-75e1626d02d0.png" %}
-{% custom_widget "custom_widget"
-  widget_name="Custom Module Name" %}
+{% custom_widget "custom_widget" widget_name="Custom Module Name" %}
 {% custom_widget "employee_quote"
   widget_name="Employee Quote",
   label="Employee image and quote section" %}
 {% for content in contents %}
 <div class="post-item {% cycle "odd" "even" %}">Blog post content</div>
 {% endfor %}
-{% dnd_area "unique_name"
-  class="main" %}
+{% dnd_area "unique_name" class="main" %}
 {% end_dnd_area %}
 {% dnd_column
   offset=0,
@@ -3742,8 +3695,7 @@ This is a simple dialog rendered by using a macro and a call block.
 
 {% end_dnd_section %}
 {% do list.append("value 2") %}
-{% email_each
-  list="custom.cart_items" %}
+{% email_each list="custom.cart_items" %}
   <td>{{ item.name }}</td>
   <td>
     {{ item.price }}
@@ -3900,8 +3852,7 @@ This is a simple dialog rendered by using a macro and a call block.
     height="64",
     purpose="semantic",
     title="address-card icon" %}
-  {% icon
-    name="address-card" %}
+  {% icon name="address-card" %}
   {% if condition %}
     If the condition is true print this to template.
   {% endif %}
@@ -3954,14 +3905,12 @@ This is a simple dialog rendered by using a macro and a call block.
   {% inline_rich_text "inline_rich_text"
     field="my_text_field",
     html="<p>My rich text default content</p>" %}
-  {% inline_text "text"
-    field="my_text_field" %}
+  {% inline_text "text" field="my_text_field" %}
   {% inline_text "simple_text_field"
     field="my_text_field",
     value="This is the default value for this text field" %}
   {% language_switcher "language_switcher" %}
-  {% language_switcher "language_switcher"
-    display_mode="hybrid" %}
+  {% language_switcher "language_switcher" display_mode="hybrid" %}
 
   {% linked_image "linked_image" %}
   {% linked_image "my_linked_image"
@@ -4011,8 +3960,7 @@ This is a simple dialog rendered by using a macro and a call block.
     password_confirm_label="Confirm Password",
     submit_button_text="Save password",
     show_password="Show password" %}
-  {% menu "menu"
-    id="123" %}
+  {% menu "menu" id="123" %}
   {% menu "my_menu"
     id="456",
     site_map_name="Default",
@@ -4022,14 +3970,10 @@ This is a simple dialog rendered by using a macro and a call block.
     max_levels="2",
     flow="horizontal",
     label="Advanced Menu" %}
-  {% module "module"
-    module_id=123 %}
-  {% module "module"
-    path="/absolute/path/to/Module" %}
-  {% module "module"
-    path="relative/path/to/Module" %}
-  {% module "module"
-    path="@hubspot/rich_text" %}
+  {% module "module" module_id=123 %}
+  {% module "module" path="/absolute/path/to/Module" %}
+  {% module "module" path="relative/path/to/Module" %}
+  {% module "module" path="@hubspot/rich_text" %}
   {% module "employee_quote"
     module_id=456,
     label="Employee image and quote section" %}
@@ -4122,8 +4066,7 @@ This is a simple dialog rendered by using a macro and a call block.
   {% simple_menu "my_simple_menu"
     orientation="horizontal",
     label="Simple Menu" %}
-  {% social_sharing "social_sharing"
-    use_page_url=True %}
+  {% social_sharing "social_sharing" use_page_url=True %}
   {% widget_block social_sharing "my_social_sharing"
     label="Social Sharing",
     use_page_url=True,
@@ -4176,8 +4119,7 @@ This is a simple dialog rendered by using a macro and a call block.
     {% end_widget_attribute %}
   {% end_widget_block %}
   {% space "space" %}
-  {% space "my_spacer"
-    label="Horizontal Spacer" %}
+  {% space "my_spacer" label="Horizontal Spacer" %}
   {% module_block raw_html "module_block raw_html"
     definition_id=2801831944,
     overrideable=False,
@@ -4396,8 +4338,7 @@ exports[`website-header.html 1`] = `
     {# Header logo column #}
 
     <div class="header__logo header__logo--main">
-      {% module "site_logo"
-        path="@hubspot/logo" %}
+      {% module "site_logo" path="@hubspot/logo" %}
     </div>
 
     {# Header navigation column #}
@@ -4570,8 +4511,7 @@ Content
 
 {%- do foo.append("bar") -%}
 
-{%- form
-   form_id=123 -%}
+{%- form form_id=123 -%}
 
 {%- widget_attribute -%}
 {%- end_widget_attribute -%}

@@ -1,7 +1,17 @@
 import { Doc } from "prettier";
 import { doc, util, format } from "prettier";
 const {
-  builders: { group, indent, dedent, join, hardline, line, softline, align },
+  builders: {
+    group,
+    indent,
+    dedent,
+    join,
+    hardline,
+    line,
+    softline,
+    align,
+    ifBreak,
+  },
 } = doc;
 
 const openTag = (whitepsace) => {
@@ -45,7 +55,7 @@ const printElse = (node) => {
 const printTagArgs = (node) => {
   return node.children.map((child) => {
     if (child.typename === "KeywordArgs") {
-      return printHubl(child);
+      return [ifBreak("", line), printHubl(child)];
     } else {
       return group([line, printHubl(child)]);
     }
@@ -336,10 +346,11 @@ function printHubl(node) {
         ]),
       ];
     case "KeywordArgs":
+      const lineType = node.children.length > 1 ? hardline : line;
       return [
-        hardline,
+        softline,
         join(
-          [",", hardline],
+          [",", lineType],
           node.children.map((kw) => {
             return group([kw.key.value, "=", printHubl(kw.value)]);
           })
