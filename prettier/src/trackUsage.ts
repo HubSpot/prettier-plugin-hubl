@@ -6,19 +6,22 @@ const {
   isTrackingAllowed,
   getAccountConfig,
 } = require("@hubspot/cli-lib");
+import { resolveConfigFile } from "prettier";
 
-export const trackUsage = (rootPath) => {
+export const trackUsage = () => {
+  const rootPath = resolveConfigFile.sync();
   if (!rootPath) {
     return;
   }
+  console.log("rootpath", rootPath);
 
-  const path = findConfig(rootPath);
-
-  if (!path) {
+  const configPath = findConfig(rootPath);
+  if (!configPath) {
     return;
   }
+  console.log("configPath", configPath);
 
-  loadConfig(path);
+  loadConfig(configPath);
 
   if (!validateConfig()) {
     return;

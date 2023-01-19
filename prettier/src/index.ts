@@ -185,11 +185,7 @@ const parsers = {
     locEnd,
     preprocess: (text) => {
       if (firstFile) {
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        console.log("THIS IS THE FIRST FILE");
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        trackUsage();
         firstFile = false;
       }
       let updatedText = text.trim();
