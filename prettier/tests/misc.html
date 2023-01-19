@@ -46,7 +46,7 @@ Infinity
           name="angle-double-left",
           purpose="decorative",
           style="SOLID",
-          unicode="f100" 
+          unicode="f100"
         %}
         <span class="pagination__link-text show-for-sr--mobile">{{ module.first_label }}</span>
       </a>
@@ -83,7 +83,7 @@ Infinity
         timeframe={{ context.card_one_timeframe or "/mo" }},
         width=4
       %}{% end_dnd_module %}
-      
+
 {% do rel.append("nofollow") %}
 
 {% set rel = [] %}
@@ -113,7 +113,7 @@ Infinity
       {% set x = true %}
       {{ variable2 }}
       </div>
-      
+
     {% endblock %}
 
 
@@ -123,7 +123,7 @@ Infinity
 
 {{ rel|join(" ") }}
 
-{% set testing_table_id = null %} 
+{% set testing_table_id = null %}
 
 {% unless true %}
   Content
@@ -156,3 +156,9 @@ What is this element?
 {{ foo % bar }}
 {{ foo ** bar }}
 {{ foo * bar }}
+{{ 1 eq 3 }}
+{{ 1 ne 3 }}
+{{ 1 gt 3 }}
+{{ 1 gte 3 }}
+{{ 1 lt 3 }}
+{{ 1 lte 3 }}

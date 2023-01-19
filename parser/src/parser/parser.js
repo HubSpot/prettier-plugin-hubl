@@ -1059,7 +1059,23 @@ class Parser extends Obj {
   }
 
   parseCompare() {
-    const compareOps = ["==", "===", "!=", "!==", "<", ">", "<=", ">="];
+    const compareOps = [
+      "==",
+      "===",
+      "!=",
+      "!==",
+      "<",
+      ">",
+      "<=",
+      ">=",
+      // HubL Specific Shorthand: https://developers.hubspot.com/docs/cms/hubl/operators-and-expression-tests#comparison
+      "eq",
+      "ne",
+      "gt",
+      "gte",
+      "lt",
+      "lte",
+    ];
     const expr = this.parseConcat();
     const ops = [];
 
