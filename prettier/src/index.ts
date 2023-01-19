@@ -1,6 +1,7 @@
 import { format } from "prettier";
 import { parse } from "../../parser/dist/index";
 import printers from "./printHubl";
+import { trackUsage } from "./trackUsage";
 
 const languages = [
   {
@@ -174,6 +175,8 @@ const preserveFormatting = (input) => {
   return input;
 };
 
+let firstFile = true;
+
 const parsers = {
   hubl: {
     astFormat: "hubl-ast",
@@ -181,6 +184,14 @@ const parsers = {
     locStart,
     locEnd,
     preprocess: (text) => {
+      if (firstFile) {
+        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        console.log("THIS IS THE FIRST FILE");
+        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        firstFile = false;
+      }
       let updatedText = text.trim();
       // Swap HubL tags for placeholders
       updatedText = tokenize(updatedText);

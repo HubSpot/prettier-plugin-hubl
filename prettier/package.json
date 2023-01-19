@@ -15,6 +15,7 @@
   "author": "HubSpot, Inc.",
   "license": "Apache-2.0",
   "dependencies": {
+    "@hubspot/cli-lib": "^4.1.6",
     "prettier": "^2.4.1"
   },
   "devDependencies": {
