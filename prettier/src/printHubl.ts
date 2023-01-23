@@ -260,7 +260,10 @@ function printHubl(node) {
         "]",
       ]);
     case "LookupVal":
-      if (node.val.typename === "Literal") {
+      if (
+        node.val.typename === "Literal" &&
+        typeof node.val.value === "string"
+      ) {
         return [printHubl(node.target), ".", node.val.value];
       }
       return [printHubl(node.target), "[", printHubl(node.val), "]"];
