@@ -1190,8 +1190,7 @@ exports[`json.html 1`] = `
 [{"social_account":"facebook-f", "social_account":"linkedin-f"},{"social_account":"twitter", "social_account":"instagram"}]
 {% end_module_attribute %}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{% module_attribute "social_link"
-  is_json=True %}
+{% module_attribute "social_link" is_json=True %}
     [
       { "social_account": "facebook-f", "social_account": "linkedin-f" },
       { "social_account": "twitter", "social_account": "instagram" }
@@ -1444,7 +1443,7 @@ Infinity
           name="angle-double-left",
           purpose="decorative",
           style="SOLID",
-          unicode="f100" 
+          unicode="f100"
         %}
         <span class="pagination__link-text show-for-sr--mobile">{{ module.first_label }}</span>
       </a>
@@ -1481,7 +1480,7 @@ Infinity
         timeframe={{ context.card_one_timeframe or "/mo" }},
         width=4
       %}{% end_dnd_module %}
-      
+
 {% do rel.append("nofollow") %}
 
 {% set rel = [] %}
@@ -1511,7 +1510,7 @@ Infinity
       {% set x = true %}
       {{ variable2 }}
       </div>
-      
+
     {% endblock %}
 
 
@@ -1521,7 +1520,7 @@ Infinity
 
 {{ rel|join(" ") }}
 
-{% set testing_table_id = null %} 
+{% set testing_table_id = null %}
 
 {% unless true %}
   Content
@@ -1554,6 +1553,9 @@ What is this element?
 {{ foo % bar }}
 {{ foo ** bar }}
 {{ foo * bar }}
+
+{{ variable[1] }}
+{{ variable[2] }}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% if sky != "blue" %}
   Clouds
@@ -1721,33 +1723,36 @@ What is this element?
 {{ foo ** bar }}
 {{ foo * bar }}
 
+{{ variable[1] }}
+{{ variable[2] }}
+
 `;
 
 exports[`nestedHtmlTags.html 1`] = `
   {% require_css %}
     <style>
-      .list-wrapper {
-        text-align: {{ module.styles.alignment_and_spacing.alignment.horizontal_align }};
+      .list-wrapper {{ tagVariable }} {
+        list-style-type: {{ anotherTestVariable }};
       }
     </style>
   {% end_require_css %}
 
   <div class="list-wrapper">
-    <{{ module.styles.appearance.list_type }}>
+    <{{ tagVariable }}>
 
-    </{{ module.styles.appearance.list_type }}>
+    </{{ tagVariable }}>
   </div>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% require_css %}
   <style>
-    .list-wrapper {
-      text-align: {{ module.styles.alignment_and_spacing.alignment.horizontal_align }};
+    .list-wrapper {{ tagVariable }} {
+      list-style-type: {{ anotherTestVariable }};
     }
   </style>
 {% end_require_css %}
 
 <div class="list-wrapper">
-  <{{ module.styles.appearance.list_type }}> </{{ module.styles.appearance.list_type }}>
+  <{{ tagVariable }}> </{{ tagVariable }}>
 </div>
 
 `;
@@ -3834,8 +3839,7 @@ This is a simple dialog rendered by using a macro and a call block.
     loop_slides=True,
     num_seconds=5,
     version="1" %}
-    {% widget_attribute "slides"
-      is_json=True %}
+    {% widget_attribute "slides" is_json=True %}
       [
         {
           "caption": "CRM Contacts App",
@@ -4100,8 +4104,7 @@ This is a simple dialog rendered by using a macro and a call block.
     label="Social Sharing",
     use_page_url=True,
     overrideable=True %}
-    {% widget_attribute "pinterest"
-      is_json=True %}
+    {% widget_attribute "pinterest" is_json=True %}
       {
         "custom_link_format": "",
         "pinterest_media": "http://cdn2.hubspot.net/hub/158015/305390_10100548508246879_837195_59275782_6882128_n.jpg",
@@ -4110,8 +4113,7 @@ This is a simple dialog rendered by using a macro and a call block.
         "img_src": "https://static.hubspot.com/final/img/common/icons/social/pinterest-24x24.png"
       }
     {% end_widget_attribute %}
-    {% widget_attribute "twitter"
-      is_json=True %}
+    {% widget_attribute "twitter" is_json=True %}
       {
         "custom_link_format": "",
         "enabled": true,
@@ -4119,8 +4121,7 @@ This is a simple dialog rendered by using a macro and a call block.
         "img_src": "https://static.hubspot.com/final/img/common/icons/social/twitter-24x24.png"
       }
     {% end_widget_attribute %}
-    {% widget_attribute "linkedin"
-      is_json=True %}
+    {% widget_attribute "linkedin" is_json=True %}
       {
         "custom_link_format": "",
         "enabled": true,
@@ -4128,8 +4129,7 @@ This is a simple dialog rendered by using a macro and a call block.
         "img_src": "https://static.hubspot.com/final/img/common/icons/social/linkedin-24x24.png"
       }
     {% end_widget_attribute %}
-    {% widget_attribute "facebook"
-      is_json=True %}
+    {% widget_attribute "facebook" is_json=True %}
       {
         "custom_link_format": "",
         "enabled": true,
@@ -4137,8 +4137,7 @@ This is a simple dialog rendered by using a macro and a call block.
         "img_src": "https://static.hubspot.com/final/img/common/icons/social/facebook-24x24.png"
       }
     {% end_widget_attribute %}
-    {% widget_attribute "email"
-      is_json=True %}
+    {% widget_attribute "email" is_json=True %}
       {
         "custom_link_format": "",
         "enabled": true,
