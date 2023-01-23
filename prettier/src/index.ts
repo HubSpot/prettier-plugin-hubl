@@ -22,10 +22,10 @@ function locEnd(node) {
 let tokenMap = new Map();
 let tokenIndex = 0;
 
-const getToken = (match) => {
+const lookupDuplicateNestedToken = (match) => {
   let tokens = tokenMap.entries();
   for (let token of tokens) {
-    if (token[1] === match) {
+    if (token[1] === match && token[0].startsWith("npe")) {
       return token[0];
     }
   }
@@ -77,7 +77,7 @@ const tokenize = (input) => {
       });
       newString = newString.replace(VARIABLE_REGEX, (match) => {
         // Variables are sometimes used as HTML tag names
-        const token = getToken(match);
+        const token = lookupDuplicateNestedToken(match);
         if (token) {
           return token;
         }

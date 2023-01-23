@@ -1723,6 +1723,35 @@ What is this element?
 
 `;
 
+exports[`nestedHtmlTags.html 1`] = `
+  {% require_css %}
+    <style>
+      .list-wrapper {
+        text-align: {{ module.styles.alignment_and_spacing.alignment.horizontal_align }};
+      }
+    </style>
+  {% end_require_css %}
+
+  <div class="list-wrapper">
+    <{{ module.styles.appearance.list_type }}>
+
+    </{{ module.styles.appearance.list_type }}>
+  </div>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% require_css %}
+  <style>
+    .list-wrapper {
+      text-align: {{ module.styles.alignment_and_spacing.alignment.horizontal_align }};
+    }
+  </style>
+{% end_require_css %}
+
+<div class="list-wrapper">
+  <{{ module.styles.appearance.list_type }}> </{{ module.styles.appearance.list_type }}>
+</div>
+
+`;
+
 exports[`pre.html 1`] = `
 {% block x %}
 <div>
