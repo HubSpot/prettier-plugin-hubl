@@ -162,3 +162,8 @@ What is this element?
 {{ 1 gte 3 }}
 {{ 1 lt 3 }}
 {{ 1 lte 3 }}
+
+{{ var|rejectattr('slug', 'eq', content.slug) }}
+{{ var|rejectattr('slug', equalto, content.slug) }}
+
+{{ 'eq' }}

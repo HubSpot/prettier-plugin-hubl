@@ -920,7 +920,13 @@ class Parser extends Obj {
         lookup = new nodes.Literal(val.lineno, val.colno, val.value);
 
         node = new nodes.LookupVal(tok.lineno, tok.colno, node, lookup);
-      } else if (node && builtInTests.includes(node.value)) {
+      } else if (
+        node &&
+        builtInTests.includes(node.value) &&
+        // We only want treat these as FuncCalls if directly followed by a string or symbol
+        (this.peekToken().type === lexer.TOKEN_STRING ||
+          this.peekToken().type === lexer.TOKEN_SYMBOL)
+      ) {
         node = new nodes.FunCall(
           tok.lineno,
           tok.colno,
