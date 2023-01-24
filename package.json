@@ -1,6 +1,6 @@
 {
   "name": "@hubspot/prettier-plugin-hubl",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "main": "prettier-plugin-hubl.js",
   "dependencies": {},
   "peerDependencies": {
