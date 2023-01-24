@@ -1,0 +1,13 @@
+  {% require_css %}
+    <style>
+      .list-wrapper {{ tagVariable }} {
+        list-style-type: {{ anotherTestVariable }};
+      }
+    </style>
+  {% end_require_css %}
+
+  <div class="list-wrapper">
+    <{{ tagVariable }}>
+
+    </{{ tagVariable }}>
+  </div>
