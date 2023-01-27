@@ -66,7 +66,7 @@ const tokenize = (input) => {
     });
   }
 
-  // Replace tags in style block
+  // Replace tags in script block
   const nestedScriptTags = input.match(SCRIPT_BLOCK_WITH_HUBL_REGEX);
   if (nestedScriptTags) {
     nestedScriptTags.forEach((tag) => {
