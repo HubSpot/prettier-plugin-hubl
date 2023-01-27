@@ -74,6 +74,15 @@ const printJsonBody = (node) => {
   }
 };
 
+const printForValues = (node) => {
+  return join(
+    ", ",
+    node.children.map((child) => {
+      return printHubl(child);
+    })
+  );
+};
+
 // Nested HubL tags get special treatment to indent correctly
 const printBody = (node) => {
   let bodyElements: Doc = [];
@@ -380,7 +389,9 @@ function printHubl(node) {
         group([
           openTag(node.whiteSpace.openTag),
           " for ",
-          printHubl(node.name),
+          node.name.typename === "Array"
+            ? printForValues(node.name)
+            : printHubl(node.name),
           " in ",
           printHubl(node.arr),
           " ",

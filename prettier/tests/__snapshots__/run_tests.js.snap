@@ -769,6 +769,11 @@ border-radius: {{ module.styles.active.corner.radius ~ "px" }};
 
 `;
 
+exports[`for.html 1`] = `
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`;
+
 exports[`home.html 1`] = `
 <!--
   templateType: page
