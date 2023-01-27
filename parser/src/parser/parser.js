@@ -1230,6 +1230,11 @@ class Parser extends Obj {
       val = null;
     } else if (tok.type === lexer.TOKEN_REGEX) {
       val = new RegExp(tok.value.body, tok.value.flags);
+    } else if (tok.type === lexer.TOKEN_OPERATOR && tok.value === ".") {
+      const maybeIntTok = this.nextToken();
+      if (maybeIntTok.type === lexer.TOKEN_INT) {
+        val = parseFloat("." + maybeIntTok.value);
+      }
     }
 
     if (val !== undefined) {

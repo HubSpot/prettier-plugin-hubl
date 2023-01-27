@@ -1583,6 +1583,13 @@ What is this element?
 {{ variable1.variable2['one'] }}
 {{ variable['two-words'] }}
 {{ variable1.variable2['two-words'] }}
+
+{{ 1.0 }}
+{{ 1.0002 }}
+{{ .1 }}
+{{ .1000001 }}
+{{ .1002 }}
+{{ 0.100004 }}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% if sky != "blue" %}
   Clouds
@@ -1768,6 +1775,13 @@ What is this element?
 {{ variable1.variable2.one }}
 {{ variable["two-words"] }}
 {{ variable1.variable2["two-words"] }}
+
+{{ 1 }}
+{{ 1.0002 }}
+{{ 0.1 }}
+{{ 0.1000001 }}
+{{ 0.1002 }}
+{{ 0.100004 }}
 
 `;
 
