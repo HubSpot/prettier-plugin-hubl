@@ -1567,6 +1567,11 @@ What is this element?
 
 {{ variable[1] }}
 {{ variable[2] }}
+
+{{ variable['one'] }}
+{{ variable1.variable2['one'] }}
+{{ variable['two-words'] }}
+{{ variable1.variable2['two-words'] }}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% if sky != "blue" %}
   Clouds
@@ -1747,6 +1752,11 @@ What is this element?
 
 {{ variable[1] }}
 {{ variable[2] }}
+
+{{ variable.one }}
+{{ variable1.variable2.one }}
+{{ variable["two-words"] }}
+{{ variable1.variable2["two-words"] }}
 
 `;
 
