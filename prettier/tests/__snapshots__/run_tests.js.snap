@@ -1590,6 +1590,10 @@ What is this element?
 {{ .1000001 }}
 {{ .1002 }}
 {{ 0.100004 }}
+
+  <script>
+    let module_{{ name }} = document.getElementById('hs_cos_wrapper_{{ name }}');
+  </script>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% if sky != "blue" %}
   Clouds
@@ -1782,6 +1786,10 @@ What is this element?
 {{ 0.1000001 }}
 {{ 0.1002 }}
 {{ 0.100004 }}
+
+<script>
+  let module_{{ name }} = document.getElementById("hs_cos_wrapper_{{ name }}");
+</script>
 
 `;
 
