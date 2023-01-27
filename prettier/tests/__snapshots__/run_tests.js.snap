@@ -769,6 +769,17 @@ border-radius: {{ module.styles.active.corner.radius ~ "px" }};
 
 `;
 
+exports[`for.html 1`] = `
+{% for key, val in request.query_dict.items() %}
+{{ key }}:{{ val }}
+{% endfor %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% for key, val in request.query_dict.items() %}
+{{ key }}:{{ val }}
+{% endfor %}
+
+`;
+
 exports[`home.html 1`] = `
 <!--
   templateType: page
@@ -3841,7 +3852,7 @@ This is a simple dialog rendered by using a macro and a call block.
   {% for value in dictionary %}
   {{ value }}
   {% endfor %}
-  {% for [ key, value] in dictionary.items() %}
+  {% for key, value in dictionary.items() %}
   {{ key }}:
   {{ value }}
   {% endfor %}
