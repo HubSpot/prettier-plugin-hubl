@@ -38,6 +38,7 @@ const tokenize = (input) => {
   const VARIABLE_REGEX = /({{.+?}})/gs;
   const HTML_TAG_WITH_HUBL_TAG_REGEX = /<[^>]*?(?={%|{{).*?>/gms;
   const STYLE_BLOCK_WITH_HUBL_REGEX = /<style.[^>]*?(?={%|{{).*?style>/gms;
+  const SCRIPT_BLOCK_WITH_HUBL_REGEX = /<script.[^>]*?(?={%|{{).*?script>/gms;
   const JSON_BLOCK_REGEX =
     /(?<={% widget_attribute.*is_json="?true"? %}|{% module_attribute.*is_json="?true"? %}).*?(?={%.*?end_module_attribute.*?%}|{%.*?end_widget_attribute.*?%})/gims;
 
@@ -60,6 +61,30 @@ const tokenize = (input) => {
         tokenIndex++;
         tokenMap.set(`/*styleblock${tokenIndex}*/`, match);
         return `/*styleblock${tokenIndex}*/`;
+      });
+      input = input.replace(tag, newString);
+    });
+  }
+
+  // Replace tags in script block
+  const nestedScriptTags = input.match(SCRIPT_BLOCK_WITH_HUBL_REGEX);
+  if (nestedScriptTags) {
+    nestedScriptTags.forEach((tag) => {
+      let newString;
+      newString = tag.replace(HUBL_TAG_REGEX, (match) => {
+        tokenIndex++;
+        tokenMap.set(`_${tokenIndex}`, match);
+        return `_${tokenIndex}`;
+      });
+      newString = newString.replace(VARIABLE_REGEX, (match) => {
+        tokenIndex++;
+        tokenMap.set(`_${tokenIndex}`, match);
+        return `_${tokenIndex}`;
+      });
+      newString = newString.replace(COMMENT_REGEX, (match) => {
+        tokenIndex++;
+        tokenMap.set(`_${tokenIndex}`, match);
+        return `_${tokenIndex}`;
       });
       input = input.replace(tag, newString);
     });
