@@ -93,7 +93,7 @@ screenshotPath: ../images/template-previews/hubdb.png
 
 {% require_js %}
   <script>
-    const pageEditor = document.querySelector('.hs-inline-edit .body-container--hubdb > .content-wrapper');
+    const pageEditor = document.querySelector('.hs-inline-edit .body-container--hubdb > .content-wrapper {{ variable }}');
     if (pageEditor) {
       const headerNode = document.createElement("h1");
       const headerTextNode = document.createTextNode("Error: No HubDB table has been selected.");

@@ -1005,7 +1005,7 @@ screenshotPath: ../images/template-previews/hubdb.png
 
 {% require_js %}
   <script>
-    const pageEditor = document.querySelector('.hs-inline-edit .body-container--hubdb > .content-wrapper');
+    const pageEditor = document.querySelector('.hs-inline-edit .body-container--hubdb > .content-wrapper {{ variable }}');
     if (pageEditor) {
       const headerNode = document.createElement("h1");
       const headerTextNode = document.createTextNode("Error: No HubDB table has been selected.");
@@ -1128,7 +1128,7 @@ screenshotPath: ../images/template-previews/hubdb.png
         {% require_js %}
           <script>
             const pageEditor = document.querySelector(
-              ".hs-inline-edit .body-container--hubdb > .content-wrapper"
+              ".hs-inline-edit .body-container--hubdb > .content-wrapper {{ variable }}"
             );
             if (pageEditor) {
               const headerNode = document.createElement("h1");
@@ -1594,6 +1594,12 @@ What is this element?
   <script>
     let module_{{ name }} = document.getElementById('hs_cos_wrapper_{{ name }}');
   </script>
+  <script>
+  console.log('Request: {{ request.id }}');
+</script>
+  <script>
+  let anoter_module_{{ name }} = document.getElementById('hs_cos_wrapper_{{ name }}');
+</script>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% if sky != "blue" %}
   Clouds
@@ -1789,6 +1795,12 @@ What is this element?
 
 <script>
   let module_{{ name }} = document.getElementById("hs_cos_wrapper_{{ name }}");
+</script>
+<script>
+  console.log("Request: {{ request.id }}");
+</script>
+<script>
+  let anoter_module_{{ name }} = document.getElementById("hs_cos_wrapper_{{ name }}");
 </script>
 
 `;
