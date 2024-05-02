@@ -5,6 +5,6 @@ console.log(
   "output:",
   prettier.format(code, {
     parser: "hubl",
-    plugins: ["./src/index.ts"]
-  }) || "empty string"
+    plugins: ["./src/index.ts"],
+  }) || "empty string",
 );

@@ -5,8 +5,7 @@
 import parser from "./parser";
 import { Parser } from "./types/parser";
 import Tags from "./Tags";
-
-type AST = any; //TODO Type me
+import { AST } from "prettier";
 
 const parse = (text: string, parsers: object, options: object): AST => {
   //@ts-ignore
