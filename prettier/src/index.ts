@@ -1,4 +1,4 @@
-import { AST, format } from "prettier";
+import { format } from "prettier";
 import { parse } from "../../parser/dist/index";
 import printers from "./printHubl";
 
@@ -11,15 +11,15 @@ const languages = [
   },
 ];
 
-function locStart(node: any) {
+function locStart(node) {
   return node.colno;
 }
 
-function locEnd(node: any) {
+function locEnd(node) {
   return node.colno;
 }
 
-let tokenMap: Map<string, string> = new Map();
+let tokenMap = new Map();
 let tokenIndex = 0;
 
 const lookupDuplicateNestedToken = (match) => {
@@ -31,8 +31,7 @@ const lookupDuplicateNestedToken = (match) => {
   }
 };
 
-const tokenize = (input: string): string => {
-  console.log("INPUT ", input);
+const tokenize = (input) => {
   const COMMENT_REGEX = /{#.*?#}/gms;
   const HUBL_TAG_REGEX = /({%.+?%})/gs;
   const LINE_BREAK_REGEX = /[\r\n]+/gm;
@@ -47,7 +46,7 @@ const tokenize = (input: string): string => {
   const nestedStyleTags = input.match(STYLE_BLOCK_WITH_HUBL_REGEX);
   if (nestedStyleTags) {
     nestedStyleTags.forEach((tag) => {
-      let newString: string;
+      let newString;
       newString = tag.replace(HUBL_TAG_REGEX, (match) => {
         tokenIndex++;
         tokenMap.set(`/*styleblock${tokenIndex}*/`, match);
@@ -71,7 +70,7 @@ const tokenize = (input: string): string => {
   const nestedScriptTags = input.match(SCRIPT_BLOCK_WITH_HUBL_REGEX);
   if (nestedScriptTags) {
     nestedScriptTags.forEach((tag) => {
-      let newString: string;
+      let newString;
       newString = tag.replace(HUBL_TAG_REGEX, (match) => {
         tokenIndex++;
         tokenMap.set(`_${tokenIndex}`, match);
@@ -95,7 +94,7 @@ const tokenize = (input: string): string => {
   const nestedHtmlTags = input.match(HTML_TAG_WITH_HUBL_TAG_REGEX);
   if (nestedHtmlTags) {
     nestedHtmlTags.forEach((tag) => {
-      let newString: string;
+      let newString;
       newString = tag.replace(HUBL_TAG_REGEX, (match) => {
         tokenIndex++;
         tokenMap.set(`npe${tokenIndex}_`, match);
@@ -131,7 +130,7 @@ const tokenize = (input: string): string => {
       tokenIndex++;
       tokenMap.set(
         `<!--placeholder-${tokenIndex}-->`,
-        `{% json_block %}${match}{% end_json_block %}`,
+        `{% json_block %}${match}{% end_json_block %}`
       );
       input = input.replace(match, `<!--placeholder-${tokenIndex}-->`);
     });
@@ -143,7 +142,7 @@ const tokenize = (input: string): string => {
       tokenIndex++;
       tokenMap.set(
         `<!--placeholder-${tokenIndex}-->`,
-        match.replace(LINE_BREAK_REGEX, " "),
+        match.replace(LINE_BREAK_REGEX, " ")
       );
       input = input.replace(match, `<!--placeholder-${tokenIndex}-->`);
     });
@@ -160,8 +159,7 @@ const tokenize = (input: string): string => {
   tokenIndex = 0;
   return input;
 };
-
-const unTokenize = (input: string) => {
+const unTokenize = (input) => {
   tokenMap.forEach((value, key) => {
     // Placeholders in styleblocks need special treatment
     if (key.startsWith("/*styleblock")) {
@@ -169,7 +167,7 @@ const unTokenize = (input: string) => {
       const escapedKey = key.replace(/\//g, "\\/").replace(/\*/g, "\\*");
       const STYLEBLOCK_REGEX = new RegExp(
         `${key.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\s;`,
-        "gm",
+        "gm"
       );
       // HTML formatter sometimes adds a space after the placeholder comment so we check for it and remove if it exists
       if (STYLEBLOCK_REGEX.test(input)) {
@@ -187,7 +185,7 @@ const unTokenize = (input: string) => {
   return input;
 };
 
-const preserveFormatting = (input: string) => {
+const preserveFormatting = (input) => {
   const BEGIN_PRE_REGEX = /<pre.*?>/gms;
   const END_PRE_REGEX = /(?<!{% end_preserve %})<\/pre>/gms;
 
@@ -207,12 +205,12 @@ const parsers = {
     parse,
     locStart,
     locEnd,
-    preprocess: async (text: AST) => {
-      let updatedText: string = text.trim();
+    preprocess: (text) => {
+      let updatedText = text.trim();
       // Swap HubL tags for placeholders
       updatedText = tokenize(updatedText);
       // Parse and format HTML
-      updatedText = await format(updatedText, { parser: "html" });
+      updatedText = format(updatedText, { parser: "html" });
       // Find <pre> tags and add {% preserve %} wrapper
       // to tell the HubL parser to preserve formatting
       updatedText = preserveFormatting(updatedText);

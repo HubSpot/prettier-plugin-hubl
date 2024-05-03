@@ -1,12 +1,12 @@
 {
   "name": "prettier-printer-hubl",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "start": "nodemon --config ./configuration/nodemon.inline.json",
-    "test": "tsc && NODE_OPTIONS='--experimental-vm-modules' npx jest -c ./configuration/jest.config.js",
+    "test": "tsc && jest -c ./configuration/jest.config.js",
     "update-test": "tsc && jest -c ./configuration/jest.config.js --update-snapshot",
     "watch": "nodemon --config ./configuration/nodemon.test.json",
     "watch-all": "yarn watch",
@@ -15,17 +15,17 @@
   "author": "HubSpot, Inc.",
   "license": "Apache-2.0",
   "dependencies": {
-    "prettier": "^3.2.5"
+    "prettier": "^2.4.1"
   },
   "devDependencies": {
-    "@types/node": "^18.14.2",
-    "@types/prettier": "^3.0.0",
+    "@types/node": "^16.10.2",
+    "@types/prettier": "^2.4.1",
     "foreman": "^3.0.1",
     "jest": "^27.0.0",
     "jest-watch-typeahead": "^0.2.1",
     "nodemon": "^2.0.13",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "ts-node": "^9.1.1",
+    "typescript": "^4.6.3"
   },
   "private": true
 }
