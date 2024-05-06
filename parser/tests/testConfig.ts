@@ -1,7 +1,8 @@
 import "colors";
-import { parse } from "../dist/index";
+import { parse } from "../src/index";
 import * as fs from "fs";
 import * as path from "path";
+import { ParserOptions } from 'prettier';
 
 const simpleWorkingPath = "tests/simple/working";
 const simpleBrokenPath = "tests/simple/broken";
@@ -73,8 +74,7 @@ try {
         // We define success as having no errors
         const output = parse(
           fs.readFileSync(`${folderPath}/${file}`, "utf-8"),
-          {},
-          {},
+          {} as ParserOptions,
         );
 
         if (!process.argv.slice(2).includes("--silent")) {

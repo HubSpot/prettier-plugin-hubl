@@ -1,5 +1,6 @@
 import { AstPath, Doc } from "prettier";
-import { doc, util, format } from "prettier";
+import prettierSync from "@prettier/sync";
+import { doc, util } from "prettier";
 const {
   builders: {
     group,
@@ -62,11 +63,11 @@ const printTagArgs = (node) => {
   });
 };
 
-const printJsonBody = async (node) => {
+const printJsonBody = (node) => {
   try {
     // This is a predictable tag structure
     const bodyText = node.children[0].children[0].value;
-    const formattedBodyText = await format(bodyText, { parser: "json" });
+    const formattedBodyText = prettierSync.format(bodyText, { parser: "json" });
     return join(line, formattedBodyText.trim().split("\n"));
   } catch (e) {
     // If JSON parsing fails, we can fall back on the normal printer
@@ -130,7 +131,7 @@ const printBody = (node) => {
 // This is the main print function, which will determine the type of node and
 // print accordingly. It is recursive, so it will call itself to print nested
 // nodes.
-async function printHubl(node) {
+function printHubl(node) {
   if (!node) {
     return "";
   }
@@ -531,7 +532,7 @@ async function printHubl(node) {
         }
       } else if (node.type === "block_tag") {
         if (node.value === "json_block") {
-          const formattedJsonBody = await printJsonBody(node.body);
+          const formattedJsonBody = printJsonBody(node.body);
           return [indent([line, formattedJsonBody]), line];
         }
         return [

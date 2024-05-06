@@ -5,8 +5,8 @@ const fs = require("fs");
 const path = require("path");
 const prettier = require("prettier");
 
-function run_spec(dirname, options) {
-  fs.readdirSync(dirname).forEach(filename => {
+async function run_spec(dirname, options) {
+  fs.readdirSync(dirname).forEach(async (filename) => {
     const filepath = dirname + filename;
     if (
       path.extname(filename) !== ".snap" &&
@@ -38,13 +38,13 @@ function run_spec(dirname, options) {
         rangeStart,
         rangeEnd,
         cursorOffset,
-        parser: "hubl"
+        parser: "hubl",
       });
 
-      const output = prettyprint(input, mergedOptions);
+      const output = await prettyprint(input, mergedOptions);
       test(filename, () => {
         expect(
-          raw(source + "~".repeat(mergedOptions.printWidth) + "\n" + output)
+          raw(source + "~".repeat(mergedOptions.printWidth) + "\n" + output),
         ).toMatchSnapshot();
       });
     }
@@ -53,8 +53,9 @@ function run_spec(dirname, options) {
 
 global.run_spec = run_spec;
 
-function prettyprint(src, options) {
+async function prettyprint(src, options) {
   const result = prettier.formatWithCursor(src, options);
+  console.log("Result", result);
   if (options.cursorOffset >= 0) {
     result.formatted =
       result.formatted.slice(0, result.cursorOffset) +
@@ -84,8 +85,8 @@ function mergeDefaultOptions(parserConfig) {
   return Object.assign(
     {
       plugins: [path.resolve(path.dirname(__dirname), "dist/index.js")],
-      printWidth: 80
+      printWidth: 80,
     },
-    parserConfig
+    parserConfig,
   );
 }

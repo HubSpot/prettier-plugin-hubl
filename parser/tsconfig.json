@@ -9,12 +9,11 @@
     "baseUrl": "",
     "rootDir": "./src",
     "typeRoots": ["./types", "node_modules/@types"],
-    "types": ["node"],
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "removeComments": true,
-    "declaration": false,
+    "declaration": true,
     "allowJs": true
   },
   "include": ["./**/*"],

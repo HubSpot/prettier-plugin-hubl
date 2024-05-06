@@ -108,8 +108,8 @@ class Parser extends Obj {
     var tok;
     if (!name) {
       tok = this.peekToken();
-
       if (!tok) {
+        console.log("did it fail here???", this);
         this.fail("unexpected end of file");
       }
 
@@ -1528,7 +1528,7 @@ class Parser extends Obj {
 
 module.exports = {
   async parse(src, extensions, opts) {
-    const resolvedSource = await src;
+    const resolvedSource = src;
     var p = new Parser(lexer.lex(resolvedSource, opts));
     if (extensions !== undefined) {
       p.extensions = extensions;

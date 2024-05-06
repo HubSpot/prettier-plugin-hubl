@@ -1,3 +1,4 @@
+import type { Plugin } from "prettier";
 import { AST, format } from "prettier";
 import { parse } from "../../parser/dist/index";
 import printers from "./printHubl";
@@ -32,7 +33,6 @@ const lookupDuplicateNestedToken = (match) => {
 };
 
 const tokenize = (input: string): string => {
-  console.log("INPUT ", input);
   const COMMENT_REGEX = /{#.*?#}/gms;
   const HUBL_TAG_REGEX = /({%.+?%})/gs;
   const LINE_BREAK_REGEX = /[\r\n]+/gm;
@@ -201,24 +201,28 @@ const preserveFormatting = (input: string) => {
   return input;
 };
 
-const parsers = {
+const preprocess = async (text: AST) => {
+  let updatedText: string = text.trim();
+  // Swap HubL tags for placeholders
+  updatedText = tokenize(updatedText);
+  // Parse and format HTML
+  updatedText = await format(updatedText, { parser: "html" });
+  // Find <pre> tags and add {% preserve %} wrapper
+  // to tell the HubL parser to preserve formatting
+  updatedText = preserveFormatting(updatedText);
+  // Swap back HubL tags and return
+  return unTokenize(updatedText);
+};
+
+const parsers: Plugin["parsers"] = {
   hubl: {
     astFormat: "hubl-ast",
-    parse,
+    parse: async (text, options) => {
+      const processedSource = await preprocess(text);
+      return parse(processedSource, options);
+    },
     locStart,
     locEnd,
-    preprocess: async (text: AST) => {
-      let updatedText: string = text.trim();
-      // Swap HubL tags for placeholders
-      updatedText = tokenize(updatedText);
-      // Parse and format HTML
-      updatedText = await format(updatedText, { parser: "html" });
-      // Find <pre> tags and add {% preserve %} wrapper
-      // to tell the HubL parser to preserve formatting
-      updatedText = preserveFormatting(updatedText);
-      // Swap back HubL tags and return
-      return unTokenize(updatedText);
-    },
   },
 };
 
