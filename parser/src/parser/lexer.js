@@ -1,6 +1,6 @@
 "use strict";
 
-const lib = require("./lib");
+import * as lib from "./lib";
 
 let whitespaceChars = " \n\t\r\u00A0";
 let delimChars = "()[]{}%*-+~/#,:|.<>=!";

@@ -2,7 +2,7 @@ import "colors";
 import { parse } from "../src/index";
 import * as fs from "fs";
 import * as path from "path";
-import { ParserOptions } from 'prettier';
+import { ParserOptions } from "prettier";
 
 const simpleWorkingPath = "tests/simple/working";
 const simpleBrokenPath = "tests/simple/broken";

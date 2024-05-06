@@ -7,8 +7,9 @@
     "noImplicitAny": false,
     "moduleResolution": "node",
     "baseUrl": "",
-    "rootDir": "./src",
-    "typeRoots": ["./types", "node_modules/@types"],
+    "rootDir": ".",
+    "typeRoots": ["./types", "../node_modules/@types"],
+    "types": ["node"],
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
@@ -16,6 +17,6 @@
     "declaration": true,
     "allowJs": true
   },
-  "include": ["./**/*"],
-  "exclude": ["./tests/**/*", "dist"]
+  "include": ["./**/*", "./tests/*"],
+  "exclude": ["dist"]
 }

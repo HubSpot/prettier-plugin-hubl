@@ -16,7 +16,7 @@
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "start": "yarn watch-all",
-    "test": "tsc && ts-node ./tests/testConfig.ts",
+    "test": "yarn build && ts-node ./tests/testConfig.ts",
     "watch": "nodemon --config nodemon.test.json",
     "watch-all": "yarn watch --simple-working --simple-broken --complex",
     "watch-simple": "yarn watch --simple-working",

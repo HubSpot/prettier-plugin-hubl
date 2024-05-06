@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "start": "nodemon --config ./configuration/nodemon.inline.json",
-    "test": "tsc && NODE_OPTIONS='--experimental-vm-modules' npx jest -c ./configuration/jest.config.js",
+    "test": "yarn build && NODE_OPTIONS='--experimental-vm-modules' npx jest -c ./configuration/jest.config.js",
     "update-test": "tsc && jest -c ./configuration/jest.config.js --update-snapshot",
     "watch": "nodemon --config ./configuration/nodemon.test.json",
     "test-inline": "tsc && node ./src/test-inline.ts"

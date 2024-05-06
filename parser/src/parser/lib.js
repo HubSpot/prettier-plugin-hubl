@@ -1,9 +1,9 @@
 "use strict";
 
-var ArrayProto = Array.prototype;
-var ObjProto = Object.prototype;
+const ArrayProto = Array.prototype;
+const ObjProto = Object.prototype;
 
-var escapeMap = {
+const escapeMap = {
   "&": "&amp;",
   '"': "&quot;",
   "'": "&#39;",
@@ -11,9 +11,7 @@ var escapeMap = {
   ">": "&gt;",
 };
 
-var escapeRegex = /[&"'<>]/g;
-
-var exports = (module.exports = {});
+const escapeRegex = /[&"'<>]/g;
 
 function hasOwnProp(obj, k) {
   return ObjProto.hasOwnProperty.call(obj, k);
@@ -45,8 +43,8 @@ function _prettifyError(path, withInternals, err) {
 exports._prettifyError = _prettifyError;
 
 function TemplateError(message, lineno, colno) {
-  var err;
-  var cause;
+  let err;
+  let cause;
 
   if (message instanceof Error) {
     cause = message;
@@ -57,6 +55,7 @@ function TemplateError(message, lineno, colno) {
     err = new Error(message);
     Object.setPrototypeOf(err, TemplateError.prototype);
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     err = this;
     Object.defineProperty(err, "message", {
       enumerable: false,
@@ -254,7 +253,7 @@ function without(array) {
 exports.without = without;
 
 function repeat(char_, n) {
-  var str = "";
+  let str = "";
   for (let i = 0; i < n; i++) {
     str += char_;
   }
@@ -280,7 +279,7 @@ function each(obj, func, context) {
 exports.each = each;
 
 function map(obj, func) {
-  var results = [];
+  const results = [];
   if (obj == null) {
     return results;
   }

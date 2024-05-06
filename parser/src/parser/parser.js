@@ -1,11 +1,12 @@
 "use strict";
 
-const lexer = require("./lexer");
-const nodes = require("./nodes");
-const Obj = require("./object").Obj;
-const lib = require("./lib");
-const { builtInTests } = require("./tests");
-class Parser extends Obj {
+import * as lexer from "./lexer";
+import * as nodes from "./nodes";
+import * as lib from "./lib";
+import { Obj } from "./object";
+import { builtInTests } from "./tests";
+
+export class Parser extends Obj {
   init(tokens) {
     this.tokens = tokens;
     this.peeked = null;
@@ -16,7 +17,7 @@ class Parser extends Obj {
   }
 
   nextToken(withWhitespace) {
-    var tok;
+    let tok;
 
     if (this.peeked) {
       if (!withWhitespace && this.peeked.type === lexer.TOKEN_WHITESPACE) {
@@ -71,7 +72,7 @@ class Parser extends Obj {
   }
 
   skip(type) {
-    var tok = this.nextToken();
+    const tok = this.nextToken();
     if (!tok || tok.type !== type) {
       this.pushToken(tok);
       return false;
@@ -80,7 +81,7 @@ class Parser extends Obj {
   }
 
   expect(type) {
-    var tok = this.nextToken();
+    const tok = this.nextToken();
     if (tok.type !== type) {
       this.fail(
         "expected " + type + ", got " + tok.type,
@@ -92,7 +93,7 @@ class Parser extends Obj {
   }
 
   skipValue(type, val) {
-    var tok = this.nextToken();
+    const tok = this.nextToken();
     if (!tok || tok.type !== type || tok.value !== val) {
       this.pushToken(tok);
       return false;
@@ -105,11 +106,11 @@ class Parser extends Obj {
   }
 
   advanceAfterBlockEnd(name) {
-    var tok;
+    let tok;
     if (!name) {
       tok = this.peekToken();
       if (!tok) {
-        console.log("did it fail here???", this);
+        console.log("This", this);
         this.fail("unexpected end of file");
       }
 
@@ -139,7 +140,7 @@ class Parser extends Obj {
   }
 
   advanceAfterVariableEnd() {
-    var tok = this.nextToken();
+    const tok = this.nextToken();
 
     if (tok && tok.type === lexer.TOKEN_VARIABLE_END) {
       this.dropLeadingWhitespace =
@@ -153,9 +154,9 @@ class Parser extends Obj {
   }
 
   parseFor() {
-    var forTok = this.peekToken();
-    var node;
-    var endBlock;
+    const forTok = this.peekToken();
+    let node;
+    let endBlock;
 
     if (this.skipSymbol("for")) {
       node = new nodes.For(forTok.lineno, forTok.colno);
@@ -254,7 +255,7 @@ class Parser extends Obj {
 
     // a call block is parsed as a normal FunCall, but with an added
     // 'caller' kwarg which is a Caller node.
-    var callTok = this.peekToken();
+    const callTok = this.peekToken();
     if (!this.skipSymbol("call")) {
       this.fail("expected call");
     }
@@ -287,9 +288,9 @@ class Parser extends Obj {
   }
 
   parseWithContext() {
-    var tok = this.peekToken();
+    const tok = this.peekToken();
 
-    var withContext = null;
+    let withContext = null;
 
     if (this.skipSymbol("with")) {
       withContext = true;
@@ -311,7 +312,7 @@ class Parser extends Obj {
   }
 
   parseImport() {
-    var importTok = this.peekToken();
+    const importTok = this.peekToken();
     if (!this.skipSymbol("import")) {
       this.fail(
         "parseImport: expected import",
@@ -365,8 +366,8 @@ class Parser extends Obj {
     const names = new nodes.NodeList();
     let withContext;
 
-    while (1) {
-      // eslint-disable-line no-constant-condition
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
       const nextTok = this.peekToken();
       if (nextTok.type === lexer.TOKEN_BLOCK_END) {
         if (!names.children.length) {
@@ -532,7 +533,7 @@ class Parser extends Obj {
       case "elif":
         node.else_ = this.parseIf(node);
         break;
-      case "else":
+      case "else": {
         let elseNode = { openTag: { start: this.dropLeadingWhitespace } };
         this.advanceAfterBlockEnd();
         elseNode.openTag.end = this.dropLeadingWhitespace;
@@ -551,6 +552,7 @@ class Parser extends Obj {
         }
 
         break;
+      }
       case "endif":
         node.else_ = null;
         if (parentIf) {
@@ -590,7 +592,7 @@ class Parser extends Obj {
     const tok = this.peekToken();
 
     switch (tok && tok.value) {
-      case "else":
+      case "else": {
         const elseWhiteSpace = {
           openTag: { start: this.dropLeadingWhitespace, end: false },
           closingTag: { start: false, end: false },
@@ -604,6 +606,7 @@ class Parser extends Obj {
         this.advanceAfterBlockEnd();
         node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         break;
+      }
       case "endunless":
         node.else_ = null;
         node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
@@ -737,8 +740,8 @@ class Parser extends Obj {
   }
 
   parseStatement() {
-    var tok = this.peekToken();
-    var node;
+    const tok = this.peekToken();
+    let node;
 
     if (tok.type !== lexer.TOKEN_SYMBOL) {
       this.fail("tag name expected", tok.lineno, tok.colno);
@@ -1014,8 +1017,8 @@ class Parser extends Obj {
 
   parseIn() {
     let node = this.parseIs();
+    // eslint-disable-next-line no-constant-condition
     while (1) {
-      // eslint-disable-line no-constant-condition
       // check if the next token is 'not'
       const tok = this.nextToken();
       if (!tok) {
@@ -1085,8 +1088,8 @@ class Parser extends Obj {
     const expr = this.parseConcat();
     const ops = [];
 
+    // eslint-disable-next-line no-constant-condition
     while (1) {
-      // eslint-disable-line no-constant-condition
       const tok = this.nextToken();
 
       if (!tok) {
@@ -1305,7 +1308,7 @@ class Parser extends Obj {
   }
 
   parseFilterStatement() {
-    var filterTok = this.peekToken();
+    const filterTok = this.peekToken();
     if (!this.skipSymbol("filter")) {
       this.fail("parseFilterStatement: expected filter");
     }
@@ -1332,8 +1335,8 @@ class Parser extends Obj {
   }
 
   parseAggregate() {
-    var tok = this.nextToken();
-    var node;
+    const tok = this.nextToken();
+    let node;
 
     switch (tok.type) {
       case lexer.TOKEN_LEFT_PAREN:
@@ -1349,8 +1352,8 @@ class Parser extends Obj {
         return null;
     }
 
+    // eslint-disable-next-line no-constant-condition
     while (1) {
-      // eslint-disable-line no-constant-condition
       const type = this.peekToken().type;
       if (
         type === lexer.TOKEN_RIGHT_PAREN ||
@@ -1422,8 +1425,8 @@ class Parser extends Obj {
     const kwargs = new nodes.KeywordArgs(tok.lineno, tok.colno);
     let checkComma = false;
 
+    // eslint-disable-next-line no-constant-condition
     while (1) {
-      // eslint-disable-line no-constant-condition
       tok = this.peekToken();
       if (!noParens && tok.type === lexer.TOKEN_RIGHT_PAREN) {
         this.nextToken();
@@ -1526,14 +1529,11 @@ class Parser extends Obj {
   }
 }
 
-module.exports = {
-  async parse(src, extensions, opts) {
-    const resolvedSource = src;
-    var p = new Parser(lexer.lex(resolvedSource, opts));
-    if (extensions !== undefined) {
-      p.extensions = extensions;
-    }
-    return p.parseAsRoot();
-  },
-  Parser: Parser,
-};
+export async function parse(src, extensions, opts) {
+  const resolvedSource = src;
+  const p = new Parser(lexer.lex(resolvedSource, opts));
+  if (extensions !== undefined) {
+    p.extensions = extensions;
+  }
+  return p.parseAsRoot();
+}

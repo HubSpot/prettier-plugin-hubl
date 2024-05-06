@@ -1,8 +1,8 @@
 "use strict";
 
 // A simple class system, more documentation to come
-const EventEmitter = require("events");
-const lib = require("./lib");
+import EventEmitter from "events";
+import lib from "./lib";
 
 function parentWrap(parent, prop) {
   if (typeof parent !== "function" || typeof prop !== "function") {
@@ -45,6 +45,7 @@ class Obj {
     this.init(...args);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   init() {}
 
   get typename() {
@@ -67,6 +68,7 @@ class EmitterObj extends EventEmitter {
     this.init(...args);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   init() {}
 
   get typename() {

@@ -1,6 +1,6 @@
 "use strict";
 
-const { Obj } = require("./object");
+import { Obj } from "./object";
 
 function traverseAndCheck(obj, type, results) {
   if (obj instanceof type) {
@@ -22,7 +22,7 @@ class Node extends Obj {
     };
     this.fields.forEach((field, i) => {
       // The first two args are line/col numbers, so offset by 2
-      var val = arguments[i + 2];
+      let val = arguments[i + 2];
 
       // Fields should never be undefined, but null. It makes
       // testing easier to normalize values.
@@ -41,7 +41,7 @@ class Node extends Obj {
       this.children.forEach((child) => traverseAndCheck(child, type, results));
     } else {
       this.fields.forEach((field) =>
-        traverseAndCheck(this[field], type, results)
+        traverseAndCheck(this[field], type, results),
       );
     }
 
@@ -176,7 +176,7 @@ const CallExtensionAsync = CallExtension.extend("CallExtensionAsync");
 
 // This is hacky, but this is just a debugging function anyway
 function print(str, indent, inline) {
-  var lines = str.split("\n");
+  const lines = str.split("\n");
 
   lines.forEach((line, i) => {
     if (line && ((inline && i > 0) || !inline)) {
