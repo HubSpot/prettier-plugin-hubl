@@ -1,3 +1,2 @@
-const prettierPlugin = require("./prettier/dist/index");
-
+import prettierPlugin from "./prettier/dist/index";
 module.exports = prettierPlugin;

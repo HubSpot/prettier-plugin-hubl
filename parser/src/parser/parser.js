@@ -1,10 +1,10 @@
 "use strict";
 
-import * as lexer from "./lexer";
-import * as nodes from "./nodes";
-import * as lib from "./lib";
-import { Obj } from "./object";
-import { builtInTests } from "./tests";
+import * as lexer from "./lexer.js";
+import * as nodes from "./nodes.js";
+import * as lib from "./lib.js";
+import { Obj } from "./object.js";
+import { builtInTests } from "./tests.js";
 
 export class Parser extends Obj {
   init(tokens) {

@@ -560,7 +560,7 @@ function printHubl(node) {
 
 function print(path: AstPath, options, print) {
   const parsedArray = path.stack[0];
-
+  console.log("Path", path);
   return printHubl(parsedArray);
 }
 export default {

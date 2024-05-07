@@ -1,6 +1,6 @@
 "use strict";
 
-import * as lib from "./lib";
+import * as lib from "./lib.js";
 
 export const whitespaceChars = " \n\t\r\u00A0";
 export const delimChars = "()[]{}%*-+~/#,:|.<>=!";
@@ -166,7 +166,7 @@ export class Tokenizer {
             flags: regexFlags,
           },
           lineno,
-          colno
+          colno,
         );
       } else if (delimChars.indexOf(cur) !== -1) {
         // We've hit a delimiter (a special char like a bracket)
@@ -344,7 +344,7 @@ export class Tokenizer {
           inComment ? TOKEN_COMMENT : TOKEN_DATA,
           tok,
           lineno,
-          colno
+          colno,
         );
       }
     }

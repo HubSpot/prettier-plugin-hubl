@@ -1,7 +1,7 @@
 import type { Plugin } from "prettier";
 import synchronizedPrettier from "@prettier/sync";
 import { parse } from "hubl-parser";
-import printers from "./printHubl";
+import printers from "./printHubl.js";
 
 const languages = [
   {
@@ -200,7 +200,6 @@ const parsers: Plugin["parsers"] = {
 };
 
 const options = {};
-
 const defaultOptions = {};
 
 export { languages, printers, parsers, options, defaultOptions };

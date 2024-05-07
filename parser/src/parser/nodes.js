@@ -1,6 +1,6 @@
 "use strict";
 
-import { Obj } from "./object";
+import { Obj } from "./object.js";
 
 export function traverseAndCheck(obj, type, results) {
   if (obj instanceof type) {
