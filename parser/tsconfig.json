@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "outDir": "./dist",
     "strict": true,
     "noImplicitAny": false,
@@ -16,6 +15,10 @@
     "removeComments": true,
     "declaration": true,
     "allowJs": true
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   },
   "include": ["./**/*", "./tests/*"],
   "exclude": ["dist", "node_modules"]

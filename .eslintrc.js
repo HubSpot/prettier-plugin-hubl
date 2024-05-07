@@ -17,5 +17,6 @@ module.exports = {
   rules: {
     "no-return-await": "error",
     "no-var": "error",
+    "@typescript-eslint/ban-types": "off",
   },
 };

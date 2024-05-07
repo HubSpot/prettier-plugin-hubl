@@ -2,6 +2,7 @@
   "name": "hubl-parser",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "dependencies": {
     "colors": "^1.4.0"
   },
@@ -15,7 +16,7 @@
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "start": "yarn watch-all",
-    "test": "yarn build && ts-node ./tests/testConfig.ts",
+    "test": "yarn build && node --loader ts-node/esm ./tests/testConfig.ts",
     "watch": "nodemon --config nodemon.test.json",
     "watch-all": "yarn watch --simple-working --simple-broken --complex",
     "watch-simple": "yarn watch --simple-working",
@@ -28,12 +29,6 @@
     "dist/**"
   ],
   "main": "dist/src/index.js",
-  "exports": {
-    ".": {
-      "types": "./dist/src/index.d.ts",
-      "default": "./dist/src/index.js"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git@git.hubteam.com:HubSpot/hubl-prettier-plugin.git"

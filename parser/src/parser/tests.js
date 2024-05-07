@@ -1,4 +1,4 @@
-const builtInTests = [
+export const builtInTests = [
   "divisibleby",
   "equalto",
   "eq",
@@ -15,7 +15,3 @@ const builtInTests = [
   "containing",
   "containingall",
 ];
-
-module.exports = {
-  builtInTests,
-};

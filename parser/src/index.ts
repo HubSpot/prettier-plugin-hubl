@@ -3,7 +3,7 @@
  * Please see NOTICE.md for license information
  */
 import { AST, ParserOptions } from "prettier";
-import { parser } from "./parser";
+import * as parser from "./parser";
 import Tags from "./Tags";
 
 const parse = (text: string, _options: ParserOptions): AST => {

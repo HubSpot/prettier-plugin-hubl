@@ -3,6 +3,7 @@ import { parse } from "../src/index";
 import * as fs from "fs";
 import * as path from "path";
 import { ParserOptions } from "prettier";
+import { fileURLToPath } from "url";
 
 const simpleWorkingPath = "tests/simple/working";
 const simpleBrokenPath = "tests/simple/broken";
@@ -13,7 +14,8 @@ type Spec = {
   files: Array<string>;
 };
 
-const base = path.join(__dirname, "..");
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const base = path.join(dirname, "..");
 
 const getFiles = (suffix: string) => {
   const folderPath = `${base}/${suffix}`;

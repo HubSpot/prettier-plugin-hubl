@@ -185,6 +185,7 @@ const parsers: Plugin["parsers"] = {
       updatedText = synchronizedPrettier.format(updatedText, {
         parser: "html",
       });
+      console.log("Fkmatted", updatedText);
       // Find <pre> tags and add {% preserve %} wrapper
       // to tell the HubL parser to preserve formatting
       updatedText = preserveFormatting(updatedText);

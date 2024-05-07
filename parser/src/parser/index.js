@@ -1,16 +1,11 @@
 "use strict";
 
-import * as lexer from "./lexer";
-import * as nodes from "./nodes";
-import * as lib from "./lib";
-import * as parser from "./parser";
-
 // A single instance of an environment, since this is so commonly used
 let e;
 
 /* eslint-disable no-undef */
 // Not sure what the undefined loaders are supposed to do, but leaving for now. Might be globals?
-function configure(templatesPath, opts) {
+export function configure(templatesPath, opts) {
   opts = opts || {};
   if (lib.isObject(templatesPath)) {
     opts = templatesPath;
@@ -40,13 +35,7 @@ function configure(templatesPath, opts) {
   return e;
 }
 /* eslint-enable no-undef */
-
-export { parser };
-
-module.exports = {
-  parser,
-  lexer,
-  lib,
-  nodes,
-  configure,
-};
+export * from "./lexer";
+export * from "./lib";
+export * from "./parser";
+export * from "./nodes";

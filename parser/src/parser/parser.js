@@ -36,7 +36,6 @@ export class Parser extends Obj {
         tok = this.tokens.nextToken();
       }
     }
-
     return tok;
   }
 
@@ -110,7 +109,6 @@ export class Parser extends Obj {
     if (!name) {
       tok = this.peekToken();
       if (!tok) {
-        console.log("This", this);
         this.fail("unexpected end of file");
       }
 
@@ -753,7 +751,6 @@ export class Parser extends Obj {
     ) {
       return null;
     }
-
     switch (tok.value) {
       case "raw":
         return this.parseRaw();
@@ -801,7 +798,6 @@ export class Parser extends Obj {
         }
         this.fail("unknown block tag: " + tok.value, tok.lineno, tok.colno);
     }
-
     return node;
   }
 
@@ -1337,7 +1333,6 @@ export class Parser extends Obj {
   parseAggregate() {
     const tok = this.nextToken();
     let node;
-
     switch (tok.type) {
       case lexer.TOKEN_LEFT_PAREN:
         node = new nodes.Group(tok.lineno, tok.colno);
@@ -1351,7 +1346,6 @@ export class Parser extends Obj {
       default:
         return null;
     }
-
     // eslint-disable-next-line no-constant-condition
     while (1) {
       const type = this.peekToken().type;
@@ -1500,6 +1494,7 @@ export class Parser extends Obj {
         variableNode.whiteSpace.openTag.start = this.dropLeadingWhitespace;
         this.advanceAfterVariableEnd();
         variableNode.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
         buf.push(variableNode);
       } else if (tok.type === lexer.TOKEN_COMMENT) {
         this.dropLeadingWhitespace = false;
