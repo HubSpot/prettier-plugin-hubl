@@ -7,9 +7,9 @@
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "start": "nodemon --config ./configuration/nodemon.inline.json",
-    "test": "yarn build && node --experimental-vm-modules ../node_modules/jest/bin/jest.js -c ./configuration/jest.config.cjs",
+    "test": "node --experimental-vm-modules ../node_modules/jest/bin/jest.js -c ./configuration/jest.config.cjs",
+    "watch": "nodemon",
     "update-test": "tsc && jest -c ./configuration/jest.config.js --update-snapshot",
-    "watch": "nodemon --config ./configuration/nodemon.test.json",
     "test-inline": "tsc && node ./src/test-inline.ts"
   },
   "author": "HubSpot, Inc.",
@@ -29,5 +29,16 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
-  "private": true
+  "private": true,
+  "nodemonConfig": {
+    "watch": [
+      "tests",
+      "src"
+    ],
+    "exec": "tsc && yarn test",
+    "ext": "js, json, ts, proto, html",
+    "ignoreRoot": [
+      ".git"
+    ]
+  }
 }

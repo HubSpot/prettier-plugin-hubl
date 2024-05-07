@@ -20,14 +20,14 @@
   "scripts": {
     "start": "yarn watch",
     "test": "lerna run test",
-    "watch": "lerna watch -- lerna run build, test",
+    "watch": "yarn lerna exec --stream yarn build && yarn lerna exec --parallel yarn watch",
     "run:prettier": "lerna --scope='prettier-printer-hubl' run",
     "run:parser": "lerna --scope='hubl-parser' run",
     "watch:prettier": "yarn run:prettier watch",
     "watch:parser": "yarn run:parser watch",
     "build:prettier": "yarn run:prettier build",
     "build:parser": "yarn run:parser build",
-    "prepare": "(yarn run build:parser) && (yarn run build:prettier)",
+    "build": "(yarn run build:parser) && (yarn run build:prettier)",
     "npm:publish-beta": "npm publish . --tag beta",
     "npm:publish-latest": "npm publish . --tag latest"
   },
