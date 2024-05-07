@@ -524,7 +524,7 @@ templateType: none
 <!--
 templateType: none
 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="{{ html_lang }}" {{ html_lang_dir }}>
   <head>
     <meta charset="utf-8" />
@@ -3845,7 +3845,7 @@ This is a simple dialog rendered by using a macro and a call block.
     unsubscribe_all_success="You have successfully unsubscribed from all email communications.",
     subscription_update_success="You have successfully updated your email preferences.",
     subheader_text="If this is not your email address, please ignore this page since the email associated with this page was most likely forwarded to you." %}
-  <!DOCTYPE html>
+  <!doctype html>
   <html lang="en">
     <head>
       {% block head %}
@@ -3995,10 +3995,9 @@ This is a simple dialog rendered by using a macro and a call block.
     loop_slides=True,
     num_seconds=5,
     version="0" %} {% widget_attribute "slides"
-                                                                                                                                                                                                                                                                                                                  is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true,
-      "link_url": "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM
-      Contacts", "img_src":
-      "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+                                                                                                                                                                                                                                                                                                                  is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url":
+      "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
+      "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
       "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile",
       "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text":
       "HubSpot CRM Contact Profile", "img_src":

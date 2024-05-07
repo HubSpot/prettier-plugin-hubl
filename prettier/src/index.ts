@@ -21,6 +21,7 @@ function locEnd(node) {
 }
 
 const Token = {
+  styleValue: (index: number) => `__STYLE_VALUE${index}__`,
   styleBlock: (index: number) => `/*styleblock${index}*/`,
   nestedScript: (index: number) => `_${index}`,
   npe: (index: number) => `npe${index}_`,
@@ -41,7 +42,8 @@ const lookupDuplicateNestedToken = (match) => {
   }
 };
 
-const withWhitespace = (regex: RegExp) => new RegExp(/(:\s*)?/.source + regex);
+const withLead = (regex: RegExp) =>
+  new RegExp(/(:\s*)?/.source + `(${regex.source})`, "gms");
 
 const tokenize = (input: string): string => {
   const COMMENT_REGEX = /{#.*?#}/gms;
@@ -54,25 +56,26 @@ const tokenize = (input: string): string => {
   const JSON_BLOCK_REGEX =
     /(?<={% widget_attribute.*is_json="?true"? %}|{% module_attribute.*is_json="?true"? %}).*?(?={%.*?end_module_attribute.*?%}|{%.*?end_widget_attribute.*?%})/gims;
 
-  const HUBL_TAG_REGEX_WITH_WHITESPACE = withWhitespace(HUBL_TAG_REGEX);
-  const COMMENT_REGEX_WITH_WHITESPACE = withWhitespace(COMMENT_REGEX);
-  const VARIABLE_REGEX_WITH_WHITESPACE = withWhitespace(VARIABLE_REGEX);
-
+  const HUBL_TAG_REGEX_WITH_LEAD = withLead(HUBL_TAG_REGEX);
+  const COMMENT_REGEX_WITH_LEAD = withLead(COMMENT_REGEX);
+  const VARIABLE_REGEX_WITH_LEAD = withLead(VARIABLE_REGEX);
   // Replace tags in style block
   const nestedStyleTags = input.match(STYLE_BLOCK_WITH_HUBL_REGEX);
   if (nestedStyleTags) {
     nestedStyleTags.forEach((tag) => {
-      const processMatch = (_all, whitespace: string, value: string) => {
-        const token = Token.styleBlock(tokenIndex++);
-        tokenMap.set(token, value);
-        return `${whitespace || ""}${value}`;
+      const processMatch = (_all, lead: string, match: string) => {
+        // Match the lead (the ":  ") so that we can distinguish between a value and a block
+        const token = lead
+          ? Token.styleValue(tokenIndex++)
+          : Token.styleBlock(tokenIndex++);
+        tokenMap.set(token, match);
+        return `${lead || ""}${token}`;
       };
 
-      // Match the whitespace so we can respect it after doing the replace
       const newString = tag
-        .replace(HUBL_TAG_REGEX_WITH_WHITESPACE, processMatch)
-        .replace(COMMENT_REGEX_WITH_WHITESPACE, processMatch)
-        .replace(VARIABLE_REGEX_WITH_WHITESPACE, processMatch);
+        .replace(HUBL_TAG_REGEX_WITH_LEAD, processMatch)
+        .replace(COMMENT_REGEX_WITH_LEAD, processMatch)
+        .replace(VARIABLE_REGEX_WITH_LEAD, processMatch);
       input = input.replace(tag, newString);
     });
   }
@@ -111,7 +114,6 @@ const tokenize = (input: string): string => {
           const maybeDuplicateTkn = lookupDuplicateNestedToken(match);
           return maybeDuplicateTkn ? maybeDuplicateTkn : processMatch(match);
         });
-
       input = input.replace(tag, newString);
     });
   }
@@ -184,8 +186,8 @@ const parsers: Plugin["parsers"] = {
       // Parse and format HTML
       updatedText = synchronizedPrettier.format(updatedText, {
         parser: "html",
+        trailingComma: "es5",
       });
-      console.log("Fkmatted", updatedText);
       // Find <pre> tags and add {% preserve %} wrapper
       // to tell the HubL parser to preserve formatting
       updatedText = preserveFormatting(updatedText);

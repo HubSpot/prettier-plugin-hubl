@@ -24,7 +24,6 @@ expect.addSnapshotSerializer({
 });
 
 async function run_spec(dirname, options) {
-  //const testFiles = [fs.readdirSync(dirname)[0]];
   fs.readdirSync(dirname).forEach(async (filename) => {
     const filepath = `${dirname}${filename}`;
     if (
