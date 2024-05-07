@@ -345,6 +345,6 @@ export function inOperator(key, val) {
     return key in val;
   }
   throw new Error(
-    'Cannot use "in" operator to search for "' + key + '" in unexpected types.',
+    'Cannot use "in" operator to search for "' + key + '" in unexpected types.'
   );
 }

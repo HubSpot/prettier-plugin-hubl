@@ -166,7 +166,7 @@ export class Tokenizer {
             flags: regexFlags,
           },
           lineno,
-          colno,
+          colno
         );
       } else if (delimChars.indexOf(cur) !== -1) {
         // We've hit a delimiter (a special char like a bracket)
@@ -344,7 +344,7 @@ export class Tokenizer {
           inComment ? TOKEN_COMMENT : TOKEN_DATA,
           tok,
           lineno,
-          colno,
+          colno
         );
       }
     }
@@ -388,8 +388,9 @@ export class Tokenizer {
     if (this.index + str.length > this.len) {
       return null;
     }
-    const match = this.str.slice(this.index, this.index + str.length);
-    return match === str;
+
+    let m = this.str.slice(this.index, this.index + str.length);
+    return m === str;
   }
 
   _extractString(str) {
