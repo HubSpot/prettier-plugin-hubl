@@ -86,7 +86,7 @@ const printForValues = (node) => {
 
 // Nested HubL tags get special treatment to indent correctly
 const printBody = (node) => {
-  let bodyElements: Doc = [];
+  const bodyElements: Doc = [];
   const isTemplateData = (item) => {
     return (
       item.typename === "Output" &&
@@ -96,7 +96,7 @@ const printBody = (node) => {
   };
   const getTemplateData = (item) => {
     const childValue = item.children[0].value;
-    let lines = childValue.split("\n");
+    const lines = childValue.split("\n");
 
     return join(hardline, lines);
   };
@@ -106,7 +106,7 @@ const printBody = (node) => {
       return item.children[0].value;
     }
     const childValue = item.children[0].value.replace(/\n$/, "");
-    let lines = childValue.split("\n");
+    const lines = childValue.split("\n");
     if (/^\s+$/.test(lines[lines.length - 1])) {
       const lastLine = lines.pop();
       return [join(hardline, lines), dedent([hardline, lastLine])];
@@ -163,7 +163,7 @@ function printHubl(node) {
       return [printHubl(node.left), " and ", printHubl(node.right)];
     case "Is":
       return [printHubl(node.left), " is ", printHubl(node.right)];
-    case "If":
+    case "If": {
       const ifParts: any = [
         group([
           openTag(node.whiteSpace.openTag),
@@ -183,6 +183,7 @@ function printHubl(node) {
         closeTag(node.whiteSpace.closingTag),
       );
       return group(ifParts);
+    }
     case "InlineIf":
       if (node.else_) {
         return group([
@@ -202,7 +203,7 @@ function printHubl(node) {
         " : ",
         printHubl(node.else),
       ]);
-    case "Unless":
+    case "Unless": {
       const unlessParts: any[] = [
         group([
           openTag(node.whiteSpace.openTag),
@@ -222,6 +223,7 @@ function printHubl(node) {
         closeTag(node.whiteSpace.closingTag),
       ]);
       return group(unlessParts);
+    }
     case "Div":
       return group([printHubl(node.left), " / ", printHubl(node.right)]);
     case "Mul":
@@ -285,13 +287,14 @@ function printHubl(node) {
         return "";
       }
       return node.value;
-    case "TemplateData":
+    case "TemplateData": {
       const newLineRegex = /(\n)+/gm;
       if (newLineRegex.test(node.value)) {
-        let parts = node.value.split("\n");
+        const parts = node.value.split("\n");
         return join(hardline, parts);
       }
       return node.value;
+    }
     case "Literal":
       if (node.value === null) {
         return "null";
@@ -302,13 +305,14 @@ function printHubl(node) {
       return `${node.value}`;
     case "Comment":
       return node.value;
-    case "Filter":
+    case "Filter": {
       const leftHandSide = node.args.children.shift();
       const parts = [printHubl(leftHandSide), "|", printHubl(node.name)];
       if (node.args.children.length > 0) {
         parts.push(["(", join(", ", printHubl(node.args)), ")"]);
       }
       return parts;
+    }
     case "Compare":
       return group([
         printHubl(node.expr),
@@ -359,7 +363,7 @@ function printHubl(node) {
           closeTag(node.whiteSpace.closingTag),
         ]),
       ];
-    case "KeywordArgs":
+    case "KeywordArgs": {
       const lineType = node.children.length > 1 ? hardline : line;
       return [
         softline,
@@ -370,8 +374,8 @@ function printHubl(node) {
           }),
         ),
       ];
-
-    case "Dict":
+    }
+    case "Dict": {
       const dictParts: any[] = ["{"];
       dictParts.push(
         indent(
@@ -385,8 +389,8 @@ function printHubl(node) {
       );
       dictParts.push(hardline, "}");
       return dictParts;
-    case "For":
-      const forCol = node.colno;
+    }
+    case "For": {
       return [
         group([
           openTag(node.whiteSpace.openTag),
@@ -404,6 +408,7 @@ function printHubl(node) {
         " endfor ",
         closeTag(node.whiteSpace.closingTag),
       ];
+    }
     case "Macro":
       return [
         group([

@@ -1,13 +1,33 @@
 // source: https://github.com/prettier/prettier/blob/ee2839bacbf6a52d004fa2f0373b732f6f191ccc/tests_config/run_spec.js
 "use strict";
 
-const fs = require("fs");
-const path = require("path");
-const prettier = require("prettier");
+import fs from "fs";
+import path from "path";
+import prettier from "prettier";
+import { fileURLToPath } from "url";
+import { expect, test } from "@jest/globals";
+
+const testDirectory = path.dirname(fileURLToPath(import.meta.url));
+
+const RAW = Symbol.for("raw");
+expect.addSnapshotSerializer({
+  print(val) {
+    return val[RAW];
+  },
+  test(val) {
+    return (
+      val &&
+      Object.prototype.hasOwnProperty.call(val, RAW) &&
+      typeof val[RAW] === "string"
+    );
+  },
+});
 
 async function run_spec(dirname, options) {
-  fs.readdirSync(dirname).forEach(async (filename) => {
-    const filepath = dirname + filename;
+  const testFiles = fs.readdirSync(dirname); //.filter((f) => f.includes("misc"));
+
+  testFiles.forEach(async (filename) => {
+    const filepath = `${dirname}${filename}`;
     if (
       path.extname(filename) !== ".snap" &&
       fs.lstatSync(filepath).isFile() &&
@@ -41,21 +61,24 @@ async function run_spec(dirname, options) {
         parser: "hubl",
       });
 
-      const output = await prettyprint(input, mergedOptions);
-      test(filename, () => {
+      const output = prettyprint(input, mergedOptions);
+
+      test(filename, async () => {
         expect(
-          raw(source + "~".repeat(mergedOptions.printWidth) + "\n" + output),
+          raw(
+            source +
+              "~".repeat(mergedOptions.printWidth) +
+              "\n" +
+              (await output),
+          ),
         ).toMatchSnapshot();
       });
     }
   });
 }
 
-global.run_spec = run_spec;
-
 async function prettyprint(src, options) {
-  const result = prettier.formatWithCursor(src, options);
-  console.log("Result", result);
+  const result = await prettier.formatWithCursor(src, options);
   if (options.cursorOffset >= 0) {
     result.formatted =
       result.formatted.slice(0, result.cursorOffset) +
@@ -64,6 +87,8 @@ async function prettyprint(src, options) {
   }
   return result.formatted;
 }
+
+global.run_spec = run_spec;
 
 function read(filename) {
   return fs.readFileSync(filename, "utf8");
@@ -84,7 +109,9 @@ function raw(string) {
 function mergeDefaultOptions(parserConfig) {
   return Object.assign(
     {
-      plugins: [path.resolve(path.dirname(__dirname), "dist/index.js")],
+      plugins: [
+        path.resolve(path.join(testDirectory, ".."), "dist/src/index.js"),
+      ],
       printWidth: 80,
     },
     parserConfig,

@@ -2,7 +2,6 @@
   "name": "hubl-parser",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "dependencies": {
     "colors": "^1.4.0"
   },
@@ -24,6 +23,16 @@
     "watch-broken": "yarn watch --simple-broken",
     "watch-single": "yarn watch",
     "watch-build": "nodemon --config nodemon.build.json"
+  },
+  "files": [
+    "dist/**"
+  ],
+  "main": "dist/src/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    }
   },
   "repository": {
     "type": "git",

@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNEXT",
-    "module": "CommonJS",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
     "outDir": "./dist",
     "strict": true,
     "noImplicitAny": false,
-    "moduleResolution": "node",
     "baseUrl": "",
     "rootDir": ".",
     "typeRoots": ["./types", "../node_modules/@types"],
@@ -18,5 +18,5 @@
     "allowJs": true
   },
   "include": ["./**/*", "./tests/*"],
-  "exclude": ["dist"]
+  "exclude": ["dist", "node_modules"]
 }
