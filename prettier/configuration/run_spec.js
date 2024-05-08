@@ -37,7 +37,8 @@ function createTestObject(dirName, fileName, options) {
   let rangeStart = 0;
   let rangeEnd = Infinity;
   let cursorOffset;
-  const source = read(filePath)
+  const source = fs
+    .readFileSync(filePath, "utf-8")
     .replace(/\r\n/g, "\n")
     .replace("<<<PRETTIER_RANGE_START>>>", (_, offset) => {
       rangeStart = offset;
@@ -79,22 +80,13 @@ async function run_spec(dirName, options) {
   describe("Formatting tests", () => {
     testObjects.forEach(async (testObj) => {
       const { fileName, source, input, mergedOptions } = testObj;
-      const output = await prettyprint(input, mergedOptions);
-      it(`formats ${fileName} correctly`, () => {
-        expect(
-          raw(source + "~".repeat(mergedOptions.printWidth) + "\n" + output),
-        ).toMatchSnapshot();
-      });
-    });
-  });
-
-  xdescribe("Idempotence tests", () => {
-    testObjects.forEach(async (testObj) => {
-      const { input, mergedOptions, fileName } = testObj;
-      const firstPass = await prettyprint(input, mergedOptions);
-      const secondPass = await prettyprint(firstPass, mergedOptions);
-      it(`is idempotent for ${fileName}`, () => {
-        expect(firstPass).toEqual(secondPass);
+      it(`formats ${fileName} correctly`, async () => {
+        const output = await prettyprint(input, mergedOptions);
+        const snapshot = raw(
+          source + "~".repeat(mergedOptions.printWidth) + "\n" + output,
+        );
+        console.log("Snap", snapshot);
+        expect(snapshot).toMatchSnapshot();
       });
     });
   });
@@ -112,10 +104,6 @@ async function prettyprint(src, options) {
 }
 
 global.run_spec = run_spec;
-
-function read(filename) {
-  return fs.readFileSync(filename, "utf8");
-}
 
 /**
  * Wraps a string in a marker object that is used by `./raw-serializer.js` to
