@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`404.html 1`] = `
+exports[`formats 404.html correctly 1`] = `
 <!--
   templateType: error_page
   isAvailableForNewContent: true
@@ -70,7 +70,7 @@ exports[`404.html 1`] = `
 
 `;
 
-exports[`basic.html 1`] = `
+exports[`formats basic.html correctly 1`] = `
 <html><div>{% set x, s = "T" %}{% form "my_form" label="My Form", custom_form_html=None, no_title=False,title="", test1=None, test2=False,title="", test3=None, test4=False,title="" %}
 </div><img src="">
 {{- variable|upper -}}
@@ -109,7 +109,7 @@ NO
 
 `;
 
-exports[`blog-listing.html 1`] = `
+exports[`formats blog-listing.html correctly 1`] = `
 <!--
 templateType: blog_listing
 isAvailableForNewContent: true
@@ -252,7 +252,7 @@ screenshotPath: ../images/template-previews/blog-index.png
 
 `;
 
-exports[`blog-post.html 1`] = `
+exports[`formats blog-post.html correctly 1`] = `
 <!--
 templateType: blog_post
 isAvailableForNewContent: true
@@ -448,7 +448,7 @@ screenshotPath: ../images/template-previews/blog-post.png
 
 `;
 
-exports[`comments.html 1`] = `
+exports[`formats comments.html correctly 1`] = `
 <div>
   {# A comment #}
 </div>
@@ -476,7 +476,7 @@ exports[`comments.html 1`] = `
 
 `;
 
-exports[`complex.html 1`] = `
+exports[`formats complex.html correctly 1`] = `
 <!--
 templateType: none
 -->
@@ -570,7 +570,7 @@ templateType: none
 
 `;
 
-exports[`contact.html 1`] = `
+exports[`formats contact.html correctly 1`] = `
 <!--
   templateType: page
   isAvailableForNewContent: true
@@ -614,7 +614,7 @@ exports[`contact.html 1`] = `
 
 `;
 
-exports[`css.html 1`] = `
+exports[`formats css.html correctly 1`] = `
 {# Module styles #}
 
 {% require_css %}
@@ -769,7 +769,7 @@ border-radius: {{ module.styles.active.corner.radius ~ "px" }};
 
 `;
 
-exports[`for.html 1`] = `
+exports[`formats for.html correctly 1`] = `
 {% for key, val in request.query_dict.items() %}
 {{ key }}:{{ val }}
 {% endfor %}
@@ -780,7 +780,7 @@ exports[`for.html 1`] = `
 
 `;
 
-exports[`home.html 1`] = `
+exports[`formats home.html correctly 1`] = `
 <!--
   templateType: page
   isAvailableForNewContent: true
@@ -909,7 +909,7 @@ exports[`home.html 1`] = `
 
 `;
 
-exports[`hubdb.html 1`] = `
+exports[`formats hubdb.html correctly 1`] = `
 <!--
 templateType: page
 isAvailableForNewContent: false
@@ -1157,7 +1157,7 @@ screenshotPath: ../images/template-previews/hubdb.png
 
 `;
 
-exports[`if.html 1`] = `
+exports[`formats if.html correctly 1`] = `
 <div class="{% if true %}foo{% endif %}">
   Content
 </div>
@@ -1196,7 +1196,7 @@ Text that should get indented
 
 `;
 
-exports[`json.html 1`] = `
+exports[`formats json.html correctly 1`] = `
 {% module_attribute "social_link" is_json=True %}
 [{"social_account":"facebook-f", "social_account":"linkedin-f"},{"social_account":"twitter", "social_account":"instagram"}]
 {% end_module_attribute %}
@@ -1210,7 +1210,7 @@ exports[`json.html 1`] = `
 
 `;
 
-exports[`landing-page.html 1`] = `
+exports[`formats landing-page.html correctly 1`] = `
 <!--
   templateType: page
   isAvailableForNewContent: true
@@ -1288,7 +1288,7 @@ exports[`landing-page.html 1`] = `
 
 `;
 
-exports[`membership-login.html 1`] = `
+exports[`formats membership-login.html correctly 1`] = `
 <!--
   templateType: membership_login_page
   isAvailableForNewContent: true
@@ -1376,7 +1376,7 @@ exports[`membership-login.html 1`] = `
 
 `;
 
-exports[`minimal_nested.html 1`] = `
+exports[`formats minimal_nested.html correctly 1`] = `
 <div class="what">
 {% dnd_column %}
 {% dnd_row %}
@@ -1405,7 +1405,7 @@ exports[`minimal_nested.html 1`] = `
 
 `;
 
-exports[`misc.html 1`] = `
+exports[`formats misc.html correctly 1`] = `
 {% if sky != 'blue' %}
 Clouds
 {% endif %}
@@ -1805,7 +1805,7 @@ What is this element?
 
 `;
 
-exports[`nestedHtmlTags.html 1`] = `
+exports[`formats nestedHtmlTags.html correctly 1`] = `
   {% require_css %}
     <style>
       .list-wrapper {{ tagVariable }} {
@@ -1834,7 +1834,7 @@ exports[`nestedHtmlTags.html 1`] = `
 
 `;
 
-exports[`pre.html 1`] = `
+exports[`formats pre.html correctly 1`] = `
 {% block x %}
 <div>
   <pre>
@@ -1939,7 +1939,7 @@ exports[`pre.html 1`] = `
 
 `;
 
-exports[`qatest.html 1`] = `
+exports[`formats qatest.html correctly 1`] = `
 <!--
   templateType: page
   isAvailableForNewContent: false
@@ -3227,7 +3227,7 @@ exports[`qatest.html 1`] = `
 
 `;
 
-exports[`set.html 1`] = `
+exports[`formats set.html correctly 1`] = `
   {% set my_string = "my value" 
   %}
 {% set my_var = 
@@ -3299,7 +3299,7 @@ a_var %}
 
 `;
 
-exports[`tags.html 1`] = `
+exports[`formats tags.html correctly 1`] = `
 {% extends "custom/page/web_page_basic/my_template.html" %}
 {% block my_sidebar %}
    <!--Content that will render within a block of the same name in the parent template-->
@@ -4308,7 +4308,7 @@ This is a simple dialog rendered by using a macro and a call block.
 
 `;
 
-exports[`ternary.html 1`] = `
+exports[`formats ternary.html correctly 1`] = `
 {{ "x" == 0 ? "hello" : "bye" }}
 
 {% set x = blue === red ? yellow : orange %}
@@ -4331,7 +4331,7 @@ exports[`ternary.html 1`] = `
 
 `;
 
-exports[`website-header.html 1`] = `
+exports[`formats website-header.html correctly 1`] = `
 <!--
   templateType: global_partial
   label: Website header
@@ -4501,7 +4501,7 @@ exports[`website-header.html 1`] = `
 
 `;
 
-exports[`whitespace.html 1`] = `
+exports[`formats whitespace.html correctly 1`] = `
 {{- foo }}
 {{- bar -}}
 {{ baz -}}

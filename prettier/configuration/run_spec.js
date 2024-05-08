@@ -6,6 +6,7 @@ import path from "path";
 import prettier from "prettier";
 import { fileURLToPath } from "url";
 import { expect, test } from "@jest/globals";
+import { describe } from "node:test";
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 
@@ -23,55 +24,71 @@ expect.addSnapshotSerializer({
   },
 });
 
-async function run_spec(dirname, options) {
-  fs.readdirSync(dirname).forEach(async (filename) => {
-    const filepath = `${dirname}${filename}`;
-    if (
-      path.extname(filename) !== ".snap" &&
-      fs.lstatSync(filepath).isFile() &&
-      filename[0] !== "." &&
-      filename !== "run_tests.js"
-    ) {
-      let rangeStart = 0;
-      let rangeEnd = Infinity;
-      let cursorOffset;
-      const source = read(filepath)
-        .replace(/\r\n/g, "\n")
-        .replace("<<<PRETTIER_RANGE_START>>>", (match, offset) => {
-          rangeStart = offset;
-          return "";
-        })
-        .replace("<<<PRETTIER_RANGE_END>>>", (match, offset) => {
-          rangeEnd = offset;
-          return "";
-        });
+function createTestObject(dirName, fileName, options) {
+  const filePath = path.join(dirName, fileName);
+  const isValidTestFile =
+    path.extname(fileName) !== ".snap" &&
+    fs.lstatSync(filePath).isFile() &&
+    fileName[0] !== "." &&
+    fileName !== "run_tests.js";
 
-      const input = source.replace("<|>", (match, offset) => {
-        cursorOffset = offset;
-        return "";
+  if (!isValidTestFile) return undefined;
+
+  let rangeStart = 0;
+  let rangeEnd = Infinity;
+  let cursorOffset;
+  const source = fs
+    .readFileSync(filePath, "utf-8")
+    .replace(/\r\n/g, "\n")
+    .replace("<<<PRETTIER_RANGE_START>>>", (_, offset) => {
+      rangeStart = offset;
+      return "";
+    })
+    .replace("<<<PRETTIER_RANGE_END>>>", (_, offset) => {
+      rangeEnd = offset;
+      return "";
+    });
+
+  const input = source.replace("<|>", (_, offset) => {
+    cursorOffset = offset;
+    return "";
+  });
+
+  const mergedOptions = Object.assign(mergeDefaultOptions(options || {}), {
+    filePath,
+    rangeStart,
+    rangeEnd,
+    cursorOffset,
+    parser: "hubl",
+  });
+
+  return {
+    fileName,
+    dirName,
+    source,
+    input,
+    mergedOptions,
+  };
+}
+
+async function run_spec(dirName, options) {
+  const testObjects = fs
+    .readdirSync(dirName)
+    .map((fileName) => createTestObject(dirName, fileName, options))
+    .filter((testObj) => testObj !== undefined);
+
+  describe("Formatting tests", () => {
+    testObjects.forEach(async (testObj) => {
+      const { fileName, source, input, mergedOptions } = testObj;
+      it(`formats ${fileName} correctly`, async () => {
+        const output = await prettyprint(input, mergedOptions);
+        const snapshot = raw(
+          source + "~".repeat(mergedOptions.printWidth) + "\n" + output,
+        );
+        console.log("Snap", snapshot);
+        expect(snapshot).toMatchSnapshot();
       });
-
-      const mergedOptions = Object.assign(mergeDefaultOptions(options || {}), {
-        filepath,
-        rangeStart,
-        rangeEnd,
-        cursorOffset,
-        parser: "hubl",
-      });
-
-      const output = prettyprint(input, mergedOptions);
-
-      test(filename, async () => {
-        expect(
-          raw(
-            source +
-              "~".repeat(mergedOptions.printWidth) +
-              "\n" +
-              (await output),
-          ),
-        ).toMatchSnapshot();
-      });
-    }
+    });
   });
 }
 
@@ -87,10 +104,6 @@ async function prettyprint(src, options) {
 }
 
 global.run_spec = run_spec;
-
-function read(filename) {
-  return fs.readFileSync(filename, "utf8");
-}
 
 /**
  * Wraps a string in a marker object that is used by `./raw-serializer.js` to
