@@ -9,6 +9,41 @@ import {
   RemoteExtensionContext,
 } from "./types/parser";
 
+export const blockTags = [
+  { start: "comment", end: "end_comment" },
+  { start: "content_attribute", end: "end_content_attribute" },
+  { start: "dnd_area", end: "end_dnd_area" },
+  { start: "dnd_column", end: "end_dnd_column" },
+  { start: "dnd_module", end: "end_dnd_module" },
+  { start: "dnd_row", end: "end_dnd_row" },
+  { start: "dnd_section", end: "end_dnd_section" },
+  { start: "email_each", end: "endemail_each" },
+  { start: "flip", end: "endflip" },
+  { start: "module_attribute", end: "end_module_attribute" },
+  { start: "module_block", end: "end_module_block" },
+  { start: "require_css", end: "end_require_css" },
+  { start: "require_head", end: "end_require_head" },
+  { start: "require_js", end: "end_require_js" },
+  { start: "scope_css", end: "end_scope_css" },
+  { start: "style_settings", end: "end_style_settings" },
+  {
+    start: "targeted_module_attribute",
+    end: "end_targeted_module_attribute",
+  },
+  {
+    start: "targeted_widget_attribute",
+    end: "end_targeted_widget_attribute",
+  },
+  { start: "widget_attribute", end: "end_widget_attribute" },
+  { start: "widget_block", end: "end_widget_block" },
+  { start: "widget_container", end: "end_widget_container" },
+  { start: "widget_wrapper", end: "end_widget_wrapper" },
+  { start: "json_block", end: "end_json_block" },
+];
+
+export const getBlockTag = (nodeName: string) =>
+  blockTags.find((t) => t.start === nodeName);
+
 const parseSignature = (parser: ParserClass, nodes: Nodes, lexer: Lexer) => {
   /**
    * Gets the next token without advancing the parser
@@ -193,7 +228,6 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     "end_dnd_module",
     "end_dnd_row",
     "end_dnd_section",
-    "end_email_each",
     "end_module_attribute",
     "end_widget_attribute",
     "end_widget_block",
@@ -275,42 +309,12 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
    * Any block tags we are adding should be added here in addition to the array above.
    */
 
-  const blockTags = [
-    { start: "comment", end: "end_comment" },
-    { start: "content_attribute", end: "end_content_attribute" },
-    { start: "dnd_area", end: "end_dnd_area" },
-    { start: "dnd_column", end: "end_dnd_column" },
-    { start: "dnd_module", end: "end_dnd_module" },
-    { start: "dnd_row", end: "end_dnd_row" },
-    { start: "dnd_section", end: "end_dnd_section" },
-    { start: "email_each", end: "endemail_each" },
-    { start: "flip", end: "endflip" },
-    { start: "module_attribute", end: "end_module_attribute" },
-    { start: "module_block", end: "end_module_block" },
-    { start: "require_css", end: "end_require_css" },
-    { start: "require_head", end: "end_require_head" },
-    { start: "require_js", end: "end_require_js" },
-    { start: "scope_css", end: "end_scope_css" },
-    { start: "style_settings", end: "end_style_settings" },
-    {
-      start: "targeted_module_attribute",
-      end: "end_targeted_module_attribute",
-    },
-    {
-      start: "targeted_widget_attribute",
-      end: "end_targeted_widget_attribute",
-    },
-    { start: "widget_attribute", end: "end_widget_attribute" },
-    { start: "widget_block", end: "end_widget_block" },
-    { start: "widget_container", end: "end_widget_container" },
-    { start: "widget_wrapper", end: "end_widget_wrapper" },
-    { start: "json_block", end: "end_json_block" },
-  ];
   this.parse = function (parser: ParserClass, nodes: Nodes, lexer: Lexer) {
     const tagWhiteSpace = {
       openTag: { start: parser.dropLeadingWhitespace, end: false },
       closingTag: { start: false, end: false },
     };
+
     /**
      * This is our next top-level token/tag.  It will be one of the ones listed in the tags array above.
      * It will look like
@@ -322,6 +326,7 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
      * }
      */
     const nextTag = parser.nextToken();
+
     /**
      * This is where we add all of the data/properties/options/flags that goes in the tag.
      */

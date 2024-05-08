@@ -4,7 +4,7 @@
  */
 import { AST, ParserOptions } from "prettier";
 import * as parser from "./parser/parser.js";
-import Tags from "./Tags.js";
+import Tags, { getBlockTag } from "./Tags.js";
 
 const parse = (text: string, _options: ParserOptions): AST => {
   // We call into parser, but we extend it by passing in our custom tags
@@ -15,4 +15,4 @@ const parse = (text: string, _options: ParserOptions): AST => {
 };
 
 // It is required that we export the parse function for prettier to hook into it
-export { parse };
+export { parse, getBlockTag };

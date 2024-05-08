@@ -1,6 +1,7 @@
 import { AstPath, Doc } from "prettier";
 import prettierSync from "@prettier/sync";
 import { doc, util } from "prettier";
+import { getBlockTag } from "hubl-parser";
 const {
   builders: {
     group,
@@ -540,6 +541,9 @@ function printHubl(node) {
           const formattedJsonBody = printJsonBody(node.body);
           return [indent([line, formattedJsonBody]), line];
         }
+        const blockTag = getBlockTag(node.value);
+        // If we can't find it in the list just default to prepending end_
+        const endBlockTag = ` ${blockTag ? blockTag.end : `end_${node.value}`} `;
         return [
           group([
             openTag(node.whiteSpace.openTag),
@@ -549,7 +553,7 @@ function printHubl(node) {
             closeTag(node.whiteSpace.openTag),
           ]),
           indent(printBody(node.body)),
-          group([openTag(node.whiteSpace.closingTag), ` end_${node.value} `]),
+          group([openTag(node.whiteSpace.closingTag), endBlockTag]),
           closeTag(node.whiteSpace.closingTag),
         ];
       }
