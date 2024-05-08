@@ -77,13 +77,24 @@ async function run_spec(dirName, options) {
     .filter((testObj) => testObj !== undefined);
 
   describe("Formatting tests", () => {
-    testObjects.forEach((testObj) => {
+    testObjects.forEach(async (testObj) => {
       const { fileName, source, input, mergedOptions } = testObj;
-      const output = prettyprint(input, mergedOptions);
+      const output = await prettyprint(input, mergedOptions);
       it(`formats ${fileName} correctly`, () => {
         expect(
           raw(source + "~".repeat(mergedOptions.printWidth) + "\n" + output),
         ).toMatchSnapshot();
+      });
+    });
+  });
+
+  xdescribe("Idempotence tests", () => {
+    testObjects.forEach(async (testObj) => {
+      const { input, mergedOptions, fileName } = testObj;
+      const firstPass = await prettyprint(input, mergedOptions);
+      const secondPass = await prettyprint(firstPass, mergedOptions);
+      it(`is idempotent for ${fileName}`, () => {
+        expect(firstPass).toEqual(secondPass);
       });
     });
   });

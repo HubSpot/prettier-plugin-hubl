@@ -123,10 +123,10 @@
 {% end_dnd_section %}
 {% do list.append('value 2') %}
 {% email_each list="custom.cart_items" %}
-<td>{{item.name}}</td><td>{{item.price}}
+<td>{{item.name}}</td><td>{{item.price}}</td>
 {% endemail_each %}
 {% email_each list="custom.cart_items" item="line_item" %}
-<td>{{line_item.name}}</td><td>{{line_item.price}}
+<td>{{line_item.name}}</td><td>{{line_item.price}}</td>
 {% endemail_each %}
 {% email_simple_subscription "email_simple_subscription" %}
 {% email_simple_subscription "email_simple_subscription" header="Email Unsubscribe", input_help_text="Your email address:", input_placeholder="email@example.com", button_text="Unsubscribe", label="Backup Unsubscribe" %}
