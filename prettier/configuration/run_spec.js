@@ -60,15 +60,9 @@ async function run_spec(dirname, options) {
       });
 
       const output = prettyprint(input, mergedOptions);
-
-      test(filename, async () => {
+      it(`formats ${filename} correctly`, () => {
         expect(
-          raw(
-            source +
-              "~".repeat(mergedOptions.printWidth) +
-              "\n" +
-              (await output),
-          ),
+          raw(source + "~".repeat(mergedOptions.printWidth) + "\n" + output),
         ).toMatchSnapshot();
       });
     }
