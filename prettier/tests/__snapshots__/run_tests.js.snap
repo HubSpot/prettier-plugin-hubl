@@ -1,6 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`formats 404.html correctly 1`] = `
+<<<<<<< Updated upstream
+exports[`404.html 1`] = `
+=======
+exports[`Formatting tests formats 404.html correctly 1`] = `
 <!--
   templateType: error_page
   isAvailableForNewContent: true
@@ -70,7 +73,7 @@ exports[`formats 404.html correctly 1`] = `
 
 `;
 
-exports[`formats basic.html correctly 1`] = `
+exports[`Formatting tests formats basic.html correctly 1`] = `
 <html><div>{% set x, s = "T" %}{% form "my_form" label="My Form", custom_form_html=None, no_title=False,title="", test1=None, test2=False,title="", test3=None, test4=False,title="" %}
 </div><img src="">
 {{- variable|upper -}}
@@ -85,17 +88,20 @@ NO
 </html>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 <html>
-  <div>{% set x, s = "T" %}{% form "my_form"
-                             label="My Form",
-                             custom_form_html=None,
-                             no_title=False,
-                             title="",
-                             test1=None,
-                             test2=False,
-                             title="",
-                             test3=None,
-                             test4=False,
-                             title="" %}</div>
+  <div>
+    {% set x, s = "T" %}
+    {% form "my_form"
+      label="My Form",
+      custom_form_html=None,
+      no_title=False,
+      title="",
+      test1=None,
+      test2=False,
+      title="",
+      test3=None,
+      test4=False,
+      title="" %}
+  </div>
   <img src="" />
   {{- variable|upper -}}
   {% if x == "T" %}
@@ -109,7 +115,7 @@ NO
 
 `;
 
-exports[`formats blog-listing.html correctly 1`] = `
+exports[`Formatting tests formats blog-listing.html correctly 1`] = `
 <!--
 templateType: blog_listing
 isAvailableForNewContent: true
@@ -252,7 +258,7 @@ screenshotPath: ../images/template-previews/blog-index.png
 
 `;
 
-exports[`formats blog-post.html correctly 1`] = `
+exports[`Formatting tests formats blog-post.html correctly 1`] = `
 <!--
 templateType: blog_post
 isAvailableForNewContent: true
@@ -379,7 +385,10 @@ screenshotPath: ../images/template-previews/blog-post.png
             {% for tag in content.tag_list %}
             <a class="blog-post__tag-link" href="{{ blog_tag_url(group.id, tag.slug) }}" rel="tag"
               >{{ tag.name }}</a
-            >{% if not loop.last %},{% endif %}
+            >
+            {% if not loop.last %}
+              ,
+            {% endif %}
             {% endfor %}
           </div>
         {% endif %}
@@ -448,7 +457,7 @@ screenshotPath: ../images/template-previews/blog-post.png
 
 `;
 
-exports[`formats comments.html correctly 1`] = `
+exports[`Formatting tests formats comments.html correctly 1`] = `
 <div>
   {# A comment #}
 </div>
@@ -476,7 +485,7 @@ exports[`formats comments.html correctly 1`] = `
 
 `;
 
-exports[`formats complex.html correctly 1`] = `
+exports[`Formatting tests formats complex.html correctly 1`] = `
 <!--
 templateType: none
 -->
@@ -570,7 +579,7 @@ templateType: none
 
 `;
 
-exports[`formats contact.html correctly 1`] = `
+exports[`Formatting tests formats contact.html correctly 1`] = `
 <!--
   templateType: page
   isAvailableForNewContent: true
@@ -614,7 +623,7 @@ exports[`formats contact.html correctly 1`] = `
 
 `;
 
-exports[`formats css.html correctly 1`] = `
+exports[`Formatting tests formats css.html correctly 1`] = `
 {# Module styles #}
 
 {% require_css %}
@@ -769,7 +778,23 @@ border-radius: {{ module.styles.active.corner.radius ~ "px" }};
 
 `;
 
-exports[`formats for.html correctly 1`] = `
+exports[`Formatting tests formats email_each.html correctly 1`] = `
+{% email_each list="custom.cart_items" item="line_item" %}
+<td>{{line_item.name}}</td><td>{{line_item.price}}
+{% endemail_each %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% email_each
+  list="custom.cart_items",
+  item="line_item" %}
+  <td>{{ line_item.name }}</td>
+  <td>
+    {{ line_item.price }}
+  {% endemail_each %}
+</td>
+
+`;
+
+exports[`Formatting tests formats for.html correctly 1`] = `
 {% for key, val in request.query_dict.items() %}
 {{ key }}:{{ val }}
 {% endfor %}
@@ -780,7 +805,7 @@ exports[`formats for.html correctly 1`] = `
 
 `;
 
-exports[`formats home.html correctly 1`] = `
+exports[`Formatting tests formats home.html correctly 1`] = `
 <!--
   templateType: page
   isAvailableForNewContent: true
@@ -909,7 +934,7 @@ exports[`formats home.html correctly 1`] = `
 
 `;
 
-exports[`formats hubdb.html correctly 1`] = `
+exports[`Formatting tests formats hubdb.html correctly 1`] = `
 <!--
 templateType: page
 isAvailableForNewContent: false
@@ -1157,7 +1182,7 @@ screenshotPath: ../images/template-previews/hubdb.png
 
 `;
 
-exports[`formats if.html correctly 1`] = `
+exports[`Formatting tests formats if.html correctly 1`] = `
 <div class="{% if true %}foo{% endif %}">
   Content
 </div>
@@ -1196,21 +1221,23 @@ Text that should get indented
 
 `;
 
-exports[`formats json.html correctly 1`] = `
-{% module_attribute "social_link" is_json=True %}
+exports[`Formatting tests formats json.html correctly 1`] = `
+{% json_block %}{%end_json_block%}{% module_attribute "social_link" is_json=True %}
 [{"social_account":"facebook-f", "social_account":"linkedin-f"},{"social_account":"twitter", "social_account":"instagram"}]
 {% end_module_attribute %}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
 {% module_attribute "social_link" is_json=True %}
-    [
-      { "social_account": "facebook-f", "social_account": "linkedin-f" },
-      { "social_account": "twitter", "social_account": "instagram" }
-    ]
-  {% end_module_attribute %}
+  [{"social_account":"facebook-f",
+  "social_account":"linkedin-f"},{"social_account":"twitter",
+  "social_account":"instagram"}]
+{% end_module_attribute %}
 
 `;
 
-exports[`formats landing-page.html correctly 1`] = `
+exports[`Formatting tests formats landing-page.html correctly 1`] = `
 <!--
   templateType: page
   isAvailableForNewContent: true
@@ -1288,7 +1315,7 @@ exports[`formats landing-page.html correctly 1`] = `
 
 `;
 
-exports[`formats membership-login.html correctly 1`] = `
+exports[`Formatting tests formats membership-login.html correctly 1`] = `
 <!--
   templateType: membership_login_page
   isAvailableForNewContent: true
@@ -1376,7 +1403,7 @@ exports[`formats membership-login.html correctly 1`] = `
 
 `;
 
-exports[`formats minimal_nested.html correctly 1`] = `
+exports[`Formatting tests formats minimal_nested.html correctly 1`] = `
 <div class="what">
 {% dnd_column %}
 {% dnd_row %}
@@ -1405,7 +1432,7 @@ exports[`formats minimal_nested.html correctly 1`] = `
 
 `;
 
-exports[`formats misc.html correctly 1`] = `
+exports[`Formatting tests formats misc.html correctly 1`] = `
 {% if sky != 'blue' %}
 Clouds
 {% endif %}
@@ -1700,7 +1727,8 @@ What is this element?
   price={{ context.card_one_price or "$0" }},
   tier={{ context.card_one_tier or "<h2>Starter</h2>" }},
   timeframe={{ context.card_one_timeframe or "/mo" }},
-  width=4 %}{% end_dnd_module %}
+  width=4 %}
+{% end_dnd_module %}
 
 {% do rel.append("nofollow") %}
 
@@ -1759,8 +1787,10 @@ What is this element?
 {{ foo is not equalto("baz") }}
 {{ foo is not equalto("baz") }}
 
-{% if var is string_startingwith("v") %}{% endif %}
-{% if var is string_startingwith("v") %}{% endif %}
+{% if var is string_startingwith("v") %}
+{% endif %}
+{% if var is string_startingwith("v") %}
+{% endif %}
 
 {{ foo in bar }}
 {{ foo % bar }}
@@ -1805,7 +1835,126 @@ What is this element?
 
 `;
 
-exports[`formats nestedHtmlTags.html correctly 1`] = `
+exports[`Formatting tests formats mvp.html correctly 1`] = `
+{% if condition %}
+  If the condition is true print this to template.
+{% endif %}
+{% if number <= 2 %}
+  Variable named number is less than or equal to 2.
+{% elif number <= 4 %} Variable named number is
+  less than or equal to 4.
+{% elif number <= 6 %} Variable named number is less than or equal to 6.
+{% else %} Variable named number is greater than 6. {% endif %} {% image
+"image" %} {% image
+"executive_image"
+label="Executive photo",
+alt="Photo of Brian Halligan",
+src="//cdn2.hubspot.net/hub/53/file-733888619-jpg/assets/hubspot.com/about/management/brian-home.jpg",
+width="300",
+loading="lazy" %} {% image_slider
+"image_slider" %} {% widget_block
+image_slider
+"crm_slider"
+sizing="static",
+only_thumbnails=False,
+transition="slide",
+caption_position="below",
+with_thumbnail_nav=False,
+lightbox=False,
+auto_advance=True,
+overrideable=True,
+show_pagination=True,
+label="Image Slider",
+loop_slides=True,
+num_seconds=5,
+version="0" %}
+{% widget_attribute "slides"
+    is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url":
+    "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
+"img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+"open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile",
+"show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text":
+"HubSpot CRM Contact Profile", "img_src":
+"http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
+"open_in_new_tab": true}]
+{% end_widget_attribute %} {% end_widget_block %} {% image_src
+"image_src" %} {% image_src
+"executve_image_src"
+src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
+no_wrapper=True %} {% import "custom/page/web_page_basic/my_macros.html" as header_footer %} {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }} {% include "custom/page/web_page_basic/my_footer.html" %}
+{% include "generated_global_groups/2781996615.html" %} {% include "hubspot/styles/patches/recommended.css" %} {% inline_rich_text
+"inline_rich_text"
+field="my_text_field" %}
+{% inline_rich_text "inline_rich_text"
+  field="my_text_field",
+  html="<p>My rich text default content</p>" %}
+{% inline_text "text" field="my_text_field" %}
+{% inline_text "simple_text_field"
+  field="my_text_field",
+  value="This is the default value for this text field" %}
+{% language_switcher "language_switcher" %}
+{% language_switcher "language_switcher" display_mode="hybrid" %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% if condition %}
+  If the condition is true print this to template.
+{% endif %}
+{% if number <= 2 %}
+  Variable named number is less than or equal to 2.
+{% elif number <= 4 %} Variable named number is
+  less than or equal to 4.
+{% elif number <= 6 %} Variable named number is less than or equal to 6.
+{% else %} Variable named number is greater than 6. {% endif %} {% image
+                                                                  "image" %} {% image
+             "executive_image"
+             label="Executive photo",
+             alt="Photo of Brian Halligan",
+             src="//cdn2.hubspot.net/hub/53/file-733888619-jpg/assets/hubspot.com/about/management/brian-home.jpg",
+             width="300",
+             loading="lazy" %} {% image_slider "image_slider" %} {% widget_block
+                    image_slider "crm_slider"
+                    sizing="static",
+                    only_thumbnails=False,
+                    transition="slide",
+                    caption_position="below",
+                    with_thumbnail_nav=False,
+                    lightbox=False,
+                    auto_advance=True,
+                    overrideable=True,
+                    show_pagination=True,
+                    label="Image Slider",
+                    loop_slides=True,
+                    num_seconds=5,
+                    version="0" %}
+  {% widget_attribute "slides"
+    is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url":
+    "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
+    "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+    "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile",
+    "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text":
+    "HubSpot CRM Contact Profile", "img_src":
+    "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
+    "open_in_new_tab": true}]
+  {% end_widget_attribute %} {% end_widget_block %} {% image_src
+                                                                              "image_src" %} {% image_src
+                 "executve_image_src"
+                 src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
+                 no_wrapper=True %} {% import "custom/page/web_page_basic/my_macros.html" as header_footer %} {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }} {% include "custom/page/web_page_basic/my_footer.html" %}
+{% include "generated_global_groups/2781996615.html" %} {% include "hubspot/styles/patches/recommended.css" %} {% inline_rich_text
+                                                                                                                 "inline_rich_text"
+                                                                                                                 field="my_text_field" %}
+{% inline_rich_text "inline_rich_text"
+  field="my_text_field",
+  html="<p>My rich text default content</p>" %}
+{% inline_text "text" field="my_text_field" %}
+{% inline_text "simple_text_field"
+  field="my_text_field",
+  value="This is the default value for this text field" %}
+{% language_switcher "language_switcher" %}
+{% language_switcher "language_switcher" display_mode="hybrid" %}
+
+`;
+
+exports[`Formatting tests formats nestedHtmlTags.html correctly 1`] = `
   {% require_css %}
     <style>
       .list-wrapper {{ tagVariable }} {
@@ -1834,7 +1983,7 @@ exports[`formats nestedHtmlTags.html correctly 1`] = `
 
 `;
 
-exports[`formats pre.html correctly 1`] = `
+exports[`Formatting tests formats pre.html correctly 1`] = `
 {% block x %}
 <div>
   <pre>
@@ -1890,34 +2039,34 @@ exports[`formats pre.html correctly 1`] = `
 {% block x %}
   <div>
     <pre>
-    Is this indented twice?
-  </pre>
+      Is this indented twice?
+    </pre>
   </div>
 
   <div>
     <pre>
-        Is this indented 4 times?
-  </pre>
+          Is this indented 4 times?
+    </pre>
   </div>
 
   <div>
     <pre>
-  {{ 2_spaces }}
-  </pre>
+    {{ 2_spaces }}
+    </pre>
   </div>
 
   <code>
     <pre>
-   {{ 3_spaces }}
-    </pre>
+     {{ 3_spaces }}
+      </pre>
   </code>
 
   <div hidden>
     <!-- Debug data_query -->
     <code>
       <pre>
-       {{ 7_spaces }}
-                </pre>
+         {{ 7_spaces }}
+                  </pre>
     </code>
 
     <!-- Debug data -->
@@ -1930,8 +2079,8 @@ exports[`formats pre.html correctly 1`] = `
     <!-- Debug data|tojson -->
     <code>
       <pre>
-      {{ data|tojson }}
-            </pre>
+        {{ data|tojson }}
+              </pre>
     </code>
     <div></div>
   </div>
@@ -1939,7 +2088,7 @@ exports[`formats pre.html correctly 1`] = `
 
 `;
 
-exports[`formats qatest.html correctly 1`] = `
+exports[`Formatting tests formats qatest.html correctly 1`] = `
 <!--
   templateType: page
   isAvailableForNewContent: false
@@ -3227,7 +3376,7 @@ exports[`formats qatest.html correctly 1`] = `
 
 `;
 
-exports[`formats set.html correctly 1`] = `
+exports[`Formatting tests formats set.html correctly 1`] = `
   {% set my_string = "my value" 
   %}
 {% set my_var = 
@@ -3299,7 +3448,7 @@ a_var %}
 
 `;
 
-exports[`formats tags.html correctly 1`] = `
+exports[`Formatting tests formats tags.html correctly 1`] = `
 {% extends "custom/page/web_page_basic/my_template.html" %}
 {% block my_sidebar %}
    <!--Content that will render within a block of the same name in the parent template-->
@@ -3809,13 +3958,13 @@ This is a simple dialog rendered by using a macro and a call block.
 {% email_each list="custom.cart_items" %}
   <td>{{ item.name }}</td>
   <td>{{ item.price }}</td>
-{% end_email_each %}
+{% endemail_each %}
 {% email_each
   list="custom.cart_items",
   item="line_item" %}
   <td>{{ line_item.name }}</td>
   <td>{{ line_item.price }}</td>
-{% end_email_each %}
+{% endemail_each %}
 {% email_simple_subscription "email_simple_subscription" %}
 {% email_simple_subscription "email_simple_subscription"
   header="Email Unsubscribe",
@@ -3846,11 +3995,16 @@ This is a simple dialog rendered by using a macro and a call block.
   <head>
     {% block head %}
       <link rel="stylesheet" href="style.css" />
-      <title>{% block title %}{% endblock title %} - My Webpage</title>
+      <title>
+        {% block title %} {% endblock title %} - My Webpage
+      </title>
     {% endblock head %}
   </head>
   <body>
-    <div id="content">{% block content %}{% endblock content %}</div>
+    <div id="content">
+      {% block content %}
+      {% endblock content %}
+    </div>
     <div id="footer">
       {% block footer %}
         &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
@@ -3859,7 +4013,9 @@ This is a simple dialog rendered by using a macro and a call block.
   </body>
 </html>
 {% extends "custom/page/web_page_basic/my_template.html" %}
-{% block title %}Index{% endblock title %}
+{% block title %}
+  Index
+{% endblock title %}
 {% block head %}
   {{ super() }}
   <style type="text/css">
@@ -3913,25 +4069,15 @@ Post content variables
   num_seconds=5,
   version="1" %}
   {% widget_attribute "slides" is_json=True %}
-      [
-        {
-          "caption": "CRM Contacts App",
-          "show_caption": true,
-          "link_url": "http://www.hubspot.com/crm",
-          "alt_text": "Screenshot of CRM Contacts",
-          "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
-          "open_in_new_tab": true
-        },
-        {
-          "caption": "HubSpot CRM Contact Profile",
-          "show_caption": true,
-          "link_url": "http://www.hubspot.com/",
-          "alt_text": "HubSpot CRM Contact Profile",
-          "img_src": "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
-          "open_in_new_tab": true
-        }
-      ]
-    {% end_widget_attribute %}
+    [{"caption": "CRM Contacts App", "show_caption": true, "link_url":
+    "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
+    "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+    "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile",
+    "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text":
+    "HubSpot CRM Contact Profile", "img_src":
+    "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
+    "open_in_new_tab": true}]
+  {% end_widget_attribute %}
 {% end_widget_block %}
 {% global_widget "global_widget" %}
 {% global_widget "facebook_fan_box"
@@ -4178,46 +4324,27 @@ The personalization token for a contact's first name is
   use_page_url=True,
   overrideable=True %}
   {% widget_attribute "pinterest" is_json=True %}
-      {
-        "custom_link_format": "",
-        "pinterest_media": "http://cdn2.hubspot.net/hub/158015/305390_10100548508246879_837195_59275782_6882128_n.jpg",
-        "enabled": true,
-        "network": "pinterest",
-        "img_src": "https://static.hubspot.com/final/img/common/icons/social/pinterest-24x24.png"
-      }
-    {% end_widget_attribute %}
+    {"custom_link_format": "", "pinterest_media":
+    "http://cdn2.hubspot.net/hub/158015/305390_10100548508246879_837195_59275782_6882128_n.jpg",
+    "enabled": true, "network": "pinterest", "img_src":
+    "https://static.hubspot.com/final/img/common/icons/social/pinterest-24x24.png"}
+  {% end_widget_attribute %}
   {% widget_attribute "twitter" is_json=True %}
-      {
-        "custom_link_format": "",
-        "enabled": true,
-        "network": "twitter",
-        "img_src": "https://static.hubspot.com/final/img/common/icons/social/twitter-24x24.png"
-      }
-    {% end_widget_attribute %}
+    {"custom_link_format": "", "enabled": true, "network": "twitter", "img_src":
+    "https://static.hubspot.com/final/img/common/icons/social/twitter-24x24.png"}
+  {% end_widget_attribute %}
   {% widget_attribute "linkedin" is_json=True %}
-      {
-        "custom_link_format": "",
-        "enabled": true,
-        "network": "linkedin",
-        "img_src": "https://static.hubspot.com/final/img/common/icons/social/linkedin-24x24.png"
-      }
-    {% end_widget_attribute %}
+    {"custom_link_format": "", "enabled": true, "network": "linkedin", "img_src":
+    "https://static.hubspot.com/final/img/common/icons/social/linkedin-24x24.png"}
+  {% end_widget_attribute %}
   {% widget_attribute "facebook" is_json=True %}
-      {
-        "custom_link_format": "",
-        "enabled": true,
-        "network": "facebook",
-        "img_src": "https://static.hubspot.com/final/img/common/icons/social/facebook-24x24.png"
-      }
-    {% end_widget_attribute %}
+    {"custom_link_format": "", "enabled": true, "network": "facebook", "img_src":
+    "https://static.hubspot.com/final/img/common/icons/social/facebook-24x24.png"}
+  {% end_widget_attribute %}
   {% widget_attribute "email" is_json=True %}
-      {
-        "custom_link_format": "",
-        "enabled": true,
-        "network": "email",
-        "img_src": "https://static.hubspot.com/final/img/common/icons/social/email-24x24.png"
-      }
-    {% end_widget_attribute %}
+    {"custom_link_format": "", "enabled": true, "network": "email", "img_src":
+    "https://static.hubspot.com/final/img/common/icons/social/email-24x24.png"}
+  {% end_widget_attribute %}
 {% end_widget_block %}
 {% space "space" %}
 {% space "my_spacer" label="Horizontal Spacer" %}
@@ -4304,7 +4431,7 @@ The personalization token for a contact's first name is
 
 `;
 
-exports[`formats ternary.html correctly 1`] = `
+exports[`Formatting tests formats ternary.html correctly 1`] = `
 {{ "x" == 0 ? "hello" : "bye" }}
 
 {% set x = blue === red ? yellow : orange %}
@@ -4327,7 +4454,126 @@ exports[`formats ternary.html correctly 1`] = `
 
 `;
 
-exports[`formats website-header.html correctly 1`] = `
+exports[`Formatting tests formats very_nested.html correctly 1`] = `
+{% if condition %}
+  If the condition is true print this to template.
+{% endif %}
+{% if number <= 2 %}
+  Variable named number is less than or equal to 2.
+{% elif number <= 4 %} Variable named number is
+  less than or equal to 4.
+{% elif number <= 6 %} Variable named number is less than or equal to 6.
+{% else %} Variable named number is greater than 6. {% endif %} {% image
+"image" %} {% image
+"executive_image"
+label="Executive photo",
+alt="Photo of Brian Halligan",
+src="//cdn2.hubspot.net/hub/53/file-733888619-jpg/assets/hubspot.com/about/management/brian-home.jpg",
+width="300",
+loading="lazy" %} {% image_slider
+"image_slider" %} {% widget_block
+image_slider
+"crm_slider"
+sizing="static",
+only_thumbnails=False,
+transition="slide",
+caption_position="below",
+with_thumbnail_nav=False,
+lightbox=False,
+auto_advance=True,
+overrideable=True,
+show_pagination=True,
+label="Image Slider",
+loop_slides=True,
+num_seconds=5,
+version="0" %}
+{% widget_attribute "slides"
+    is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url":
+    "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
+"img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+"open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile",
+"show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text":
+"HubSpot CRM Contact Profile", "img_src":
+"http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
+"open_in_new_tab": true}]
+{% end_widget_attribute %} {% end_widget_block %} {% image_src
+"image_src" %} {% image_src
+"executve_image_src"
+src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
+no_wrapper=True %} {% import "custom/page/web_page_basic/my_macros.html" as header_footer %} {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }} {% include "custom/page/web_page_basic/my_footer.html" %}
+{% include "generated_global_groups/2781996615.html" %} {% include "hubspot/styles/patches/recommended.css" %} {% inline_rich_text
+"inline_rich_text"
+field="my_text_field" %}
+{% inline_rich_text "inline_rich_text"
+  field="my_text_field",
+  html="<p>My rich text default content</p>" %}
+{% inline_text "text" field="my_text_field" %}
+{% inline_text "simple_text_field"
+  field="my_text_field",
+  value="This is the default value for this text field" %}
+{% language_switcher "language_switcher" %}
+{% language_switcher "language_switcher" display_mode="hybrid" %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% if condition %}
+  If the condition is true print this to template.
+{% endif %}
+{% if number <= 2 %}
+  Variable named number is less than or equal to 2.
+{% elif number <= 4 %} Variable named number is
+  less than or equal to 4.
+{% elif number <= 6 %} Variable named number is less than or equal to 6.
+{% else %} Variable named number is greater than 6. {% endif %} {% image
+                                                                  "image" %} {% image
+             "executive_image"
+             label="Executive photo",
+             alt="Photo of Brian Halligan",
+             src="//cdn2.hubspot.net/hub/53/file-733888619-jpg/assets/hubspot.com/about/management/brian-home.jpg",
+             width="300",
+             loading="lazy" %} {% image_slider "image_slider" %} {% widget_block
+                    image_slider "crm_slider"
+                    sizing="static",
+                    only_thumbnails=False,
+                    transition="slide",
+                    caption_position="below",
+                    with_thumbnail_nav=False,
+                    lightbox=False,
+                    auto_advance=True,
+                    overrideable=True,
+                    show_pagination=True,
+                    label="Image Slider",
+                    loop_slides=True,
+                    num_seconds=5,
+                    version="0" %}
+  {% widget_attribute "slides"
+    is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url":
+    "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
+    "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+    "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile",
+    "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text":
+    "HubSpot CRM Contact Profile", "img_src":
+    "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
+    "open_in_new_tab": true}]
+  {% end_widget_attribute %} {% end_widget_block %} {% image_src
+                                                                              "image_src" %} {% image_src
+                 "executve_image_src"
+                 src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
+                 no_wrapper=True %} {% import "custom/page/web_page_basic/my_macros.html" as header_footer %} {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }} {% include "custom/page/web_page_basic/my_footer.html" %}
+{% include "generated_global_groups/2781996615.html" %} {% include "hubspot/styles/patches/recommended.css" %} {% inline_rich_text
+                                                                                                                 "inline_rich_text"
+                                                                                                                 field="my_text_field" %}
+{% inline_rich_text "inline_rich_text"
+  field="my_text_field",
+  html="<p>My rich text default content</p>" %}
+{% inline_text "text" field="my_text_field" %}
+{% inline_text "simple_text_field"
+  field="my_text_field",
+  value="This is the default value for this text field" %}
+{% language_switcher "language_switcher" %}
+{% language_switcher "language_switcher" display_mode="hybrid" %}
+
+`;
+
+exports[`Formatting tests formats website-header.html correctly 1`] = `
 <!--
   templateType: global_partial
   label: Website header
@@ -4497,7 +4743,4634 @@ exports[`formats website-header.html correctly 1`] = `
 
 `;
 
-exports[`formats whitespace.html correctly 1`] = `
+exports[`Formatting tests formats whitespace.html correctly 1`] = `
+{{- foo }}
+{{- bar -}}
+{{ baz -}}
+
+{%- set foo = bar %}
+{%- set foo = bar -%}
+{% set foo = bar -%}
+
+{%- if x -%}
+{% elif x -%}
+{%- else %}
+{%- endif %}
+
+{%- raw -%}
+{% set x=true %}
+{%- endraw %}
+
+{%- for foo in bar %}
+{% endfor -%}
+
+{%- unless foo -%}
+Content
+{%- else -%}
+{%- endunless -%}
+
+{%- block a -%}
+{%- endblock -%}
+
+{%- extends 'foo.html' -%}
+
+{%- include 'bar.html' -%}
+
+{%- set foo = "bar" -%}
+
+{%- macro foo() -%}
+Content
+{%- endmacro -%}
+
+{%- import 'foo.html' %}
+
+{%- import 'custom/page/web_page_basic/my_macros.html' as header_footer -%}
+
+{%- from 'custom/page/web_page_basic/my_macros.html' import footer -%}
+
+{% from "forms.html" import field, label as description %}
+
+{% from "forms.html" import field with context %}
+
+{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}
+
+{%- do foo.append('bar') -%}
+
+{%- form form_id=123 -%}
+
+{%- widget_attribute -%}
+{%- end_widget_attribute -%}
+
+{%- call render_dialog("Hello World", "greeting") -%}
+<p>This is a paragraph tag that I want to render in my.</p>
+{%- endcall -%}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{- foo }}
+{{- bar -}}
+{{ baz -}}
+
+{%- set foo = bar %}
+{%- set foo = bar -%}
+{% set foo = bar -%}
+
+{%- if x -%}
+{% elif x -%}
+{%- else %}
+{%- endif %}
+
+{%- raw -%}
+{% set x=true %}
+{%- endraw %}
+
+{%- for foo in bar %}
+{% endfor -%}
+
+{%- unless foo -%}
+  Content
+{%- else -%}
+{%- endunless -%}
+
+{%- block a -%}
+{%- endblock a -%}
+
+{%- extends "foo.html" -%}
+
+{%- include "bar.html" -%}
+
+{%- set foo = "bar" -%}
+
+{%- macro foo() -%}
+  Content
+{%- endmacro -%}
+
+{%- import "foo.html" %}
+
+{%- import "custom/page/web_page_basic/my_macros.html" as header_footer -%}
+
+{%- from "custom/page/web_page_basic/my_macros.html" import footer -%}
+
+{% from "forms.html" import field, label as description %}
+
+{% from "forms.html" import field with context %}
+
+{%- from "macro-and-set.jinja" import foo as from_foo, bar as from_bar -%}
+
+{%- do foo.append("bar") -%}
+
+{%- form form_id=123 -%}
+
+{%- widget_attribute -%}
+{%- end_widget_attribute -%}
+
+{%- call render_dialog("Hello World", "greeting") -%}
+<p>This is a paragraph tag that I want to render in my.</p>
+{%- endcall -%}
+
+`;
+
+exports[`formats 404.html correctly 1`] = `
+>>>>>>> Stashed changes
+<!--
+  templateType: error_page
+  isAvailableForNewContent: true
+  label: Boilerplate - 404 error
+  screenshotPath: ../../images/template-previews/404.png
+-->
+{% set template_css = "../../css/templates/system.css" %}
+{% extends "../layouts/base.html" %}
+{# pageTitle is used on system templates for setting a value for the title tag #}
+{% set pageTitle = "Error 404 | Page not found" %}
+
+{% block body %}
+<section class="content-wrapper">
+  <div class="error-page" data-error="404">
+    {% module "content"
+      path="@hubspot/rich_text",
+      html="<h1>Page not found.</h1>"
+    %}
+    {% module "button"
+      path="../../modules/button",
+      button_text="Go Home"
+      link={
+        "url":
+          {
+            "type": "EXTERNAL",
+            "href": "/"
+  },
+  "open_in_new_tab": false,
+  "no_follow": false
+      }
+    %}
+  </div>
+</section>
+{% endblock body %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+  templateType: error_page
+  isAvailableForNewContent: true
+  label: Boilerplate - 404 error
+  screenshotPath: ../../images/template-previews/404.png
+-->
+{% set template_css = "../../css/templates/system.css" %}
+{% extends "../layouts/base.html" %}
+{# pageTitle is used on system templates for setting a value for the title tag #}
+{% set pageTitle = "Error 404 | Page not found" %}
+
+{% block body %}
+  <section class="content-wrapper">
+    <div class="error-page" data-error="404">
+      {% module "content"
+        path="@hubspot/rich_text",
+        html="<h1>Page not found.</h1>" %}
+      {% module "button"
+        path="../../modules/button",
+        button_text="Go Home",
+        link={
+          "url": {
+            "type": "EXTERNAL",
+            "href": "/"
+          },
+          "open_in_new_tab": false,
+          "no_follow": false
+        } %}
+    </div>
+  </section>
+{% endblock body %}
+
+`;
+
+exports[`basic.html 1`] = `
+<html><div>{% set x, s = "T" %}{% form "my_form" label="My Form", custom_form_html=None, no_title=False,title="", test1=None, test2=False,title="", test3=None, test4=False,title="" %}
+</div><img src="">
+{{- variable|upper -}}
+{% if x == "T" %}
+GO
+{% else %}
+NO
+{% endif %}
+{% set key, value = call_something %}
+{{ thing|filterWith(arg, hey, '12') }}
+
+</html>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<html>
+  <div>{% set x, s = "T" %}{% form "my_form"
+                             label="My Form",
+                             custom_form_html=None,
+                             no_title=False,
+                             title="",
+                             test1=None,
+                             test2=False,
+                             title="",
+                             test3=None,
+                             test4=False,
+                             title="" %}</div>
+  <img src="" />
+  {{- variable|upper -}}
+  {% if x == "T" %}
+    GO
+  {% else %}
+    NO
+  {% endif %}
+  {% set key, value = call_something %}
+  {{ thing|filterWith(arg, hey, "12") }}
+</html>
+
+`;
+
+exports[`blog-listing.html 1`] = `
+<!--
+templateType: blog_listing
+isAvailableForNewContent: true
+label: Boilerplate - blog listing
+screenshotPath: ../images/template-previews/blog-index.png
+-->
+{% set template_css = "../../css/templates/blog.css" %}
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+{% dnd_area "dnd_area"
+label="Main section",
+class="body-container body-container--blog-index"
+%}
+
+{# Hero banner #}
+
+{% dnd_section
+background_color="#f8fafc",
+max_width=600,
+padding={
+"default": {
+"top": 80,
+"right": 0,
+"bottom": 80,
+"left": 0
+},
+"mobile": {
+"top": 80,
+"right": 20,
+"bottom": 80,
+"left": 20
+}
+}
+%}
+{% dnd_column %}
+{% dnd_row %}
+{% dnd_module
+path="@hubspot/rich_text",
+html='<div style="text-align: center;"><h1>Blog</h1><p>Use this space to tell everyone about what you have to offer.</p></div>'
+%}
+{% end_dnd_module %}
+{% end_dnd_row %}
+{% dnd_row %}
+{% dnd_module
+path="@hubspot/blog_subscribe",
+title=""
+%}
+{% end_dnd_module %}
+{% end_dnd_row %}
+{% end_dnd_column %}
+{% end_dnd_section %}
+
+{# Blog listings and pagination #}
+
+{% dnd_section
+vertical_alignment="TOP"
+%}
+{% dnd_column %}
+{% dnd_row %}
+{% dnd_module path="../modules/blog-listings" %}
+{% end_dnd_module %}
+{% end_dnd_row %}
+{% dnd_row %}
+{% dnd_module path="../modules/blog-pagination" %}
+{% end_dnd_module %}
+{% end_dnd_row %}
+{% end_dnd_column %}
+{% end_dnd_section %}
+
+{% end_dnd_area %}
+{% endblock body %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+templateType: blog_listing
+isAvailableForNewContent: true
+label: Boilerplate - blog listing
+screenshotPath: ../images/template-previews/blog-index.png
+-->
+{% set template_css = "../../css/templates/blog.css" %}
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+  {% dnd_area "dnd_area"
+    label="Main section",
+    class="body-container body-container--blog-index" %}
+
+    {# Hero banner #}
+
+    {% dnd_section
+      background_color="#f8fafc",
+      max_width=600,
+      padding={
+        "default": {
+          "top": 80,
+          "right": 0,
+          "bottom": 80,
+          "left": 0
+        },
+        "mobile": {
+          "top": 80,
+          "right": 20,
+          "bottom": 80,
+          "left": 20
+        }
+      } %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module
+            path="@hubspot/rich_text",
+            html="<div style=\\"text-align: center;\\"><h1>Blog</h1><p>Use this space to tell everyone about what you have to offer.</p></div>" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+        {% dnd_row %}
+          {% dnd_module
+            path="@hubspot/blog_subscribe",
+            title="" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# Blog listings and pagination #}
+
+    {% dnd_section vertical_alignment="TOP" %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="../modules/blog-listings" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+        {% dnd_row %}
+          {% dnd_module path="../modules/blog-pagination" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+  {% end_dnd_area %}
+{% endblock body %}
+
+`;
+
+exports[`blog-post.html 1`] = `
+<!--
+templateType: blog_post
+isAvailableForNewContent: true
+label: Boilerplate - blog post
+screenshotPath: ../images/template-previews/blog-post.png
+-->
+{% set template_css = "../../css/templates/blog.css" %}
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+<div class="body-container body-container--blog-post">
+
+{# Blog post #}
+
+<div class="content-wrapper">
+<article class="blog-post">
+<h1>{{ content.name }}</h1>
+<div class="blog-post__meta">
+<a href="{{ blog_author_url(group.id, content.blog_post_author.slug) }}" rel="author">
+{{ content.blog_post_author.display_name }}
+</a>
+<time datetime="{{ content.publish_date }}" class="blog-post__timestamp">
+{{ content.publish_date_localized }}
+</time>
+</div>
+<div class="blog-post__body">
+{{ content.post_body }}
+</div>
+{% if content.tag_list %}
+<div class="blog-post__tags">
+{% icon
+name="tag",
+purpose="decorative",
+style="SOLID"
+%}
+{% for tag in content.tag_list %}
+<a class="blog-post__tag-link" href="{{ blog_tag_url(group.id, tag.slug) }}" rel="tag">{{ tag.name }}</a>{% if not loop.last %},{% endif %}
+{% endfor %}
+</div>
+{% endif %}
+</article>
+{% if group.allow_comments %}
+<div class="blog-comments">
+{% module "blog_comments"
+path="@hubspot/blog_comments",
+label="Blog comments"
+%}
+</div>
+{% endif %}
+</div>
+
+{# Recent posts listing #}
+
+{# This macro is used to format each recent post card and gets passed to the related_blog_posts HubL tag below #}
+
+{% macro related_posts(post, count, total) %}
+{% if count == 1 %}
+<section class="blog-related-posts">
+<div class="content-wrapper">
+<h2>Read On</h2>
+<div class="blog-related-posts__list">
+{% endif %}
+<article class="blog-related-posts__post" aria-label="Blog post summary: {{ post.name }}">
+{% if post.featured_image %}
+<a class="blog-related-posts__post-image-wrapper" href="{{ post.absolute_url }}" aria-label="{% if post.featured_image_alt_text %} Featured image: {{ post.featured_image_alt_text }} - {% endif %}Read full post: {{ post.name }}">
+  <img class="blog-related-posts__image" src="{{ post.featured_image }}" loading="lazy" width="352" alt="{{ post.featured_image_alt_text }}">
+</a>
+{% endif %}
+<div class="blog-related-posts__content">
+<h3 class="blog-related-posts__title">
+  <a class="blog-related-posts__title-link" href="{{ post.absolute_url }}">{{ post.name }}</a></h3>
+{{ post.post_summary|truncatehtml(100) }}
+</div>
+</article>
+{% if count == total %}
+</div>
+</div>
+</section>
+{% endif %}
+{% endmacro %}
+
+{% related_blog_posts
+limit=3,
+no_wrapper=True,
+post_formatter="related_posts"
+%}
+
+</div>
+{% endblock body %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+templateType: blog_post
+isAvailableForNewContent: true
+label: Boilerplate - blog post
+screenshotPath: ../images/template-previews/blog-post.png
+-->
+{% set template_css = "../../css/templates/blog.css" %}
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+  <div class="body-container body-container--blog-post">
+    {# Blog post #}
+
+    <div class="content-wrapper">
+      <article class="blog-post">
+        <h1>{{ content.name }}</h1>
+        <div class="blog-post__meta">
+          <a href="{{ blog_author_url(group.id, content.blog_post_author.slug) }}" rel="author">
+            {{ content.blog_post_author.display_name }}
+          </a>
+          <time datetime="{{ content.publish_date }}" class="blog-post__timestamp">
+            {{ content.publish_date_localized }}
+          </time>
+        </div>
+        <div class="blog-post__body">
+          {{ content.post_body }}
+        </div>
+        {% if content.tag_list %}
+          <div class="blog-post__tags">
+            {% icon
+              name="tag",
+              purpose="decorative",
+              style="SOLID" %}
+            {% for tag in content.tag_list %}
+            <a class="blog-post__tag-link" href="{{ blog_tag_url(group.id, tag.slug) }}" rel="tag"
+              >{{ tag.name }}</a
+            >{% if not loop.last %},{% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </article>
+      {% if group.allow_comments %}
+        <div class="blog-comments">
+          {% module "blog_comments"
+            path="@hubspot/blog_comments",
+            label="Blog comments" %}
+        </div>
+      {% endif %}
+    </div>
+
+    {# Recent posts listing #}
+
+    {# This macro is used to format each recent post card and gets passed to the related_blog_posts HubL tag below #}
+
+    {% macro related_posts(post, count, total) %}
+      {% if count == 1 %}
+        <section class="blog-related-posts">
+          <div class="content-wrapper">
+            <h2>Read On</h2>
+            <div class="blog-related-posts__list">
+            {% endif %}
+            <article
+              class="blog-related-posts__post"
+              aria-label="Blog post summary: {{ post.name }}"
+            >
+              {% if post.featured_image %}
+                <a
+                  class="blog-related-posts__post-image-wrapper"
+                  href="{{ post.absolute_url }}"
+                  aria-label="{% if post.featured_image_alt_text %} Featured image: {{ post.featured_image_alt_text }} - {% endif %}Read full post: {{ post.name }}"
+                >
+                  <img
+                    class="blog-related-posts__image"
+                    src="{{ post.featured_image }}"
+                    loading="lazy"
+                    width="352"
+                    alt="{{ post.featured_image_alt_text }}"
+                  />
+                </a>
+              {% endif %}
+              <div class="blog-related-posts__content">
+                <h3 class="blog-related-posts__title">
+                  <a class="blog-related-posts__title-link" href="{{ post.absolute_url }}"
+                    >{{ post.name }}</a
+                  >
+                </h3>
+                {{ post.post_summary|truncatehtml(100) }}
+              </div>
+            </article>
+            {% if count == total %}
+            </div>
+          </div>
+        </section>
+      {% endif %}
+    {% endmacro %}
+
+    {% related_blog_posts
+      limit=3,
+      no_wrapper=True,
+      post_formatter="related_posts" %}
+  </div>
+{% endblock body %}
+
+`;
+
+exports[`comments.html 1`] = `
+<div>
+  {# A comment #}
+</div>
+
+<img src="">{# a trailing comment #}
+
+<img src=""> {# a trailing comment that should wrap #}
+
+{% block head -%}
+{# A comment with whitespace control -#}
+{%- endblock -%}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<div>
+  {# A comment #}
+</div>
+
+<img src="" />{# a trailing comment #}
+
+<img src="" />
+{# a trailing comment that should wrap #}
+
+{% block head -%}
+  {# A comment with whitespace control -#}
+{%- endblock head -%}
+
+`;
+
+exports[`complex.html 1`] = `
+<!--
+templateType: none
+-->
+<!doctype html>
+<html lang="{{ html_lang }}" {{ html_lang_dir }}><head>
+<meta charset="utf-8">
+{% if page_meta.html_title or pageTitle %}<title>{{ page_meta.html_title or pageTitle }}</title>{% endif %}
+{% if site_settings.favicon_src %}<link rel="shortcut icon" href="{{ site_settings.favicon_src }}" />{% endif %}
+<meta name="description" content="{{ page_meta.meta_description }}">
+{{ require_css(get_asset_url("../../css/main.css")) }}
+{# This is intended to be used if a template requires template specific style sheets #}
+{% if template_css %}
+{{ require_css(get_asset_url(template_css)) }}
+{% endif %}
+{{ require_css(get_asset_url("../../css/theme-overrides.css")) }}
+{# To see a full list of what is included via standard_header_includes please reference this article: https://developers.hubspot.com/docs/cms/hubl/variables#required-page-template-variables #}
+{{ standard_header_includes }}
+</head>
+                    <body>
+<div class="body-wrapper {{ builtin_body_classes }}">
+{% block header %}
+
+
+
+{% global_partial path="../partials/header.html" %}
+{% endblock header %}
+
+{# The main-content ID is used for the navigation skipper in the header.html file. More information on the navigation skipper can be found here: https://github.com/HubSpot/cms-theme-boilerplate/wiki/Accessibility #}
+
+<main id="main-content" class="body-container-wrapper">
+{% block body %}
+{% endblock body %}
+</main>
+
+{% block footer %}
+{% global_partial path="../partials/footer.html" %}
+{% endblock footer %}
+</div>
+{{ require_js(get_asset_url("../../js/main.js")) }}
+{# To see a full list of what is included via standard_footer_includes please reference this article: https://developers.hubspot.com/docs/cms/hubl/variables#required-page-template-variables #}
+{{ standard_footer_includes }}
+</body>
+</html>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+templateType: none
+-->
+<!doctype html>
+<html lang="{{ html_lang }}" {{ html_lang_dir }}>
+  <head>
+    <meta charset="utf-8" />
+    {% if page_meta.html_title or pageTitle %}
+      <title>{{ page_meta.html_title or pageTitle }}</title>
+    {% endif %}
+    {% if site_settings.favicon_src %}
+      <link rel="shortcut icon" href="{{ site_settings.favicon_src }}" />
+    {% endif %}
+    <meta name="description" content="{{ page_meta.meta_description }}" />
+    {{ require_css(get_asset_url("../../css/main.css")) }}
+    {# This is intended to be used if a template requires template specific style sheets #}
+    {% if template_css %}
+      {{ require_css(get_asset_url(template_css)) }}
+    {% endif %}
+    {{ require_css(get_asset_url("../../css/theme-overrides.css")) }}
+    {# To see a full list of what is included via standard_header_includes please reference this article: https://developers.hubspot.com/docs/cms/hubl/variables#required-page-template-variables #}
+    {{ standard_header_includes }}
+  </head>
+  <body>
+    <div class="body-wrapper {{ builtin_body_classes }}">
+      {% block header %}
+
+        {% global_partial path="../partials/header.html" %}
+      {% endblock header %}
+
+      {# The main-content ID is used for the navigation skipper in the header.html file. More information on the navigation skipper can be found here: https://github.com/HubSpot/cms-theme-boilerplate/wiki/Accessibility #}
+
+      <main id="main-content" class="body-container-wrapper">
+        {% block body %}
+        {% endblock body %}
+      </main>
+
+      {% block footer %}
+        {% global_partial path="../partials/footer.html" %}
+      {% endblock footer %}
+    </div>
+    {{ require_js(get_asset_url("../../js/main.js")) }}
+    {# To see a full list of what is included via standard_footer_includes please reference this article: https://developers.hubspot.com/docs/cms/hubl/variables#required-page-template-variables #}
+    {{ standard_footer_includes }}
+  </body>
+</html>
+
+`;
+
+exports[`contact.html 1`] = `
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Contact
+  screenshotPath: ../images/template-previews/contact.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+{% dnd_area "dnd_area"
+  label="Main section",
+  class="body-container body-container--contact"
+%}
+
+  {# Cards #}
+
+  {% include_dnd_partial path="../sections/cards.html" %}
+
+{% end_dnd_area %}
+{% endblock body %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Contact
+  screenshotPath: ../images/template-previews/contact.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+  {% dnd_area "dnd_area"
+    label="Main section",
+    class="body-container body-container--contact" %}
+
+    {# Cards #}
+
+    {% include_dnd_partial path="../sections/cards.html" %}
+
+  {% end_dnd_area %}
+{% endblock body %}
+
+`;
+
+exports[`css.html 1`] = `
+{# Module styles #}
+
+{% require_css %}
+<style>
+{% scope_css %}
+
+{# Pagination #}
+
+.pagination {
+{{ module.styles.spacing.spacing.css }}
+}
+
+{# Pagination links #}
+
+.pagination__link-text,
+.pagination__link--number {
+{% if module.styles.text.font.color %}
+color: {{ module.styles.text.font.color }};
+{% endif %}
+{% if module.styles.text.font.size %}
+font-size: {{ module.styles.text.font.size ~ module.styles.text.font.size_unit }};
+{% endif %}
+{% if module.styles.text.font.style %}
+{{ module.styles.text.font.style }};
+{% endif %}
+{% if module.styles.spacing.space_between_links %}
+margin-right: {{ module.styles.spacing.space_between_links ~ "px" }};
+{% endif %}
+}
+
+.pagination__link-icon svg {
+{% if module.styles.text.font.color %}
+fill: {{ module.styles.text.font.color }};
+{% endif %}
+{% if module.styles.text.font.size %}
+height: {{ module.styles.text.font.size ~ module.styles.text.font.size_unit }};
+width: {{ module.styles.text.font.size ~ module.styles.text.font.size_unit }};
+{% endif %}
+}
+
+{% if module.styles.text.font.color %}
+.pagination__link:hover .pagination__link-text,
+.pagination__link:focus .pagination__link-text,
+.pagination__link--number:hover,
+.pagination__link--number:focus {
+color: {{ color_variant(module.styles.text.font.color, -80) }};
+}
+
+.pagination__link:hover .pagination__link-icon svg,
+.pagination__link:focus .pagination__link-icon svg {
+fill: {{ color_variant(module.styles.text.font.color, -80) }};
+}
+
+.pagination__link:active .pagination__link-text,
+.pagination__link--number:active {
+color: {{ color_variant(module.styles.text.font.color, 80) }};
+}
+
+.pagination__link:active .pagination__link-icon svg {
+fill: {{ color_variant(module.styles.text.font.color, 80) }};
+}
+{% endif %}
+
+{# Active pagination link #}
+
+.pagination__link--active {
+{{ module.styles.active.border.border.css }}
+{% if module.styles.active.corner.radius >= 0 %}
+border-radius: {{ module.styles.active.corner.radius ~ "px" }};
+{% endif %}
+}
+
+{% end_scope_css %}
+</style>
+{% end_require_css %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{# Module styles #}
+
+{% require_css %}
+  <style>
+    {% scope_css %}
+
+      {# Pagination #}
+
+      .pagination {
+        {{ module.styles.spacing.spacing.css }}
+      }
+
+      {# Pagination links #}
+
+      .pagination__link-text,
+      .pagination__link--number {
+        {% if module.styles.text.font.color %}
+          color: {{ module.styles.text.font.color }};
+        {% endif %}
+        {% if module.styles.text.font.size %}
+          font-size: {{ module.styles.text.font.size ~ module.styles.text.font.size_unit }};
+        {% endif %}
+        {% if module.styles.text.font.style %}
+          {{ module.styles.text.font.style }}
+        {% endif %}
+        {% if module.styles.spacing.space_between_links %}
+          margin-right: {{ module.styles.spacing.space_between_links ~ "px" }};
+        {% endif %}
+      }
+
+      .pagination__link-icon svg {
+        {% if module.styles.text.font.color %}
+          fill: {{ module.styles.text.font.color }};
+        {% endif %}
+        {% if module.styles.text.font.size %}
+          height: {{ module.styles.text.font.size ~ module.styles.text.font.size_unit }};
+          width: {{ module.styles.text.font.size ~ module.styles.text.font.size_unit }};
+        {% endif %}
+      }
+
+      {% if module.styles.text.font.color %}
+        .pagination__link:hover .pagination__link-text,
+        .pagination__link:focus .pagination__link-text,
+        .pagination__link--number:hover,
+        .pagination__link--number:focus {
+          color: {{ color_variant(module.styles.text.font.color, -80) }};
+        }
+
+        .pagination__link:hover .pagination__link-icon svg,
+        .pagination__link:focus .pagination__link-icon svg {
+          fill: {{ color_variant(module.styles.text.font.color, -80) }};
+        }
+
+        .pagination__link:active .pagination__link-text,
+        .pagination__link--number:active {
+          color: {{ color_variant(module.styles.text.font.color, 80) }};
+        }
+
+        .pagination__link:active .pagination__link-icon svg {
+          fill: {{ color_variant(module.styles.text.font.color, 80) }};
+        }
+      {% endif %}
+
+      {# Active pagination link #}
+
+      .pagination__link--active {
+        {{ module.styles.active.border.border.css }}
+        {% if module.styles.active.corner.radius >= 0 %}
+          border-radius: {{ module.styles.active.corner.radius ~ "px" }};
+        {% endif %}
+      }
+
+    {% end_scope_css %}
+  </style>
+{% end_require_css %}
+
+`;
+
+exports[`for.html 1`] = `
+{% for key, val in request.query_dict.items() %}
+{{ key }}:{{ val }}
+{% endfor %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% for key, val in request.query_dict.items() %}
+{{ key }}:{{ val }}
+{% endfor %}
+
+`;
+
+exports[`home.html 1`] = `
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Home
+  screenshotPath: ../images/template-previews/home.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+{# All templates are recommended to have an h1 present for both accessibility and SEO best practice. This should be at the top of the template before any other textual content. The h1 element below is within a dnd area to allow content editors the ability to adjust the content and alignment of the text. #}
+
+{% dnd_area "dnd_area"
+  label="Main section",
+  class="body-container body-container--home"
+%}
+
+  {# Hero banner #}
+   
+{% include_dnd_partial path="../sections/hero-banner.html" %}
+
+  {# Two column image right #}
+
+  {% include_dnd_partial path="../sections/multi-row-content.html" %}
+
+  {# Two column image left #}
+
+  {% dnd_section
+    background_color="#f8fafc",
+    vertical_alignment="MIDDLE"
+  %}
+{% dnd_module
+  path="@hubspot/linked_image",
+  img={
+    "alt": "Stock placeholder image with grayscale geometrical mountain landscape",
+    "loading": "lazy",
+    "max_height": 451,
+    "max_width": 605,
+    "size_type": "auto_custom_max",
+    "src": get_asset_url("../images/grayscale-mountain.png"),
+  },
+  offset=0,
+  width=6
+%}
+{% end_dnd_module %}
+{% dnd_module
+  path="@hubspot/rich_text",
+  html="<h2>Provide more details here.</h2><p>Use text and images to tell your company’s story. Explain what makes your product or service extraordinary.</p>"
+  offset=6,
+  width=6,
+%}
+    {% end_dnd_module %}
+  {% end_dnd_section %}
+
+  {# Call to action #}
+
+  {% include_dnd_partial path="../sections/call-to-action.html" %}
+
+  {# Three column image with text #}
+
+  {% include_dnd_partial path="../sections/multi-column-content.html" %}
+
+{% end_dnd_area %}
+{% endblock body %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Home
+  screenshotPath: ../images/template-previews/home.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+  {# All templates are recommended to have an h1 present for both accessibility and SEO best practice. This should be at the top of the template before any other textual content. The h1 element below is within a dnd area to allow content editors the ability to adjust the content and alignment of the text. #}
+
+  {% dnd_area "dnd_area"
+    label="Main section",
+    class="body-container body-container--home" %}
+
+    {# Hero banner #}
+
+    {% include_dnd_partial path="../sections/hero-banner.html" %}
+
+    {# Two column image right #}
+
+    {% include_dnd_partial path="../sections/multi-row-content.html" %}
+
+    {# Two column image left #}
+
+    {% dnd_section
+      background_color="#f8fafc",
+      vertical_alignment="MIDDLE" %}
+      {% dnd_module
+        path="@hubspot/linked_image",
+        img={
+          "alt": "Stock placeholder image with grayscale geometrical mountain landscape",
+          "loading": "lazy",
+          "max_height": 451,
+          "max_width": 605,
+          "size_type": "auto_custom_max",
+          "src": get_asset_url("../images/grayscale-mountain.png")
+        },
+        offset=0,
+        width=6 %}
+      {% end_dnd_module %}
+      {% dnd_module
+        path="@hubspot/rich_text",
+        html="<h2>Provide more details here.</h2><p>Use text and images to tell your company’s story. Explain what makes your product or service extraordinary.</p>",
+        offset=6,
+        width=6 %}
+      {% end_dnd_module %}
+    {% end_dnd_section %}
+
+    {# Call to action #}
+
+    {% include_dnd_partial path="../sections/call-to-action.html" %}
+
+    {# Three column image with text #}
+
+    {% include_dnd_partial path="../sections/multi-column-content.html" %}
+
+  {% end_dnd_area %}
+{% endblock body %}
+
+`;
+
+exports[`hubdb.html 1`] = `
+<!--
+templateType: page
+isAvailableForNewContent: false
+label: HubDB
+screenshotPath: ../images/template-previews/hubdb.png
+-->
+
+{# Please note that only users with CMS Hub will have access to the HubDB tool. Therefore, this template should not be used in accounts without CMS Hub. We don't currently accept marketplace assets that leverage HubDB (https://developers.hubspot.com/docs/cms/marketplace-requirements/compliance-design-code-quality#1-3-unacceptable-asset-marketplace-submissions) so please remove this template if you're creating a marketplace asset. #}
+
+{# Before getting started with using HubDB we highly recommend you read through our HubDB documentation (https://developers.hubspot.com/docs/cms/features/hubdb) #}
+
+{% extends "./layouts/base.html" %}
+
+{# Testing config #}
+
+{# By setting the testing variable below to true, you can preview your template changes using a specific HubDB table directly from the design manager. Set the testing variable to false and isAvailableForNewContent in the template annotations to true when you're ready to use this template for a live page. #}
+
+{% set testing = true %} {# Set to false for production #}
+{% set testing_table_id = null %} {# Set to HubDB table id (integer) #}
+{% set testing_row_id = null %} {# Set to a HubDB table row id (integer) #}
+{% set testing_page_level = 0 %} {# Set to the dynamic page route level that you want to test. Set 0 for the root level page and 1 for an example of a dynamic page based on the testing_row_id #}
+
+{# Testing/production logic #}
+
+{% if testing %}
+{% set table_id = testing_table_id %}
+{% set row = hubdb_table_row( table_id, testing_row_id ) %}
+{% set page_level = testing_page_level %}
+{% else %}
+{% set table_id = dynamic_page_hubdb_table_id %}
+{% set row = dynamic_page_hubdb_row %}
+{% set page_level = dynamic_page_route_level %}
+{% endif %}
+
+{# Used on top level (table_id set in testing/production logic) #}
+
+{% set rows = hubdb_table_rows( table_id ) %}
+
+{% block body %}
+<div class="body-container body-container--hubdb">
+<section class="content-wrapper content-wrapper--vertical-spacing">
+
+{% if table_id %}
+
+{% if page_level == 0 and rows|length > 0 %}
+  <header>
+    <h1>
+      {% module "page_title" path="@hubspot/text"
+        label="Page title",
+        value="Root Page Title"
+      %}
+    </h1>
+  </header>
+
+  <ul>
+    {% for row in rows %}
+      <li>
+        <a href="{{ request.path }}/{{ row.hs_path }}">{{ row.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% elif page_level == 1 and row %}
+
+  <header>
+    <h1>{{ row.name }}</h1>
+  </header>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Label</th>
+        <th>Name</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for col in hubdb_table( table_id ).columns %}
+        <tr>
+          <th>{{ col.label }}</th>
+          <td><code>{{ col.name }}</code></td>
+          <td>{{ row[ col.name ] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endif %}
+
+{% else %}
+
+{# Leverages HubSpot's editor class to only show an error message within the page editor if a user hasn't selected a HubDB table yet (https://designers.hubspot.com/how-to-make-custom-code-work-with-cms#using-hs-inline-edit-window-hsineditor) #}
+
+{% require_js %}
+  <script>
+    const pageEditor = document.querySelector('.hs-inline-edit .body-container--hubdb > .content-wrapper {{ variable }}');
+    if (pageEditor) {
+      const headerNode = document.createElement("h1");
+      const headerTextNode = document.createTextNode("Error: No HubDB table has been selected.");
+      headerNode.appendChild(headerTextNode);
+      pageEditor.appendChild(headerNode);
+
+      const linkNode = document.createElement('a');
+      const linkTextNode = document.createTextNode("Learn how to select a HubDB table");
+      linkNode.appendChild(linkTextNode);
+      linkNode.href = "https://knowledge.hubspot.com/cos-general/how-to-edit-hubdb-tables";
+      pageEditor.appendChild(linkNode);
+    }
+  </script>
+{% end_require_js %}
+
+{% endif %}
+</section>
+
+</div>
+{% endblock %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+templateType: page
+isAvailableForNewContent: false
+label: HubDB
+screenshotPath: ../images/template-previews/hubdb.png
+-->
+
+{# Please note that only users with CMS Hub will have access to the HubDB tool. Therefore, this template should not be used in accounts without CMS Hub. We don't currently accept marketplace assets that leverage HubDB (https://developers.hubspot.com/docs/cms/marketplace-requirements/compliance-design-code-quality#1-3-unacceptable-asset-marketplace-submissions) so please remove this template if you're creating a marketplace asset. #}
+
+{# Before getting started with using HubDB we highly recommend you read through our HubDB documentation (https://developers.hubspot.com/docs/cms/features/hubdb) #}
+
+{% extends "./layouts/base.html" %}
+
+{# Testing config #}
+
+{# By setting the testing variable below to true, you can preview your template changes using a specific HubDB table directly from the design manager. Set the testing variable to false and isAvailableForNewContent in the template annotations to true when you're ready to use this template for a live page. #}
+
+{% set testing = true %}
+{# Set to false for production #}
+{% set testing_table_id = null %}
+{# Set to HubDB table id (integer) #}
+{% set testing_row_id = null %}
+{# Set to a HubDB table row id (integer) #}
+{% set testing_page_level = 0 %}
+{# Set to the dynamic page route level that you want to test. Set 0 for the root level page and 1 for an example of a dynamic page based on the testing_row_id #}
+
+{# Testing/production logic #}
+
+{% if testing %}
+  {% set table_id = testing_table_id %}
+  {% set row = hubdb_table_row(table_id, testing_row_id) %}
+  {% set page_level = testing_page_level %}
+{% else %}
+  {% set table_id = dynamic_page_hubdb_table_id %}
+  {% set row = dynamic_page_hubdb_row %}
+  {% set page_level = dynamic_page_route_level %}
+{% endif %}
+
+{# Used on top level (table_id set in testing/production logic) #}
+
+{% set rows = hubdb_table_rows(table_id) %}
+
+{% block body %}
+  <div class="body-container body-container--hubdb">
+    <section class="content-wrapper content-wrapper--vertical-spacing">
+      {% if table_id %}
+
+        {% if page_level == 0 and rows|length > 0 %}
+          <header>
+            <h1>
+              {% module "page_title"
+                path="@hubspot/text",
+                label="Page title",
+                value="Root Page Title" %}
+            </h1>
+          </header>
+
+          <ul>
+            {% for row in rows %}
+            <li>
+              <a href="{{ request.path }}/{{ row.hs_path }}">{{ row.name }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+
+        {% elif page_level == 1 and row %}
+
+          <header>
+            <h1>{{ row.name }}</h1>
+          </header>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Label</th>
+                <th>Name</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for col in hubdb_table(table_id).columns %}
+              <tr>
+                <th>{{ col.label }}</th>
+                <td>
+                  <code>{{ col.name }}</code>
+                </td>
+                <td>{{ row[col.name] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        {% endif %}
+
+      {% else %}
+
+        {# Leverages HubSpot's editor class to only show an error message within the page editor if a user hasn't selected a HubDB table yet (https://designers.hubspot.com/how-to-make-custom-code-work-with-cms#using-hs-inline-edit-window-hsineditor) #}
+
+        {% require_js %}
+          <script>
+            const pageEditor = document.querySelector(
+              ".hs-inline-edit .body-container--hubdb > .content-wrapper {{ variable }}"
+            );
+            if (pageEditor) {
+              const headerNode = document.createElement("h1");
+              const headerTextNode = document.createTextNode(
+                "Error: No HubDB table has been selected."
+              );
+              headerNode.appendChild(headerTextNode);
+              pageEditor.appendChild(headerNode);
+
+              const linkNode = document.createElement("a");
+              const linkTextNode = document.createTextNode(
+                "Learn how to select a HubDB table"
+              );
+              linkNode.appendChild(linkTextNode);
+              linkNode.href =
+                "https://knowledge.hubspot.com/cos-general/how-to-edit-hubdb-tables";
+              pageEditor.appendChild(linkNode);
+            }
+          </script>
+        {% end_require_js %}
+
+      {% endif %}
+    </section>
+  </div>
+{% endblock body %}
+
+`;
+
+exports[`if.html 1`] = `
+<div class="{% if true %}foo{% endif %}">
+  Content
+</div>
+<div class="{% if reallyLongVariableName === true %} also a reall long text node that should wrap{% endif %}">
+  Content
+</div>
+<div class="{% if reallyLongVariableName === true and anotherVariable === 'string' %}another long string that should wrap{% endif %}">
+  Content
+</div>
+{% if foo === bar %}
+Text that should get indented
+{% endif %}
+{% if true %}
+{% block a%}
+{% linked_image src="string" %}
+{% if false %}
+{% endif %}
+{% endblock %}
+{% endif %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<div class="{% if true %}foo{% endif %}">Content</div>
+<div class="{% if reallyLongVariableName === true %} also a reall long text node that should wrap{% endif %}">
+  Content
+</div>
+<div class="{% if reallyLongVariableName === true and anotherVariable === "string" %}another long string that should wrap{% endif %}">Content</div>
+{% if foo === bar %}
+  Text that should get indented
+{% endif %}
+{% if true %}
+  {% block a %}
+    {% linked_image src="string" %}
+    {% if false %}
+    {% endif %}
+  {% endblock a %}
+{% endif %}
+
+`;
+
+exports[`json.html 1`] = `
+{% module_attribute "social_link" is_json=True %}
+[{"social_account":"facebook-f", "social_account":"linkedin-f"},{"social_account":"twitter", "social_account":"instagram"}]
+{% end_module_attribute %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% module_attribute "social_link" is_json=True %}
+    [
+      { "social_account": "facebook-f", "social_account": "linkedin-f" },
+      { "social_account": "twitter", "social_account": "instagram" }
+    ]
+  {% end_module_attribute %}
+
+`;
+
+exports[`landing-page.html 1`] = `
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Landing page
+  screenshotPath: ../images/template-previews/landing-page.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block header %}
+  {% global_partial path="./partials/header-no-navigation.html" %}
+{% endblock header %}
+
+{% block body %}
+{% dnd_area "dnd_area"
+  label="Main section",
+  class="body-container body-container--landing-page"
+%}
+
+  {# Hero banner #}
+
+  {% include_dnd_partial
+    path="../sections/hero-banner.html"
+    context={
+      "content": "<h1>Download your free eBook</h1><p>Use this space to tell everyone what your eBook is all about.</p>"
+    }
+  %}
+
+  {# Three column image with text #}
+
+  {% include_dnd_partial
+    path="../sections/multi-column-content.html",
+    context={
+      "background_color": "#FFFFFF"
+    }
+  %}
+
+{% end_dnd_area %}
+{% endblock body %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Landing page
+  screenshotPath: ../images/template-previews/landing-page.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block header %}
+  {% global_partial path="./partials/header-no-navigation.html" %}
+{% endblock header %}
+
+{% block body %}
+  {% dnd_area "dnd_area"
+    label="Main section",
+    class="body-container body-container--landing-page" %}
+
+    {# Hero banner #}
+
+    {% include_dnd_partial
+      path="../sections/hero-banner.html",
+      context={
+        "content": "<h1>Download your free eBook</h1><p>Use this space to tell everyone what your eBook is all about.</p>"
+      } %}
+
+    {# Three column image with text #}
+
+    {% include_dnd_partial
+      path="../sections/multi-column-content.html",
+      context={
+        "background_color": "#FFFFFF"
+      } %}
+
+  {% end_dnd_area %}
+{% endblock body %}
+
+`;
+
+exports[`membership-login.html 1`] = `
+<!--
+  templateType: membership_login_page
+  isAvailableForNewContent: true
+  label: Boilerplate - membership login
+  screenshotPath: ../../images/template-previews/membership-login.png
+-->
+{% set template_css = "../../css/templates/system.css" %}
+{% extends "../layouts/base.html" %}
+{# pageTitle is used on system templates for setting a value for the title tag #}
+{% set pageTitle = "Membership | Login" %}
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+<section class="content-wrapper">
+  <div class="systems-page">
+    {% module "content"
+      path="@hubspot/rich_text",
+      html="<h1>Sign in to view this page</h1><p>This page is only available to people who have been given access.</p>"
+    %}
+    <div class="form-container">
+      {% member_login "my_login"
+        email_label= "Email",
+        password_label= "Password",
+        remember_me_label= "Remember Me",
+        reset_password_text= "Forgot your password?",
+        submit_button_text= "Login"
+      %}
+    </div>
+    <div>
+      {% module_block module "membership_admin_content"
+        label="Contact admin",
+        path="@hubspot/rich_text"
+      %}
+        {% module_attribute "html" %}
+          <p>Having trouble? <a href="{{"mailto:" ~ site_settings.membershipWebsiteAdmin}}">Contact the admin</a>.</p>
+        {% end_module_attribute %}
+      {% end_module_block %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+  templateType: membership_login_page
+  isAvailableForNewContent: true
+  label: Boilerplate - membership login
+  screenshotPath: ../../images/template-previews/membership-login.png
+-->
+{% set template_css = "../../css/templates/system.css" %}
+{% extends "../layouts/base.html" %}
+{# pageTitle is used on system templates for setting a value for the title tag #}
+{% set pageTitle = "Membership | Login" %}
+
+{% block header %}
+{% endblock header %}
+
+{% block body %}
+  <section class="content-wrapper">
+    <div class="systems-page">
+      {% module "content"
+        path="@hubspot/rich_text",
+        html="<h1>Sign in to view this page</h1><p>This page is only available to people who have been given access.</p>" %}
+      <div class="form-container">
+        {% member_login "my_login"
+          email_label="Email",
+          password_label="Password",
+          remember_me_label="Remember Me",
+          reset_password_text="Forgot your password?",
+          submit_button_text="Login" %}
+      </div>
+      <div>
+        {% module_block module "membership_admin_content"
+          label="Contact admin",
+          path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <p>Having trouble? <a href="{{ "mailto:" ~ site_settings.membershipWebsiteAdmin }}">Contact the admin</a>.</p>
+          {% end_module_attribute %}
+        {% end_module_block %}
+      </div>
+    </div>
+  </section>
+{% endblock body %}
+
+`;
+
+exports[`minimal_nested.html 1`] = `
+<div class="what">
+{% dnd_column %}
+{% dnd_row %}
+{% dnd_module path="@hubspot/rich_text" %}
+{% module_attribute "html" %}
+<title>{{ page_meta.html_title or pageTitle }}</title>
+<h3>Nested heading</h3>
+{% end_module_attribute %}
+{% end_dnd_module %}
+{% end_dnd_row %}
+{% end_dnd_column %}
+</div>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<div class="what">
+  {% dnd_column %}
+    {% dnd_row %}
+      {% dnd_module path="@hubspot/rich_text" %}
+        {% module_attribute "html" %}
+          <title>{{ page_meta.html_title or pageTitle }}</title>
+          <h3>Nested heading</h3>
+        {% end_module_attribute %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+</div>
+
+`;
+
+exports[`misc.html 1`] = `
+{% if sky != 'blue' %}
+Clouds
+{% endif %}
+
+{% if sun === True && rain === 'yes' %}
+Sun Shower
+{% elif sun === true and rain === 'no' %}
+Sunny
+{% endif %}
+
+{% if snow_inches > 10 %}
+Snow Fort
+{% elif  snow_inches > 4 %}
+Sledding
+{% else %}
+Brrrr
+{% endif %}
+
+{% if !one %}
+One
+{% elif not two %}
+Two
+{% elif three %}
+Three
+{% elif four %}
+Four
+{% else %}
+Infinity
+{% endif %}
+
+{% if content.featured_image and module.featured_image %}
+  <a class="blog-index__post-image-wrapper blog-index__post-image-wrapper--{{ list_type }}" href="{{ content.absolute_url }}" aria-label="{% if content.featured_image_alt_text %}Featured image: {{ content.featured_image_alt_text }} - {% endif %}Read full post: {{ content.name }}">
+    <img class="blog-index__post-image blog-index__post-image--{{ list_type }}" src="{{ content.featured_image }}" loading="lazy" alt="{{ content.featured_image_alt_text }}" width="{{ "365" if list_type == "small" else "596" }}">
+  </a>
+{% endif %}
+
+{% if true %}
+  {% if !false %}
+
+  {% endif %}
+  {% endif %}
+
+    {% if module.show_first_and_last_links == true %}
+      <a class="pagination__link pagination__link--first {{ "pagination__link--disabled" if not last_page_num }}" {% if last_page_num %}href="{% if current_page_num == 2 %}{{ group.absolute_url }}{% else %}{{ blog_page_link(1) }}{% endif %}"{% endif %}>
+        {% icon extra_classes="pagination__link-icon",
+          name="angle-double-left",
+          purpose="decorative",
+          style="SOLID",
+          unicode="f100"
+        %}
+        <span class="pagination__link-text show-for-sr--mobile">{{ module.first_label }}</span>
+      </a>
+    {% endif %}
+
+{{ content.longVariable if module.whichValue is defined }}
+
+{{ module.styles.background.color.opacity / 100 }}
+
+{{ color_variant(module.styles.background.color.color, -80)|convert_rgb }}
+
+{{ contents.total_page_count - current_page_num == 1 }}
+
+{{ contents.total_page_count + current_page_num }}
+
+ {% dnd_module
+        path="../modules/pricing-card",
+        button_text={{ context.card_one_button_text or "Buy starter" }},
+        description={{ context.card_one_description or "<p>For individuals or team just getting started with sales.</p>" }},
+        features=[
+          "Ad management",
+          "Live chat",
+          "Conversational bots",
+          "Forms",
+          "Pop-up forms",
+          "Contact website activity",
+          "List segmentation",
+          "Email marketing",
+          "Ad retargeting"
+        ],
+        offset=0,
+        price={{ context.card_one_price or "$0" }},
+        tier={{ context.card_one_tier or "<h2>Starter</h2>" }},
+        timeframe={{ context.card_one_timeframe or "/mo" }},
+        width=4
+      %}{% end_dnd_module %}
+
+{% do rel.append("nofollow") %}
+
+{% set rel = [] %}
+
+{{ 'target="_blank" rel="noopener"' if link.linkTarget }}
+{{ "It's gettin' better!" }}
+{{ "target='_blank' rel='noopener'" if link.linkTarget }}
+      <main id="main-content" class="body-container-wrapper">
+        {% block body %}fdfd
+        {% endblock body %}
+      </main>
+
+
+    {% block body1 %}
+      <div>
+  {% set x = false %}
+      </div>
+    {% endblock %}
+
+
+
+    {% block body2 %}
+      <div>
+  {{ variable }}
+      </div>
+      <div>
+      {% set x = true %}
+      {{ variable2 }}
+      </div>
+
+    {% endblock %}
+
+
+
+    {% block body3 %}
+    {% endblock %}
+
+{{ rel|join(" ") }}
+
+{% set testing_table_id = null %}
+
+{% unless true %}
+  Content
+{% endunless %}
+
+{% unless (module.logo.link is string_startingwith("http")) || (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
+    {% set link = "//" ~ module.logo.link %}
+  {% else %}
+    {% set link = module.logo.link || "" %}
+  {% endunless %}
+
+
+<{{ module.list_type }} class="list">
+What is this element?
+</{{ module.list_type }}>
+
+{{ foo is equalto "bar" }}
+{{ foo is equalto("bar") }}
+
+{{ foo is equalto var }}
+{{ foo is equalto(var) }}
+
+{{ foo is not equalto "baz" }}
+{{ foo is not equalto("baz") }}
+
+{% if var is string_startingwith "v" %}{% endif %}
+{% if var is string_startingwith("v") %}{% endif %}
+
+{{ foo in bar }}
+{{ foo % bar }}
+{{ foo ** bar }}
+{{ foo * bar }}
+{{ 1 eq 3 }}
+{{ 1 ne 3 }}
+{{ 1 gt 3 }}
+{{ 1 gte 3 }}
+{{ 1 lt 3 }}
+{{ 1 lte 3 }}
+
+{{ var|rejectattr('slug', 'eq', content.slug) }}
+{{ var|rejectattr('slug', equalto, content.slug) }}
+
+{{ 'eq' }}
+
+{{ variable[1] }}
+{{ variable[2] }}
+
+{{ variable['one'] }}
+{{ variable1.variable2['one'] }}
+{{ variable['two-words'] }}
+{{ variable1.variable2['two-words'] }}
+
+{{ 1.0 }}
+{{ 1.0002 }}
+{{ .1 }}
+{{ .1000001 }}
+{{ .1002 }}
+{{ 0.100004 }}
+
+  <script>
+    let module_{{ name }} = document.getElementById('hs_cos_wrapper_{{ name }}');
+  </script>
+  <script>
+  console.log('Request: {{ request.id }}');
+</script>
+  <script>
+  let anoter_module_{{ name }} = document.getElementById('hs_cos_wrapper_{{ name }}');
+</script>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% if sky != "blue" %}
+  Clouds
+{% endif %}
+
+{% if sun === True and rain === "yes" %}
+  Sun Shower
+{% elif sun === true and rain === "no" %}
+  Sunny
+{% endif %}
+
+{% if snow_inches > 10 %}
+  Snow Fort
+{% elif snow_inches > 4 %}
+  Sledding
+{% else %}
+  Brrrr
+{% endif %}
+
+{% if not one %}
+  One
+{% elif not two %}
+  Two
+{% elif three %}
+  Three
+{% elif four %}
+  Four
+{% else %}
+  Infinity
+{% endif %}
+
+{% if content.featured_image and module.featured_image %}
+  <a
+    class="blog-index__post-image-wrapper blog-index__post-image-wrapper--{{ list_type }}"
+    href="{{ content.absolute_url }}"
+    aria-label="{% if content.featured_image_alt_text %}Featured image: {{ content.featured_image_alt_text }} - {% endif %}Read full post: {{ content.name }}"
+  >
+    <img
+      class="blog-index__post-image blog-index__post-image--{{ list_type }}"
+      src="{{ content.featured_image }}"
+      loading="lazy"
+      alt="{{ content.featured_image_alt_text }}"
+      width="{{ "365" if list_type == "small" else "596" }}"
+    />
+  </a>
+{% endif %}
+
+{% if true %}
+  {% if not false %}
+
+  {% endif %}
+{% endif %}
+
+{% if module.show_first_and_last_links == true %}
+  <a
+    class="pagination__link pagination__link--first {{ "pagination__link--disabled" if not last_page_num }}"
+    {% if last_page_num %}href="{% if current_page_num == 2 %}{{ group.absolute_url }}{% else %}{{ blog_page_link(1) }}{% endif %}"
+    {% endif %}
+  >
+    {% icon
+      extra_classes="pagination__link-icon",
+      name="angle-double-left",
+      purpose="decorative",
+      style="SOLID",
+      unicode="f100" %}
+    <span class="pagination__link-text show-for-sr--mobile"
+      >{{ module.first_label }}</span
+    >
+  </a>
+{% endif %}
+
+{{ content.longVariable if module.whichValue is defined }}
+
+{{ module.styles.background.color.opacity / 100 }}
+
+{{ color_variant(module.styles.background.color.color, -80)|convert_rgb }}
+
+{{ contents.total_page_count - current_page_num == 1 }}
+
+{{ contents.total_page_count + current_page_num }}
+
+{% dnd_module
+  path="../modules/pricing-card",
+  button_text={{ context.card_one_button_text or "Buy starter" }},
+  description={{ context.card_one_description or "<p>For individuals or team just getting started with sales.</p>" }},
+  features=[
+    "Ad management",
+    "Live chat",
+    "Conversational bots",
+    "Forms",
+    "Pop-up forms",
+    "Contact website activity",
+    "List segmentation",
+    "Email marketing",
+    "Ad retargeting"
+  ],
+  offset=0,
+  price={{ context.card_one_price or "$0" }},
+  tier={{ context.card_one_tier or "<h2>Starter</h2>" }},
+  timeframe={{ context.card_one_timeframe or "/mo" }},
+  width=4 %}{% end_dnd_module %}
+
+{% do rel.append("nofollow") %}
+
+{% set rel = [] %}
+
+{{ "target=\\"_blank\\" rel=\\"noopener\\"" if link.linkTarget }}
+{{ "It's gettin' better!" }}
+{{ "target='_blank' rel='noopener'" if link.linkTarget }}
+<main id="main-content" class="body-container-wrapper">
+  {% block body %}fdfd
+  {% endblock body %}
+</main>
+
+{% block body1 %}
+  <div>
+    {% set x = false %}
+  </div>
+{% endblock body1 %}
+
+{% block body2 %}
+  <div>
+    {{ variable }}
+  </div>
+  <div>
+    {% set x = true %}
+    {{ variable2 }}
+  </div>
+
+{% endblock body2 %}
+
+{% block body3 %}
+{% endblock body3 %}
+
+{{ rel|join(" ") }}
+
+{% set testing_table_id = null %}
+
+{% unless true %}
+  Content
+{% endunless %}
+
+{% unless (module.logo.link is string_startingwith("http")) or (module.logo.link is string_startingwith("/")) or (module.logo.link is string_startingwith("mailto")) or (module.logo.link is string_startingwith("#")) or (not module.logo.link) %}
+  {% set link = "//" ~ module.logo.link %}
+{% else %}
+  {% set link = module.logo.link or "" %}
+{% endunless %}
+
+<{{ module.list_type }} class="list"> What is this element? </{{ module.list_type }}>
+
+{{ foo is equalto("bar") }}
+{{ foo is equalto("bar") }}
+
+{{ foo is equalto(var) }}
+{{ foo is equalto(var) }}
+
+{{ foo is not equalto("baz") }}
+{{ foo is not equalto("baz") }}
+
+{% if var is string_startingwith("v") %}{% endif %}
+{% if var is string_startingwith("v") %}{% endif %}
+
+{{ foo in bar }}
+{{ foo % bar }}
+{{ foo ** bar }}
+{{ foo * bar }}
+{{ 1 eq 3 }}
+{{ 1 ne 3 }}
+{{ 1 gt 3 }}
+{{ 1 gte 3 }}
+{{ 1 lt 3 }}
+{{ 1 lte 3 }}
+
+{{ var|rejectattr("slug", "eq", content.slug) }}
+{{ var|rejectattr("slug", equalto, content.slug) }}
+
+{{ "eq" }}
+
+{{ variable[1] }}
+{{ variable[2] }}
+
+{{ variable.one }}
+{{ variable1.variable2.one }}
+{{ variable["two-words"] }}
+{{ variable1.variable2["two-words"] }}
+
+{{ 1 }}
+{{ 1.0002 }}
+{{ 0.1 }}
+{{ 0.1000001 }}
+{{ 0.1002 }}
+{{ 0.100004 }}
+
+<script>
+  let module_{{ name }} = document.getElementById("hs_cos_wrapper_{{ name }}");
+</script>
+<script>
+  console.log("Request: {{ request.id }}");
+</script>
+<script>
+  let anoter_module_{{ name }} = document.getElementById("hs_cos_wrapper_{{ name }}");
+</script>
+
+`;
+
+exports[`nestedHtmlTags.html 1`] = `
+  {% require_css %}
+    <style>
+      .list-wrapper {{ tagVariable }} {
+        list-style-type: {{ anotherTestVariable }};
+      }
+    </style>
+  {% end_require_css %}
+
+  <div class="list-wrapper">
+    <{{ tagVariable }}>
+
+    </{{ tagVariable }}>
+  </div>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% require_css %}
+  <style>
+    .list-wrapper {{ tagVariable }} {
+      list-style-type: {{ anotherTestVariable }};
+    }
+  </style>
+{% end_require_css %}
+
+<div class="list-wrapper">
+  <{{ tagVariable }}> </{{ tagVariable }}>
+</div>
+
+`;
+
+exports[`pre.html 1`] = `
+{% block x %}
+<div>
+  <pre>
+    Is this indented twice?
+  </pre>
+</div>
+
+<div>
+  <pre>
+        Is this indented 4 times?
+  </pre>
+</div>
+
+<div>
+  <pre>
+  {{ 2_spaces }}
+  </pre>
+</div>
+
+<code>
+  <pre>
+   {{ 3_spaces }}
+    </pre>
+</code>
+
+<div hidden>
+  <!-- Debug data_query -->
+  <code>
+    <pre>
+       {{ 7_spaces }}
+                </pre>
+  </code>
+
+  <!-- Debug data -->
+  <code>
+    <pre>{% raw %}
+         {{ 10_spaces }}
+    {% endraw %}</pre>
+  </code>
+
+  <!-- Debug data|tojson -->
+  <code>
+  <pre>
+      {{ data|tojson }}
+            </pre>
+  </code>
+  <div>
+
+</div>
+</div>
+{% endblock %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% block x %}
+  <div>
+    <pre>
+    Is this indented twice?
+  </pre>
+  </div>
+
+  <div>
+    <pre>
+        Is this indented 4 times?
+  </pre>
+  </div>
+
+  <div>
+    <pre>
+  {{ 2_spaces }}
+  </pre>
+  </div>
+
+  <code>
+    <pre>
+   {{ 3_spaces }}
+    </pre>
+  </code>
+
+  <div hidden>
+    <!-- Debug data_query -->
+    <code>
+      <pre>
+       {{ 7_spaces }}
+                </pre>
+    </code>
+
+    <!-- Debug data -->
+    <code>
+      <pre>{% raw %}
+         {{ 10_spaces }}
+    {% endraw %}</pre>
+    </code>
+
+    <!-- Debug data|tojson -->
+    <code>
+      <pre>
+      {{ data|tojson }}
+            </pre>
+    </code>
+    <div></div>
+  </div>
+{% endblock x %}
+
+`;
+
+exports[`qatest.html 1`] = `
+<!--
+  templateType: page
+  isAvailableForNewContent: false
+  label: QA test
+  screenshotPath: ../images/template-previews/qa-test.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+{% dnd_area "dnd_area"
+  label="Main section",
+  class="body-container body-container--qa-test"
+%}
+
+  {# Typography section #}
+
+  {% dnd_section %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h1>Typography</h1>
+            <hr>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h1>Heading 1</h1>
+            <h2>Heading 2</h2>
+            <h3>Heading 3</h3>
+            <h4>Heading 4</h4>
+            <h5>Heading 5</h5>
+            <h6>Heading 6</h6>
+            <p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing elit</em>. Duis porttitor, quam vel <strong>dignissim</strong> tincidunt, odio libero porta ligula, vitae fermentum lacus libero vel risus. Aenean pulvinar nisl et <a href="#">vestibulum commodo</a>. Quisque euismod tempus dignissim. Quisque dictum luctus velit, eu viverra urna tristique non. Vivamus at dolor tellus. Cras congue sapien non turpis dapibus, et vestibulum ante ultrices. Mauris eu nisi non sapien fermentum fermentum in eu odio. Fusce congue elit et tortor sagittis, sit amet auctor risus sagittis.</p>
+            <p>This line contains <sub>subscript</sub> text.</p>
+            <p>This line contains <sup>superscript</sup> text.</p>
+            <p>This line contains <code>code</code>.</p>
+            <p>This line contains <small>small</small> text.</p>
+            <p>This line contains <mark>highlighted</mark> text</p>
+            <pre><code>.preformatted-code { background-color: #FFF; }</code></pre>
+            <ul>
+            <li>Unordered list item</li>
+            <li>Unordered list item</li>
+            <li>Unordered list item</li>
+            <li>Unordered list item</li>
+            </ul>
+            <ol>
+            <li>First ordered list item</li>
+            <li>Second ordered list item</li>
+            <li>Third ordered list item</li>
+            <li>Fourth ordered list item</li>
+            </ol>
+            <blockquote>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porttitor, quam vel dignissim tincidunt, odio libero porta ligula, vitae fermentum lacus libero vel risus. Aenean pulvinar nisl et vestibulum commodo. Quisque euismod tempus dignissim.</blockquote>
+            <table>
+              <thead>
+                <tr>
+                  <th>Header column one</th>
+                  <th>Header column two</th>
+                  <th>Header column three</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Row one column one</td>
+                  <td>Row one column two</td>
+                  <td>Row one column three</td>
+                </tr>
+                <tr>
+                  <td>Row two column one</td>
+                  <td>Row two column two</td>
+                  <td>Row two column three</td>
+                </tr>
+                <tr>
+                  <td>Row three column one</td>
+                  <td>Row three column two</td>
+                  <td>Row three column three</td>
+                </tr>
+                <tr>
+                  <td>Row four column one</td>
+                  <td>Row four column two</td>
+                  <td>Row four column three</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td>Footer column one</td>
+                  <td>Footer column two</td>
+                  <td>Footer column three</td>
+                </tr>
+              </tfoot>
+            </table>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {# Default modules section #}
+
+  {% dnd_section %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h2>Default modules </h2>
+            <hr>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Forms #}
+
+      {% dnd_row
+        margin={
+          "top": 35
+        }
+      %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Forms</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# One column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="@hubspot/form" %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+
+      {# Two column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="@hubspot/form",
+          offset=0,
+          width=6
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="@hubspot/form",
+          offset=6,
+          width=6
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Three column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="@hubspot/form",
+          offset=0,
+          width=4,
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="@hubspot/form",
+          offset=4,
+          width=4
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="@hubspot/form",
+          offset=8,
+          width=4
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {# Theme modules section #}
+
+  {% dnd_section %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h2>Theme modules</h2>
+            <hr>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Card #}
+
+      {% dnd_row
+        margin={
+          "top": 35,
+        }
+      %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Card</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# One column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/card" %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Two column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/card",
+          offset=0,
+          width=6
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/card",
+          offset=6,
+          width=6
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Three column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/card",
+          offset=0,
+          width=4
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/card",
+          offset=4,
+          width=4
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/card",
+          offset=8,
+          width=4
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Button #}
+
+      {% dnd_row
+        margin={
+          "top": 35
+        }
+      %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Button</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# One column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/button" %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Two column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/button",
+          offset=0,
+          width=6
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/button",
+          offset=6,
+          width=6
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Three column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/button",
+          offset=0,
+          width=4
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/button",
+          offset=4,
+          width=4
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/button",
+          offset=8,
+          width=4
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Menu #}
+
+      {% dnd_row
+        margin={
+          "top": 35
+        }
+      %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Menu section</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+      {% dnd_row %}
+        {% dnd_module path="../modules/menu" %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Pricing card #}
+
+      {% dnd_row
+        margin={
+          "top": 35
+        }
+      %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Pricing card</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# One column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/pricing-card" %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Two column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/pricing-card",
+          offset=0,
+          width=6
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/pricing-card",
+          offset=6,
+          width=6
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Three column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/pricing-card",
+          offset=0,
+          width=4
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/pricing-card",
+          offset=4,
+          width=4
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/pricing-card",
+          offset=8,
+          width=4
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Social follow #}
+
+      {% dnd_row
+        margin={
+          "top": 35
+        }
+      %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Social follow</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# One column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/social-follow" %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Two column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/social-follow",
+          offset=0,
+          width=6
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/social-follow",
+          offset=6,
+          width=6
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+
+      {# Three column #}
+
+      {% dnd_row
+        padding={
+        "top": 35
+        }
+      %}
+        {% dnd_module path="../modules/social-follow",
+          offset=0,
+          width=4
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/social-follow",
+          offset=4,
+          width=4
+        %}
+        {% end_dnd_module %}
+        {% dnd_module path="../modules/social-follow",
+          offset=8,
+          width=4
+        %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {# Theme sections #}
+
+  {% dnd_section %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h2>Theme sections</h2>
+            <hr>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {# Call to action #}
+
+  {% dnd_section
+    padding={
+      "top": 0,
+      "bottom": 0
+    },
+    margin={
+      "top": 35
+    }
+  %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Call to action</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {% include_dnd_partial path="../sections/call-to-action.html" %}
+
+  {# Cards #}
+
+  {% dnd_section
+    padding={
+      "top": 0,
+      "bottom": 0
+    },
+    margin={
+      "top": 35
+    }
+  %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Cards</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {% include_dnd_partial path="../sections/cards.html" %}
+
+  {# Hero banner #}
+
+  {% dnd_section
+    padding={
+      "top": 0,
+      "bottom": 0
+    },
+    margin={
+      "top": 35
+    }
+  %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Hero banner</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {% include_dnd_partial path="../sections/hero-banner.html" %}
+
+  {# Multi-column content #}
+
+  {% dnd_section
+    padding={
+      "top": 0,
+      "bottom": 0
+    },
+    margin={
+      "top": 35
+    }
+  %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Multi-column content</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {% include_dnd_partial path="../sections/multi-column-content.html" %}
+
+  {# Multi-row content #}
+
+  {% dnd_section
+    padding={
+      "top": 0,
+      "bottom": 0
+    },
+    margin={
+      "top": 35
+    }
+  %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Multi-row content</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {% include_dnd_partial path="../sections/multi-row-content.html" %}
+
+  {# Pricing #}
+
+  {% dnd_section
+    padding={
+      "top": 0,
+      "bottom": 0
+    },
+    margin={
+      "top": 35
+    }
+  %}
+    {% dnd_column %}
+      {% dnd_row %}
+        {% dnd_module path="@hubspot/rich_text" %}
+          {% module_attribute "html" %}
+            <h3>Pricing</h3>
+          {% end_module_attribute %}
+        {% end_dnd_module %}
+      {% end_dnd_row %}
+    {% end_dnd_column %}
+  {% end_dnd_section %}
+
+  {% include_dnd_partial path="../sections/pricing.html" %}
+
+{% end_dnd_area %}
+{% endblock body %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+  templateType: page
+  isAvailableForNewContent: false
+  label: QA test
+  screenshotPath: ../images/template-previews/qa-test.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+  {% dnd_area "dnd_area"
+    label="Main section",
+    class="body-container body-container--qa-test" %}
+
+    {# Typography section #}
+
+    {% dnd_section %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h1>Typography</h1>
+              <hr />
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h1>Heading 1</h1>
+              <h2>Heading 2</h2>
+              <h3>Heading 3</h3>
+              <h4>Heading 4</h4>
+              <h5>Heading 5</h5>
+              <h6>Heading 6</h6>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur <em>adipiscing elit</em>. Duis
+                porttitor, quam vel <strong>dignissim</strong> tincidunt, odio libero porta
+                ligula, vitae fermentum lacus libero vel risus. Aenean pulvinar nisl et
+                <a href="#">vestibulum commodo</a>. Quisque euismod tempus dignissim. Quisque
+                dictum luctus velit, eu viverra urna tristique non. Vivamus at dolor tellus.
+                Cras congue sapien non turpis dapibus, et vestibulum ante ultrices. Mauris eu
+                nisi non sapien fermentum fermentum in eu odio. Fusce congue elit et tortor
+                sagittis, sit amet auctor risus sagittis.
+              </p>
+              <p>This line contains <sub>subscript</sub> text.</p>
+              <p>This line contains <sup>superscript</sup> text.</p>
+              <p>This line contains <code>code</code>.</p>
+              <p>This line contains <small>small</small> text.</p>
+              <p>This line contains <mark>highlighted</mark> text</p>
+              <pre><code>.preformatted-code { background-color: #FFF; }</code></pre>
+              <ul>
+                <li>Unordered list item</li>
+                <li>Unordered list item</li>
+                <li>Unordered list item</li>
+                <li>Unordered list item</li>
+              </ul>
+              <ol>
+                <li>First ordered list item</li>
+                <li>Second ordered list item</li>
+                <li>Third ordered list item</li>
+                <li>Fourth ordered list item</li>
+              </ol>
+              <blockquote>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porttitor, quam
+                vel dignissim tincidunt, odio libero porta ligula, vitae fermentum lacus
+                libero vel risus. Aenean pulvinar nisl et vestibulum commodo. Quisque euismod
+                tempus dignissim.
+              </blockquote>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Header column one</th>
+                    <th>Header column two</th>
+                    <th>Header column three</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Row one column one</td>
+                    <td>Row one column two</td>
+                    <td>Row one column three</td>
+                  </tr>
+                  <tr>
+                    <td>Row two column one</td>
+                    <td>Row two column two</td>
+                    <td>Row two column three</td>
+                  </tr>
+                  <tr>
+                    <td>Row three column one</td>
+                    <td>Row three column two</td>
+                    <td>Row three column three</td>
+                  </tr>
+                  <tr>
+                    <td>Row four column one</td>
+                    <td>Row four column two</td>
+                    <td>Row four column three</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td>Footer column one</td>
+                    <td>Footer column two</td>
+                    <td>Footer column three</td>
+                  </tr>
+                </tfoot>
+              </table>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# Default modules section #}
+
+    {% dnd_section %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h2>Default modules</h2>
+              <hr />
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Forms #}
+
+        {% dnd_row
+          margin={
+            "top": 35
+          } %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Forms</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# One column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module path="@hubspot/form" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Two column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=0,
+            width=6 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=6,
+            width=6 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Three column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=0,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=4,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="@hubspot/form",
+            offset=8,
+            width=4 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# Theme modules section #}
+
+    {% dnd_section %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h2>Theme modules</h2>
+              <hr />
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Card #}
+
+        {% dnd_row
+          margin={
+            "top": 35
+          } %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Card</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# One column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module path="../modules/card" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Two column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="../modules/card",
+            offset=0,
+            width=6 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/card",
+            offset=6,
+            width=6 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Three column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="../modules/card",
+            offset=0,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/card",
+            offset=4,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/card",
+            offset=8,
+            width=4 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Button #}
+
+        {% dnd_row
+          margin={
+            "top": 35
+          } %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Button</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# One column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module path="../modules/button" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Two column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="../modules/button",
+            offset=0,
+            width=6 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/button",
+            offset=6,
+            width=6 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Three column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="../modules/button",
+            offset=0,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/button",
+            offset=4,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/button",
+            offset=8,
+            width=4 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Menu #}
+
+        {% dnd_row
+          margin={
+            "top": 35
+          } %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Menu section</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+        {% dnd_row %}
+          {% dnd_module path="../modules/menu" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Pricing card #}
+
+        {% dnd_row
+          margin={
+            "top": 35
+          } %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Pricing card</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# One column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module path="../modules/pricing-card" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Two column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=0,
+            width=6 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=6,
+            width=6 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Three column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=0,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=4,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/pricing-card",
+            offset=8,
+            width=4 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Social follow #}
+
+        {% dnd_row
+          margin={
+            "top": 35
+          } %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Social follow</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# One column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module path="../modules/social-follow" %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Two column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=0,
+            width=6 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=6,
+            width=6 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+
+        {# Three column #}
+
+        {% dnd_row
+          padding={
+            "top": 35
+          } %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=0,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=4,
+            width=4 %}
+          {% end_dnd_module %}
+          {% dnd_module
+            path="../modules/social-follow",
+            offset=8,
+            width=4 %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# Theme sections #}
+
+    {% dnd_section %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h2>Theme sections</h2>
+              <hr />
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# Call to action #}
+
+    {% dnd_section
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Call to action</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {% include_dnd_partial path="../sections/call-to-action.html" %}
+
+    {# Cards #}
+
+    {% dnd_section
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Cards</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {% include_dnd_partial path="../sections/cards.html" %}
+
+    {# Hero banner #}
+
+    {% dnd_section
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Hero banner</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {% include_dnd_partial path="../sections/hero-banner.html" %}
+
+    {# Multi-column content #}
+
+    {% dnd_section
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Multi-column content</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {% include_dnd_partial path="../sections/multi-column-content.html" %}
+
+    {# Multi-row content #}
+
+    {% dnd_section
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Multi-row content</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {% include_dnd_partial path="../sections/multi-row-content.html" %}
+
+    {# Pricing #}
+
+    {% dnd_section
+      padding={
+        "top": 0,
+        "bottom": 0
+      },
+      margin={
+        "top": 35
+      } %}
+      {% dnd_column %}
+        {% dnd_row %}
+          {% dnd_module path="@hubspot/rich_text" %}
+            {% module_attribute "html" %}
+              <h3>Pricing</h3>
+            {% end_module_attribute %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {% include_dnd_partial path="../sections/pricing.html" %}
+
+  {% end_dnd_area %}
+{% endblock body %}
+
+`;
+
+exports[`set.html 1`] = `
+  {% set my_string = "my value" 
+  %}
+{% set my_var = 
+a_var %}
+{% set my_number =      42 %}
+{% set key,value = "a string" %}
+  {% set key, value = 123 %}
+{% set key,  value = call_something() %}
+{% set key, value = func_with(1, 'two', three,
+ four(a,b,c,d,e)) %}
+
+
+<!--
+  templateType: section
+  label: Pricing
+  isAvailableForNewContent: true
+  screenshotPath: ../images/section-previews/pricing.png
+  description: "Middle centered heading above three pricing cards, containing a subheading, description, and button each."
+-->
+{% dnd_section %}
+  {% dnd_column %}
+    {% dnd_row %}
+      {% dnd_module
+        path="@hubspot/rich_text",
+        html={{ context.heading or '<div style="text-align: center;"><h1>Pricing</h1></div>' }},
+        no="yes",
+ margin={
+          "top": 35,
+        },
+        false=true
+      %} 
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+
+  {% end_dnd_column %}
+{% end_dnd_section %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% set my_string = "my value" %}
+{% set my_var = a_var %}
+{% set my_number = 42 %}
+{% set key, value = "a string" %}
+{% set key, value = 123 %}
+{% set key, value = call_something() %}
+{% set key, value = func_with(1, "two", three, four(a, b, c, d, e)) %}
+
+<!--
+  templateType: section
+  label: Pricing
+  isAvailableForNewContent: true
+  screenshotPath: ../images/section-previews/pricing.png
+  description: "Middle centered heading above three pricing cards, containing a subheading, description, and button each."
+-->
+{% dnd_section %}
+  {% dnd_column %}
+    {% dnd_row %}
+      {% dnd_module
+        path="@hubspot/rich_text",
+        html={{ context.heading or '<div style="text-align: center;"><h1>Pricing</h1></div>' }},
+        no="yes",
+        margin={
+          "top": 35
+        },
+        false=true %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+`;
+
+exports[`tags.html 1`] = `
+{% extends "custom/page/web_page_basic/my_template.html" %}
+{% block my_sidebar %}
+   <!--Content that will render within a block of the same name in the parent template-->
+{% endblock %}
+{% blog_comments "blog_comments" %}
+{% blog_comments "default_blog_comments" select_blog="359485112" %}
+{% blog_social_sharing "blog_social_sharing" %}
+{% blog_social_sharing "my_blog_social_sharing" select_blog="359485112" %}
+{% blog_subscribe "blog_subscribe" %}
+{% blog_subscribe "subscribe_designers_blog" select_blog="default", title="Subscribe to the Designers Blog", response_message="Thanks for Subscribing!", label="Blog Email Subscription", overrideable=False %}
+{% boolean "boolean" %}
+{% boolean "nav_toggle" label="Hide navigation", value=False, no_wrapper=True %}
+ {% macro render_dialog(title, class='dialog') %}
+  <div class="{{ class }}">
+      <h2>{{ title }}</h2>
+      <div class="contents">
+          {{ caller() }}
+      </div>
+  </div>
+ {% endmacro %}
+
+ {% call render_dialog('Hello World') %}
+     This is a simple dialog rendered by using a macro and
+     a call block.
+ {% endcall %}
+ {% macro dump_users(users) %}
+   <ul>
+     {% for user in users %}
+       <li><p>{{ user.username|e }}</p>{{ caller(user) }}</li>
+     {%- endfor %}
+   </ul>
+ {% endmacro %}
+
+ {% call(user) dump_users(list_of_user) %}
+  <dl>
+       <dl>Realname</dl>
+       <dd>{{ user.realname|e }}</dd>
+       <dl>Description</dl>
+       <dd>{{ user.description }}</dd>
+  </dl>
+ {% endcall %}
+{% choice "flip_layout" value="left", choices="left,right", export_to_template_context=True %}
+{% choice "flip_layout" value="left", choices="[[\\"\\", \\"\\"], [\\"option1\\", \\"Option 1\\"], [\\"option2\\", \\"Option 2\\"], [\\"option3\\", \\"Option 3\\"]]", export_to_template_context=True %}
+{% color "color" %}
+{% color "my_color_picker" label="Choose a color", color="#000000", no_wrapper=True %}
+{% content_attribute "email_body" %}
+<p>Your email body default content</p>
+{% end_content_attribute %}
+{% cta "cta" %}
+{% cta "my_cta" label="Select a CTA", guid="ccd39b7c-ae18-4c4e-98ee-547069bfbc5b", image_src="https://no-cache.hubspot.com/cta/default/53/c7335b66-a0d4-4d19-82eb-75e1626d02d0.png" %}
+{% custom_widget "custom_widget" widget_name="Custom Module Name" %}
+{% custom_widget "employee_quote" widget_name="Employee Quote", label="Employee image and quote section" %}
+{% for content in contents %}
+    <div class="post-item {% cycle 'odd','even' %}">Blog post content</div>
+{% endfor %}
+{% dnd_area "unique_name", class="main" %}
+{% end_dnd_area %}
+{% dnd_column
+  offset=0,
+  width=12,
+  background_color={
+    r: 255,
+    g: 0,
+    b: 0,
+    a: 1
+  },
+  margin={
+    'top': 20,
+    'bottom': 200
+  },
+%}
+
+{% end_dnd_column %}
+{% dnd_module
+  path="@hubspot/rich_text",
+  offset=0,
+  width=8,
+%}
+  {% module_attribute "html" %}
+    <h1>Hello, world!</h1>
+  {% end_module_attribute %}
+{% end_dnd_module %}
+{% dnd_row
+  background_color={
+    r: 123,
+    g: 123,
+    b: 123,
+    a: 1.0
+  },
+  margin={
+    'top': 20,
+    'bottom': 200
+  },
+  padding={
+    'top': 20,
+    'bottom': 200,
+    'left': 20,
+    'right': 20
+  }
+%}
+
+{% end_dnd_row %}
+{% dnd_section
+  background_image={
+    'backgroundPosition': 'MIDDLE_CENTER',
+    'backgroundSize': 'cover',
+    'imageUrl': 'https://example.com/path/to/image.jpg'
+  },
+  margin={
+    'top': 20,
+    'bottom': 200
+  },
+  padding={
+    'top': 20,
+    'bottom': 200,
+    'left': 20,
+    'right': 20
+  },
+  max_width=1200,
+  vertical_alignment='MIDDLE'
+%}
+
+{% end_dnd_section %}
+{% do list.append('value 2') %}
+{% email_each list="custom.cart_items" %}
+<td>{{item.name}}</td><td>{{item.price}}
+{% endemail_each %}
+{% email_each list="custom.cart_items" item="line_item" %}
+<td>{{line_item.name}}</td><td>{{line_item.price}}
+{% endemail_each %}
+{% email_simple_subscription "email_simple_subscription" %}
+{% email_simple_subscription "email_simple_subscription" header="Email Unsubscribe", input_help_text="Your email address:", input_placeholder="email@example.com", button_text="Unsubscribe", label="Backup Unsubscribe" %}
+{% email_subscriptions "email_subscriptions"  %}
+{% email_subscriptions "email_subscriptions" resubscribe_button_text="Yes, resubscribe me!", unsubscribe_single_text="Uncheck the types of emails you do not want to receive:", subheader_text="If this is not your email address, please ignore this page since the email associated with this page was most likely forwarded to you.", unsubscribe_all_unsubbed_text="You are presently unsubscribed from all of our emails. Would you like to receive our emails again?", button_text="Update email preferences", label="Subscription Preferences", header="Communication Preferences", unsubscribe_all_option="Unsubscribe me from all mailing lists.", unsubscribe_all_text="Or check here to never receive any emails:" %}
+{% email_subscriptions_confirmation "email_subscriptions_confirmation" %}
+{% email_subscriptions_confirmation "email_subscriptions_confirmation" header="Communication Preferences", label="Subscriptions Update Confirmation", unsubscribe_all_success="You have successfully unsubscribed from all email communications.", subscription_update_success="You have successfully updated your email preferences.", subheader_text="If this is not your email address, please ignore this page since the email associated with this page was most likely forwarded to you." %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="style.css" />
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+    {% endblock %}
+</head>
+<body>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+        {% endblock %}
+    </div>
+</body>
+</html>
+{% extends "custom/page/web_page_basic/my_template.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1>Index</h1>
+    <p class="important">
+      Welcome to my awesome homepage.
+    </p>
+{% endblock %}
+{% follow_me "follow_me" %}
+{% follow_me "follow_us" title="Follow Us", module_title_tag="h2" %}
+{% for item in items %}
+    {{ item }}
+{% endfor %}
+{% for value in dictionary %}
+    {{ value }}
+{% endfor %}
+{% for key, value in dictionary.items() %}
+    {{ key }}: {{ value }}
+{% endfor %}
+{% for content in contents %}
+    Post content variables
+{% endfor %}
+{% form "my_form" %}
+{% form "my_form" label="My Form", custom_form_html=None, no_title=False, title="" %}
+{% from 'custom/page/web_page_basic/my_macros.html' import footer %}
+{{ footer('h2', 'My footer info') }}
+{% gallery "gallery" %}
+{% widget_block gallery "crm_slider" sizing="static", only_thumbnails=False, transition="slide", caption_position="below", with_thumbnail_nav=False, lightbox=False, auto_advance=True, overrideable=True, show_pagination=True, label="Gallery", loop_slides=True, num_seconds=5, version='1' %}
+{% widget_attribute "slides" is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url": "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts", "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240", "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile", "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text": "HubSpot CRM Contact Profile", "img_src": "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240", "open_in_new_tab": true}]{% end_widget_attribute %}
+{% end_widget_block %}
+{% global_widget "global_widget" %}
+{% global_widget "facebook_fan_box" overrideable=False, label='Facebook Fan Box' %}
+{% google_search "google_search" %}
+{% google_search "my_search_bar" label="Google Search", prefill_input_with_pathname=True, search_field_label="Search this site on Google", search_button_text="Search Google" %}
+{% header "header" %}
+{% header "my_header" header_tag="h1", overrideable=True, value="A clear and bold header", label="Header" %}
+{% icon name="address-card" icon_set="fontawesome-5" style="solid" format="svg" width="64" height="64", purpose="semantic", title="address-card icon" %}
+{% icon name="address-card" %}
+{% if condition %}
+If the condition is true print this to template.
+{% endif %}
+{% if number <= 2 %}
+Variable named number is less than or equal to 2.
+{% elif number <= 4 %}
+Variable named number is less than or equal to 4.
+{% elif number <= 6 %}
+Variable named number is less than or equal to 6.
+{% else %}
+Variable named number is greater than 6.
+{% endif %}
+{% image "image" %}
+{% image "executive_image" label="Executive photo", alt="Photo of Brian Halligan", src="//cdn2.hubspot.net/hub/53/file-733888619-jpg/assets/hubspot.com/about/management/brian-home.jpg", width="300", loading="lazy" %}
+{% image_slider "image_slider" %}
+{% widget_block image_slider "crm_slider" sizing="static", only_thumbnails=False, transition="slide", caption_position="below", with_thumbnail_nav=False, lightbox=False, auto_advance=True, overrideable=True, show_pagination=True, label="Image Slider", loop_slides=True, num_seconds=5, version='0' %}
+{% widget_attribute "slides" is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url": "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts", "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240", "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile", "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text": "HubSpot CRM Contact Profile", "img_src": "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240", "open_in_new_tab": true}]{% end_widget_attribute %}
+{% end_widget_block %}
+{% image_src "image_src" %}
+{% image_src "executve_image_src" src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg", no_wrapper=True %}
+{% import 'custom/page/web_page_basic/my_macros.html' as header_footer %}
+{{ header_footer.header('h1', 'My page title') }}
+{{ header_footer.footer('h3', 'Company footer info') }}
+{% include "custom/page/web_page_basic/my_footer.html" %}
+{% include "generated_global_groups/2781996615.html" %}
+{% include "hubspot/styles/patches/recommended.css" %}
+{% inline_rich_text "inline_rich_text" field="my_text_field" %}
+{% inline_rich_text "inline_rich_text" field="my_text_field" html="<p>My rich text default content</p>" %}
+{% inline_text "text" field="my_text_field" %}
+{% inline_text "simple_text_field" field="my_text_field" value="This is the default value for this text field" %}
+{% language_switcher "language_switcher" %}
+{% language_switcher  "language_switcher" display_mode="hybrid" %}
+
+{% linked_image "linked_image" %}
+{% linked_image "my_linked_image" label="My Linked Image", align="left", alt="Click the button", height=240, hspace="3", link="", src="http://mycdn.com/images/my-image.png", style="border: 1px solid red;", width=400, loading="lazy" %}
+{% logo "logo" %}
+{% logo "my_logo" label="Logo", src="//cdn2.hubspot.net/hub/53/file-1237149549-png/assets/hubspot.com/V2-Global/hubspot-logo-dark.png", width=200 %}
+{% macro name_of_macro(argument_name, argument_name2) %}
+    {{ argument_name }}
+    {{ argument_name2 }}
+{% endmacro %}
+{{ name_of_macro("value to pass to argument 1", "value to pass to argument 2") }}
+{% macro trans(value) %}
+   -webkit-transition: {{value}};
+   -moz-transition: {{value}};
+   -o-transition: {{value}};
+   -ms-transition: {{value}};
+   transition: {{value}};
+{% endmacro %}
+a { {{ trans("all .2s ease-in-out") }} }
+{% member_login "my_login" %}
+{% member_login "my_login" email_label="Email", password_label="Password", remember_me_label="Remember Me", submit_button_text="Login", reset_password_text="Forgot your password?", show_password="Show password" %}
+{% member_register "my_register" %}
+{% member_register "my_register" email_label="Email", password_label="Password", password_confirm_label="Confirm Password", submit_button_text="Save password", show_password="Show password" %}
+{% menu "menu" id="123" %}
+{% menu "my_menu" id="456", site_map_name="Default", overrideable=False, root_type="site_root", flyouts="true", max_levels="2", flow="horizontal", label="Advanced Menu" %}
+{% module "module" module_id=123 %}
+{% module "module" path="/absolute/path/to/Module" %}
+{% module "module" path="relative/path/to/Module" %}
+{% module "module" path="@hubspot/rich_text" %}
+{% module "employee_quote" module_id=456, label="Employee image and quote section" %}
+{% module_block rich_text "my_text_block" overrideable=True, label="Right Column" %}
+   {% module_attribute "html" %}
+       <h2>Something Powerful</h2>
+       <p>Some paragraph content...</p>
+   {% end_module_attribute %}
+{% end_module_block %}
+{% page_footer "page_footer" %}
+{% password_prompt "my_password_prompt" %}
+{% password_prompt "my_password_prompt" label="My Password Prompt", bad_password_message="<p>Sorry, please try again.</p>", submit_button_text="Submit", password_placeholder="Password" %}
+{% password_reset "my_password_reset" %}
+{% password_reset "my_password_reset" password_label="Password", password_confirm_label="Confirm Password", submit_button_text="Save password", show_password="Show password" %}
+{% password_reset_request "my_password_reset_request" %}
+{% password_reset_request "my_password_reset_request" email_label="Email", submit_button_text="Send reset email"%}
+{% post_filter "my_post_filter" %}
+{% post_filter "my_post_filter" label="My Post Filter", expand_link_text="see all", filter_type="tag", list_title="Lists by Tag", max_links=5, order_by="post_count", select_blog="default" %}
+{% post_listing "my_post_listing" %}
+{% post_listing "my_post_listing" label="My Post Listing", list_title="Recent Posts", listing_type="recent", max_links=5, select_blog="default" %}
+{% set string_to_echo = "Print me" %}
+{% print string_to_echo %}
+{% raw %}
+    The personalization token for a contact's first name is {{ contact.firstname }}
+{% endraw %}
+{% raw_html "raw_html" %}
+{% raw_html "my_raw_html" label="Enter HTML here", value="<div>My HTML Block</div>" %}
+{% related_blog_posts %}
+{% related_blog_posts blog_ids="1,2", limit=5, tags="Sales enablement, couches", end_date="2018-04-10", blog_authors="John Smith,Joe Smith,Frank Smith", path_prefixes="/path-prefix", post_formatter="test_macro" %}
+{% rich_text "rich_text" %}
+{% rich_text "my_rich_text" label="Enter text here" html="<p>My rich text default content</p>" %}
+{% widget_block rich_text "right_column" overrideable=True, label="Right Column" %}
+{% widget_attribute "html" %}
+<h2>Something Powerful</h2>
+<p>Some paragraph content...</p>
+{% end_widget_attribute %}
+{% end_widget_block %}
+{% rss_listing "rss_listing" %}
+{% section_header "section_header" %}
+{% section_header "my_section_header" header="A clear and bold header", subheader="A more subdued subheader", label="Sidebar Header" %}
+{% set primaryColor = "#F7761F" %}
+{{ primaryColor }}
+
+{% set var_one = "String 1" %}
+{% set var_two = "String 2" %}
+{% set sequence = [var_one,  var_two] %}
+{% set name = 'Jack' %}
+{% simple_menu "simple_menu" %}
+{% simple_menu "my_simple_menu" orientation="horizontal", label="Simple Menu" %}
+{% social_sharing "social_sharing" use_page_url=True %}
+{% widget_block social_sharing "my_social_sharing" label="Social Sharing", use_page_url=True, overrideable=True %}
+{% widget_attribute "pinterest" is_json=True %}{"custom_link_format": "", "pinterest_media": "http://cdn2.hubspot.net/hub/158015/305390_10100548508246879_837195_59275782_6882128_n.jpg", "enabled": true, "network": "pinterest", "img_src": "https://static.hubspot.com/final/img/common/icons/social/pinterest-24x24.png"}{% end_widget_attribute %}
+{% widget_attribute "twitter" is_json=True %}{"custom_link_format": "", "enabled": true, "network": "twitter", "img_src": "https://static.hubspot.com/final/img/common/icons/social/twitter-24x24.png"}{% end_widget_attribute %}
+{% widget_attribute "linkedin" is_json=True %}{"custom_link_format": "", "enabled": true, "network": "linkedin", "img_src": "https://static.hubspot.com/final/img/common/icons/social/linkedin-24x24.png"}{% end_widget_attribute %}
+{% widget_attribute "facebook" is_json=True %}{"custom_link_format": "", "enabled": true, "network": "facebook", "img_src": "https://static.hubspot.com/final/img/common/icons/social/facebook-24x24.png"}{% end_widget_attribute %}
+{% widget_attribute "email" is_json=True %}{"custom_link_format": "", "enabled": true, "network": "email", "img_src": "https://static.hubspot.com/final/img/common/icons/social/email-24x24.png"}{% end_widget_attribute %}
+{% end_widget_block %}
+{% space "space" %}
+{% space "my_spacer" label="Horizontal Spacer" %}
+{% module_block raw_html "module_block raw_html" definition_id=2801831944, overrideable=False, smart_type="GEO_IP", label="Custom HTML" %}
+{% module_attribute "value" %}
+Default smart content value
+{% end_module_attribute %}
+{% targeted_module_attribute "value" label="Custom HTML", criterion_id=2801831949, order=0, target_type="CUSTOM_HTML_WIDGET"  %}
+Smart content rule 1
+{% end_targeted_module_attribute %}
+{% end_module_block %}
+{% widget_block raw_html "widget_block raw_html" definition_id=2801831944, overrideable=False, smart_type="GEO_IP", label="Custom HTML" %}
+{% widget_attribute "value" %}
+Default smart content value
+{% end_widget_attribute %}
+{% targeted_widget_attribute "value" label="Custom HTML", criterion_id=2801831949, order=0, target_type="CUSTOM_HTML_WIDGET"  %}
+Smart content rule 1
+{% end_targeted_widget_attribute %}
+{% end_widget_block %}
+{% text "text" %}
+{% text "simple_text_field" label="Enter text here", value="This is the default value for this text field" %}
+{% textarea "textarea" %}
+{% textarea "my_textarea" label="Enter plain text block", value="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a urna quis lacus vehicula rutrum.", no_wrapper=True %}
+{% unless x < 0 %} x is greater than zero {% endunless %}
+
+{% widget_block rich_text "my_text_block" overrideable=True, label="Right Column" %}
+   {% widget_attribute "html" %}
+       <h2>Something Powerful</h2>
+       <p>Some paragraph content...</p>
+   {% end_widget_attribute %}
+{% end_widget_block %}
+{% widget_block rich_text "my_text_block" overrideable=True, label="Right Column" %}
+{% widget_attribute "html" %}
+<h2>Something Powerful</h2>
+<p>Some paragraph content...</p>
+{% end_widget_attribute %}
+{% end_widget_block %}
+{% widget_container "widget_container" %}
+{% end_widget_container %}
+{% widget_container "my_flexible_column" %}
+    {% rich_text "my_rich_text" %}
+    {% rich_text "second_rich_text" %}
+{% end_widget_container %}
+{% widget_wrapper 'unique_key' %}
+    <div>
+        {{ html }}
+    </div>
+{% end_widget_wrapper %}
+
+{% video_player "embed_player" player_id="1234", type="script", label="good player", width="300", height="200", play_button_color="#006643", hide_playlist=True, full_width=False %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% extends "custom/page/web_page_basic/my_template.html" %}
+{% block my_sidebar %}
+  <!--Content that will render within a block of the same name in the parent template-->
+{% endblock my_sidebar %}
+{% blog_comments "blog_comments" %}
+{% blog_comments "default_blog_comments" select_blog="359485112" %}
+{% blog_social_sharing "blog_social_sharing" %}
+{% blog_social_sharing "my_blog_social_sharing" select_blog="359485112" %}
+{% blog_subscribe "blog_subscribe" %}
+{% blog_subscribe "subscribe_designers_blog"
+  select_blog="default",
+  title="Subscribe to the Designers Blog",
+  response_message="Thanks for Subscribing!",
+  label="Blog Email Subscription",
+  overrideable=False %}
+{% boolean "boolean" %}
+{% boolean "nav_toggle"
+  label="Hide navigation",
+  value=False,
+  no_wrapper=True %}
+{% macro render_dialog(title, class="dialog") %}
+  <div class="{{ class }}">
+    <h2>{{ title }}</h2>
+    <div class="contents">
+      {{ caller() }}
+    </div>
+  </div>
+{% endmacro %}
+
+{% call render_dialog("Hello World") %}
+This is a simple dialog rendered by using a macro and a call block.
+{% endcall %}
+{% macro dump_users(users) %}
+  <ul>
+    {% for user in users %}
+    <li>
+      <p>{{ user.username|e }}</p>
+      {{ caller(user) }}
+    </li>
+    {%- endfor %}
+  </ul>
+{% endmacro %}
+
+{% call dump_users(list_of_user) %}
+<dl>
+  <dl>Realname</dl>
+  <dd>{{ user.realname|e }}</dd>
+  <dl>Description</dl>
+  <dd>{{ user.description }}</dd>
+</dl>
+{% endcall %}
+{% choice "flip_layout"
+  value="left",
+  choices="left,right",
+  export_to_template_context=True %}
+{% choice "flip_layout"
+  value="left",
+  choices="[[\\"\\", \\"\\"], [\\"option1\\", \\"Option 1\\"], [\\"option2\\", \\"Option 2\\"], [\\"option3\\", \\"Option 3\\"]]",
+  export_to_template_context=True %}
+{% color "color" %}
+{% color "my_color_picker"
+  label="Choose a color",
+  color="#000000",
+  no_wrapper=True %}
+{% content_attribute "email_body" %}
+  <p>Your email body default content</p>
+{% end_content_attribute %}
+{% cta "cta" %}
+{% cta "my_cta"
+  label="Select a CTA",
+  guid="ccd39b7c-ae18-4c4e-98ee-547069bfbc5b",
+  image_src="https://no-cache.hubspot.com/cta/default/53/c7335b66-a0d4-4d19-82eb-75e1626d02d0.png" %}
+{% custom_widget "custom_widget" widget_name="Custom Module Name" %}
+{% custom_widget "employee_quote"
+  widget_name="Employee Quote",
+  label="Employee image and quote section" %}
+{% for content in contents %}
+<div class="post-item {% cycle "odd" "even" %}">Blog post content</div>
+{% endfor %}
+{% dnd_area "unique_name" class="main" %}
+{% end_dnd_area %}
+{% dnd_column
+  offset=0,
+  width=12,
+  background_color={
+    r: 255,
+    g: 0,
+    b: 0,
+    a: 1
+  },
+  margin={
+    "top": 20,
+    "bottom": 200
+  } %}
+
+{% end_dnd_column %}
+{% dnd_module
+  path="@hubspot/rich_text",
+  offset=0,
+  width=8 %}
+  {% module_attribute "html" %}
+    <h1>Hello, world!</h1>
+  {% end_module_attribute %}
+{% end_dnd_module %}
+{% dnd_row
+  background_color={
+    r: 123,
+    g: 123,
+    b: 123,
+    a: 1
+  },
+  margin={
+    "top": 20,
+    "bottom": 200
+  },
+  padding={
+    "top": 20,
+    "bottom": 200,
+    "left": 20,
+    "right": 20
+  } %}
+
+{% end_dnd_row %}
+{% dnd_section
+  background_image={
+    "backgroundPosition": "MIDDLE_CENTER",
+    "backgroundSize": "cover",
+    "imageUrl": "https://example.com/path/to/image.jpg"
+  },
+  margin={
+    "top": 20,
+    "bottom": 200
+  },
+  padding={
+    "top": 20,
+    "bottom": 200,
+    "left": 20,
+    "right": 20
+  },
+  max_width=1200,
+  vertical_alignment="MIDDLE" %}
+
+{% end_dnd_section %}
+{% do list.append("value 2") %}
+{% email_each list="custom.cart_items" %}
+  <td>{{ item.name }}</td>
+  <td>
+    {{ item.price }}
+  {% end_email_each %}
+  {% email_each
+    list="custom.cart_items",
+    item="line_item" %}
+  </td>
+
+  <td>{{ line_item.name }}</td>
+  <td>
+    {{ line_item.price }}
+  {% end_email_each %}
+  {% email_simple_subscription "email_simple_subscription" %}
+  {% email_simple_subscription "email_simple_subscription"
+    header="Email Unsubscribe",
+    input_help_text="Your email address:",
+    input_placeholder="email@example.com",
+    button_text="Unsubscribe",
+    label="Backup Unsubscribe" %}
+  {% email_subscriptions "email_subscriptions" %}
+  {% email_subscriptions "email_subscriptions"
+    resubscribe_button_text="Yes, resubscribe me!",
+    unsubscribe_single_text="Uncheck the types of emails you do not want to receive:",
+    subheader_text="If this is not your email address, please ignore this page since the email associated with this page was most likely forwarded to you.",
+    unsubscribe_all_unsubbed_text="You are presently unsubscribed from all of our emails. Would you like to receive our emails again?",
+    button_text="Update email preferences",
+    label="Subscription Preferences",
+    header="Communication Preferences",
+    unsubscribe_all_option="Unsubscribe me from all mailing lists.",
+    unsubscribe_all_text="Or check here to never receive any emails:" %}
+  {% email_subscriptions_confirmation "email_subscriptions_confirmation" %}
+  {% email_subscriptions_confirmation "email_subscriptions_confirmation"
+    header="Communication Preferences",
+    label="Subscriptions Update Confirmation",
+    unsubscribe_all_success="You have successfully unsubscribed from all email communications.",
+    subscription_update_success="You have successfully updated your email preferences.",
+    subheader_text="If this is not your email address, please ignore this page since the email associated with this page was most likely forwarded to you." %}
+  <!doctype html>
+  <html lang="en">
+    <head>
+      {% block head %}
+        <link rel="stylesheet" href="style.css" />
+        <title>{% block title %}{% endblock title %} - My Webpage</title>
+      {% endblock head %}
+    </head>
+    <body>
+      <div id="content">{% block content %}{% endblock content %}</div>
+      <div id="footer">
+        {% block footer %}
+          &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+        {% endblock footer %}
+      </div>
+    </body>
+  </html>
+  {% extends "custom/page/web_page_basic/my_template.html" %}
+  {% block title %}Index{% endblock title %}
+  {% block head %}
+    {{ super() }}
+    <style type="text/css">
+      .important {
+        color: #336699;
+      }
+    </style>
+  {% endblock head %}
+  {% block content %}
+    <h1>Index</h1>
+    <p class="important">Welcome to my awesome homepage.</p>
+  {% endblock content %}
+  {% follow_me "follow_me" %}
+  {% follow_me "follow_us"
+    title="Follow Us",
+    module_title_tag="h2" %}
+  {% for item in items %}
+  {{ item }}
+  {% endfor %}
+  {% for value in dictionary %}
+  {{ value }}
+  {% endfor %}
+  {% for key, value in dictionary.items() %}
+  {{ key }}:
+  {{ value }}
+  {% endfor %}
+  {% for content in contents %}
+  Post content variables
+  {% endfor %}
+  {% form "my_form" %}
+  {% form "my_form"
+    label="My Form",
+    custom_form_html=None,
+    no_title=False,
+    title="" %}
+  {% from "custom/page/web_page_basic/my_macros.html" import footer %}
+  {{ footer("h2", "My footer info") }}
+  {% gallery "gallery" %}
+  {% widget_block gallery "crm_slider"
+    sizing="static",
+    only_thumbnails=False,
+    transition="slide",
+    caption_position="below",
+    with_thumbnail_nav=False,
+    lightbox=False,
+    auto_advance=True,
+    overrideable=True,
+    show_pagination=True,
+    label="Gallery",
+    loop_slides=True,
+    num_seconds=5,
+    version="1" %}
+    {% widget_attribute "slides" is_json=True %}
+      [
+        {
+          "caption": "CRM Contacts App",
+          "show_caption": true,
+          "link_url": "http://www.hubspot.com/crm",
+          "alt_text": "Screenshot of CRM Contacts",
+          "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+          "open_in_new_tab": true
+        },
+        {
+          "caption": "HubSpot CRM Contact Profile",
+          "show_caption": true,
+          "link_url": "http://www.hubspot.com/",
+          "alt_text": "HubSpot CRM Contact Profile",
+          "img_src": "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
+          "open_in_new_tab": true
+        }
+      ]
+    {% end_widget_attribute %}
+  {% end_widget_block %}
+  {% global_widget "global_widget" %}
+  {% global_widget "facebook_fan_box"
+    overrideable=False,
+    label="Facebook Fan Box" %}
+  {% google_search "google_search" %}
+  {% google_search "my_search_bar"
+    label="Google Search",
+    prefill_input_with_pathname=True,
+    search_field_label="Search this site on Google",
+    search_button_text="Search Google" %}
+  {% header "header" %}
+  {% header "my_header"
+    header_tag="h1",
+    overrideable=True,
+    value="A clear and bold header",
+    label="Header" %}
+  {% icon
+    name="address-card",
+    icon_set="fontawesome-5",
+    style="solid",
+    format="svg",
+    width="64",
+    height="64",
+    purpose="semantic",
+    title="address-card icon" %}
+  {% icon name="address-card" %}
+  {% if condition %}
+    If the condition is true print this to template.
+  {% endif %}
+  {% if number <= 2 %}
+    Variable named number is less than or equal to 2.
+{% elif number <= 4 %} Variable named number
+    is less than or equal to 4.
+{% elif number <= 6 %} Variable named number is less than or equal
+    to 6.
+{% else %} Variable named number is greater than 6. {% endif %} {% image
+                                                                          "image" %} {% image
+                                                                                              "executive_image"
+                                                                                              label="Executive photo",
+                                                                                              alt="Photo of Brian Halligan",
+                                                                                              src="//cdn2.hubspot.net/hub/53/file-733888619-jpg/assets/hubspot.com/about/management/brian-home.jpg",
+                                                                                              width="300",
+                                                                                              loading="lazy" %} {% image_slider
+                                                                                                                                                                                                                                                                                                                       "image_slider" %}
+  {% widget_block image_slider "crm_slider"
+    sizing="static",
+    only_thumbnails=False,
+    transition="slide",
+    caption_position="below",
+    with_thumbnail_nav=False,
+    lightbox=False,
+    auto_advance=True,
+    overrideable=True,
+    show_pagination=True,
+    label="Image Slider",
+    loop_slides=True,
+    num_seconds=5,
+    version="0" %} {% widget_attribute "slides"
+                                                                                                                                                                                                                                                                                                                  is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url":
+      "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
+      "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+      "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile",
+      "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text":
+      "HubSpot CRM Contact Profile", "img_src":
+      "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
+      "open_in_new_tab": true}]
+  {% end_widget_attribute %} {% end_widget_block %} {% image_src
+                                                                               "image_src" %} {% image_src
+                                                                                                           "executve_image_src"
+                                                                                                           src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
+                                                                                                           no_wrapper=True %} {% import "custom/page/web_page_basic/my_macros.html" as header_footer %} {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }}
+  {% include "custom/page/web_page_basic/my_footer.html" %} {% include "generated_global_groups/2781996615.html" %} {% include "hubspot/styles/patches/recommended.css" %} {% inline_rich_text
+                                                                                                                                                                             "inline_rich_text"
+                                                                                                                                                                             field="my_text_field" %}
+  {% inline_rich_text "inline_rich_text"
+    field="my_text_field",
+    html="<p>My rich text default content</p>" %}
+  {% inline_text "text" field="my_text_field" %}
+  {% inline_text "simple_text_field"
+    field="my_text_field",
+    value="This is the default value for this text field" %}
+  {% language_switcher "language_switcher" %}
+  {% language_switcher "language_switcher" display_mode="hybrid" %}
+
+  {% linked_image "linked_image" %}
+  {% linked_image "my_linked_image"
+    label="My Linked Image",
+    align="left",
+    alt="Click the button",
+    height=240,
+    hspace="3",
+    link="",
+    src="http://mycdn.com/images/my-image.png",
+    style="border: 1px solid red;",
+    width=400,
+    loading="lazy" %}
+  {% logo "logo" %}
+  {% logo "my_logo"
+    label="Logo",
+    src="//cdn2.hubspot.net/hub/53/file-1237149549-png/assets/hubspot.com/V2-Global/hubspot-logo-dark.png",
+    width=200 %}
+  {% macro name_of_macro(argument_name, argument_name2) %}
+    {{ argument_name }}
+    {{ argument_name2 }}
+  {% endmacro %}
+  {{ name_of_macro("value to pass to argument 1", "value to pass to argument 2") }}
+  {% macro trans(value) %}
+    -webkit-transition:
+    {{ value }}; -moz-transition:
+    {{ value }}; -o-transition:
+    {{ value }}; -ms-transition:
+    {{ value }}; transition:
+    {{ value }};
+  {% endmacro %}
+  a {
+  {{ trans("all .2s ease-in-out") }}
+  }
+  {% member_login "my_login" %}
+  {% member_login "my_login"
+    email_label="Email",
+    password_label="Password",
+    remember_me_label="Remember Me",
+    submit_button_text="Login",
+    reset_password_text="Forgot your password?",
+    show_password="Show password" %}
+  {% member_register "my_register" %}
+  {% member_register "my_register"
+    email_label="Email",
+    password_label="Password",
+    password_confirm_label="Confirm Password",
+    submit_button_text="Save password",
+    show_password="Show password" %}
+  {% menu "menu" id="123" %}
+  {% menu "my_menu"
+    id="456",
+    site_map_name="Default",
+    overrideable=False,
+    root_type="site_root",
+    flyouts="true",
+    max_levels="2",
+    flow="horizontal",
+    label="Advanced Menu" %}
+  {% module "module" module_id=123 %}
+  {% module "module" path="/absolute/path/to/Module" %}
+  {% module "module" path="relative/path/to/Module" %}
+  {% module "module" path="@hubspot/rich_text" %}
+  {% module "employee_quote"
+    module_id=456,
+    label="Employee image and quote section" %}
+  {% module_block rich_text "my_text_block"
+    overrideable=True,
+    label="Right Column" %}
+    {% module_attribute "html" %}
+      <h2>Something Powerful</h2>
+      <p>Some paragraph content...</p>
+    {% end_module_attribute %}
+  {% end_module_block %}
+  {% page_footer "page_footer" %}
+  {% password_prompt "my_password_prompt" %}
+  {% password_prompt "my_password_prompt"
+    label="My Password Prompt",
+    bad_password_message="<p>Sorry, please try again.</p>",
+    submit_button_text="Submit",
+    password_placeholder="Password" %}
+  {% password_reset "my_password_reset" %}
+  {% password_reset "my_password_reset"
+    password_label="Password",
+    password_confirm_label="Confirm Password",
+    submit_button_text="Save password",
+    show_password="Show password" %}
+  {% password_reset_request "my_password_reset_request" %}
+  {% password_reset_request "my_password_reset_request"
+    email_label="Email",
+    submit_button_text="Send reset email" %}
+  {% post_filter "my_post_filter" %}
+  {% post_filter "my_post_filter"
+    label="My Post Filter",
+    expand_link_text="see all",
+    filter_type="tag",
+    list_title="Lists by Tag",
+    max_links=5,
+    order_by="post_count",
+    select_blog="default" %}
+  {% post_listing "my_post_listing" %}
+  {% post_listing "my_post_listing"
+    label="My Post Listing",
+    list_title="Recent Posts",
+    listing_type="recent",
+    max_links=5,
+    select_blog="default" %}
+  {% set string_to_echo = "Print me" %}
+  {% print string_to_echo %}
+  {% raw %}
+  The personalization token for a contact's first name is
+  {{ contact.firstname }}
+  {% endraw %}
+  {% raw_html "raw_html" %}
+  {% raw_html "my_raw_html"
+    label="Enter HTML here",
+    value="<div>My HTML Block</div>" %}
+  {% related_blog_posts %}
+  {% related_blog_posts
+    blog_ids="1,2",
+    limit=5,
+    tags="Sales enablement, couches",
+    end_date="2018-04-10",
+    blog_authors="John Smith,Joe Smith,Frank Smith",
+    path_prefixes="/path-prefix",
+    post_formatter="test_macro" %}
+  {% rich_text "rich_text" %}
+  {% rich_text "my_rich_text"
+    label="Enter text here",
+    html="<p>My rich text default content</p>" %}
+  {% widget_block rich_text "right_column"
+    overrideable=True,
+    label="Right Column" %}
+    {% widget_attribute "html" %}
+      <h2>Something Powerful</h2>
+      <p>Some paragraph content...</p>
+    {% end_widget_attribute %}
+  {% end_widget_block %}
+  {% rss_listing "rss_listing" %}
+  {% section_header "section_header" %}
+  {% section_header "my_section_header"
+    header="A clear and bold header",
+    subheader="A more subdued subheader",
+    label="Sidebar Header" %}
+  {% set primaryColor = "#F7761F" %}
+  {{ primaryColor }}
+
+  {% set var_one = "String 1" %}
+  {% set var_two = "String 2" %}
+  {% set sequence = [ var_one, var_two] %}
+  {% set name = "Jack" %}
+  {% simple_menu "simple_menu" %}
+  {% simple_menu "my_simple_menu"
+    orientation="horizontal",
+    label="Simple Menu" %}
+  {% social_sharing "social_sharing" use_page_url=True %}
+  {% widget_block social_sharing "my_social_sharing"
+    label="Social Sharing",
+    use_page_url=True,
+    overrideable=True %}
+    {% widget_attribute "pinterest" is_json=True %}
+      {
+        "custom_link_format": "",
+        "pinterest_media": "http://cdn2.hubspot.net/hub/158015/305390_10100548508246879_837195_59275782_6882128_n.jpg",
+        "enabled": true,
+        "network": "pinterest",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/pinterest-24x24.png"
+      }
+    {% end_widget_attribute %}
+    {% widget_attribute "twitter" is_json=True %}
+      {
+        "custom_link_format": "",
+        "enabled": true,
+        "network": "twitter",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/twitter-24x24.png"
+      }
+    {% end_widget_attribute %}
+    {% widget_attribute "linkedin" is_json=True %}
+      {
+        "custom_link_format": "",
+        "enabled": true,
+        "network": "linkedin",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/linkedin-24x24.png"
+      }
+    {% end_widget_attribute %}
+    {% widget_attribute "facebook" is_json=True %}
+      {
+        "custom_link_format": "",
+        "enabled": true,
+        "network": "facebook",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/facebook-24x24.png"
+      }
+    {% end_widget_attribute %}
+    {% widget_attribute "email" is_json=True %}
+      {
+        "custom_link_format": "",
+        "enabled": true,
+        "network": "email",
+        "img_src": "https://static.hubspot.com/final/img/common/icons/social/email-24x24.png"
+      }
+    {% end_widget_attribute %}
+  {% end_widget_block %}
+  {% space "space" %}
+  {% space "my_spacer" label="Horizontal Spacer" %}
+  {% module_block raw_html "module_block raw_html"
+    definition_id=2801831944,
+    overrideable=False,
+    smart_type="GEO_IP",
+    label="Custom HTML" %}
+    {% module_attribute "value" %}
+      Default smart content value
+    {% end_module_attribute %}
+    {% targeted_module_attribute "value"
+      label="Custom HTML",
+      criterion_id=2801831949,
+      order=0,
+      target_type="CUSTOM_HTML_WIDGET" %}
+      Smart content rule 1
+    {% end_targeted_module_attribute %}
+  {% end_module_block %}
+  {% widget_block raw_html "widget_block raw_html"
+    definition_id=2801831944,
+    overrideable=False,
+    smart_type="GEO_IP",
+    label="Custom HTML" %}
+    {% widget_attribute "value" %}
+      Default smart content value
+    {% end_widget_attribute %}
+    {% targeted_widget_attribute "value"
+      label="Custom HTML",
+      criterion_id=2801831949,
+      order=0,
+      target_type="CUSTOM_HTML_WIDGET" %}
+      Smart content rule 1
+    {% end_targeted_widget_attribute %}
+  {% end_widget_block %}
+  {% text "text" %}
+  {% text "simple_text_field"
+    label="Enter text here",
+    value="This is the default value for this text field" %}
+  {% textarea "textarea" %}
+  {% textarea "my_textarea"
+    label="Enter plain text block",
+    value="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a urna quis lacus vehicula rutrum.",
+    no_wrapper=True %}
+  {% unless x < 0 %}
+    x is greater than zero
+{% endunless %} {% widget_block rich_text "my_text_block"
+                                           overrideable=True,
+                                           label="Right Column" %} {% widget_attribute
+                                                                                                                                  "html" %}
+      <h2>Something Powerful</h2>
+      <p>Some paragraph content...</p>
+    {% end_widget_attribute %}
+  {% end_widget_block %}
+  {% widget_block rich_text "my_text_block"
+    overrideable=True,
+    label="Right Column" %}
+    {% widget_attribute "html" %}
+      <h2>Something Powerful</h2>
+      <p>Some paragraph content...</p>
+    {% end_widget_attribute %}
+  {% end_widget_block %}
+  {% widget_container "widget_container" %}
+  {% end_widget_container %}
+  {% widget_container "my_flexible_column" %}
+    {% rich_text "my_rich_text" %}
+    {% rich_text "second_rich_text" %}
+  {% end_widget_container %}
+  {% widget_wrapper "unique_key" %}
+    <div>
+      {{ html }}
+    </div>
+  {% end_widget_wrapper %}
+
+  {% video_player "embed_player"
+    player_id="1234",
+    type="script",
+    label="good player",
+    width="300",
+    height="200",
+    play_button_color="#006643",
+    hide_playlist=True,
+    full_width=False %}
+</td>
+
+`;
+
+exports[`ternary.html 1`] = `
+{{ "x" == 0 ? "hello" : "bye" }}
+
+{% set x = blue === red ? yellow : orange %}
+
+{{ hello ? ya : nah }}
+
+{{ cond1 ? cond2 ? yes2 : no2 : no1 }}
+
+{{ macro(does ? this : parse) }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{ "x" == 0 ? "hello" : "bye" }}
+
+{% set x = blue === red ? yellow : orange %}
+
+{{ hello ? ya : nah }}
+
+{{ cond1 ? cond2 ? yes2 : no2 : no1 }}
+
+{{ macro(does ? this : parse) }}
+
+`;
+
+exports[`website-header.html 1`] = `
+<!--
+  templateType: global_partial
+  label: Website header
+-->
+<header class="header">
+
+  {# The link below is used for a navigation skipper which allows users navigating the site with their keyboard to skip over the site navigation. More information on the navigation skipper can be found here: https://github.com/HubSpot/cms-theme-boilerplate/wiki/Accessibility #}
+
+  <a href="#main-content" class="header__skip">Skip to content</a>
+
+  {# Top header drag and drop area #}
+
+  {% dnd_area "header-top"
+    label="Top header",
+    class="content-wrapper"
+  %}
+  {% end_dnd_area %}
+
+  {# Main header #}
+
+  <div class="header__container content-wrapper">
+
+    {# Header logo column #}
+
+    <div class="header__logo header__logo--main">
+      {% module "site_logo" path="@hubspot/logo" %}
+    </div>
+
+    {# Header navigation column #}
+
+    <div class="header__column">
+
+      {# Header navigation row one #}
+
+      <div class="header__row-1">
+        {% if content.translated_content.values()|selectattr("published")|length or is_listing_view and group.translations %}
+          <div class="header__language-switcher header--element">
+            <div class="header__language-switcher--label">
+              {% module "language-switcher"
+                path="@hubspot/language_switcher",
+                label="Language switcher",
+                display_mode="localized"
+              %}
+              <div class="header__language-switcher--label-current"> {{ locale_name(locale) }}</div>
+            </div>
+          </div>
+        {% endif %}
+        <div class="header__search header--element">
+          {% module "site_search"
+            path="@hubspot/search_input",
+            label="Search",
+            field_label="Search",
+            placeholder=""
+          %}
+        </div>
+      </div>
+
+      {# Header navigation row two #}
+
+      <div class="header__row-2">
+        <div class="header--toggle header__navigation--toggle"></div>
+        {% if content.translated_content|length or is_listing_view and group.translations %}
+          <div class="header--toggle header__language-switcher--toggle"></div>
+        {% endif %}
+        <div class="header--toggle header__search--toggle"></div>
+        <div class="header__close--toggle"></div>
+        <div class="header__navigation header--element">
+          {% module "navigation-primary"
+            path="../../modules/menu",
+            label="Primary navigation"
+          %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  {# Bottom header drag and drop area #}
+
+  {% dnd_area "header-bottom"
+    label="Bottom header",
+    class="content-wrapper"
+  %}
+  {% end_dnd_area %}
+
+</header>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--
+  templateType: global_partial
+  label: Website header
+-->
+<header class="header">
+  {# The link below is used for a navigation skipper which allows users navigating the site with their keyboard to skip over the site navigation. More information on the navigation skipper can be found here: https://github.com/HubSpot/cms-theme-boilerplate/wiki/Accessibility #}
+
+  <a href="#main-content" class="header__skip">Skip to content</a>
+
+  {# Top header drag and drop area #}
+
+  {% dnd_area "header-top"
+    label="Top header",
+    class="content-wrapper" %}
+  {% end_dnd_area %}
+
+  {# Main header #}
+
+  <div class="header__container content-wrapper">
+    {# Header logo column #}
+
+    <div class="header__logo header__logo--main">
+      {% module "site_logo" path="@hubspot/logo" %}
+    </div>
+
+    {# Header navigation column #}
+
+    <div class="header__column">
+      {# Header navigation row one #}
+
+      <div class="header__row-1">
+        {% if content.translated_content.values()|selectattr("published")|length or is_listing_view and group.translations %}
+          <div class="header__language-switcher header--element">
+            <div class="header__language-switcher--label">
+              {% module "language-switcher"
+                path="@hubspot/language_switcher",
+                label="Language switcher",
+                display_mode="localized" %}
+              <div class="header__language-switcher--label-current">
+                {{ locale_name(locale) }}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        <div class="header__search header--element">
+          {% module "site_search"
+            path="@hubspot/search_input",
+            label="Search",
+            field_label="Search",
+            placeholder="" %}
+        </div>
+      </div>
+
+      {# Header navigation row two #}
+
+      <div class="header__row-2">
+        <div class="header--toggle header__navigation--toggle"></div>
+        {% if content.translated_content|length or is_listing_view and group.translations %}
+          <div class="header--toggle header__language-switcher--toggle"></div>
+        {% endif %}
+        <div class="header--toggle header__search--toggle"></div>
+        <div class="header__close--toggle"></div>
+        <div class="header__navigation header--element">
+          {% module "navigation-primary"
+            path="../../modules/menu",
+            label="Primary navigation" %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# Bottom header drag and drop area #}
+
+  {% dnd_area "header-bottom"
+    label="Bottom header",
+    class="content-wrapper" %}
+  {% end_dnd_area %}
+</header>
+
+`;
+
+exports[`whitespace.html 1`] = `
 {{- foo }}
 {{- bar -}}
 {{ baz -}}

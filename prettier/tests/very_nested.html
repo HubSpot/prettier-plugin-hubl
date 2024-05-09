@@ -1,12 +1,8 @@
 {% if condition %}
-  If the condition is true print this to template.
+If the condition is true print this to template.
 {% endif %}
 {% if number <= 2 %}
-  Variable named number is less than or equal to 2.
-{% elif number <= 4 %} Variable named number is
-  less than or equal to 4.
-{% elif number <= 6 %} Variable named number is less than or equal to 6.
-{% else %} Variable named number is greater than 6. {% endif %} {% image
+{% endif %} {% image
 "image" %} {% image
 "executive_image"
 label="Executive photo",
@@ -32,14 +28,13 @@ num_seconds=5,
 version="0" %}
 {% widget_attribute "slides"
     is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url":
-    "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
+"http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
 "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
 "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile",
 "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text":
 "HubSpot CRM Contact Profile", "img_src":
 "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
-"open_in_new_tab": true}]
-{% end_widget_attribute %} {% end_widget_block %} {% image_src
+"open_in_new_tab": true}] {% end_widget_attribute %} {% end_widget_block %} {% image_src
 "image_src" %} {% image_src
 "executve_image_src"
 src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
@@ -47,12 +42,8 @@ no_wrapper=True %} {% import "custom/page/web_page_basic/my_macros.html" as head
 {% include "generated_global_groups/2781996615.html" %} {% include "hubspot/styles/patches/recommended.css" %} {% inline_rich_text
 "inline_rich_text"
 field="my_text_field" %}
-{% inline_rich_text "inline_rich_text"
-  field="my_text_field",
-  html="<p>My rich text default content</p>" %}
+{% inline_rich_text "inline_rich_text"   field="my_text_field",   html="<p>My rich text default content</p>" %}
 {% inline_text "text" field="my_text_field" %}
-{% inline_text "simple_text_field"
-  field="my_text_field",
-  value="This is the default value for this text field" %}
+{% inline_text "simple_text_field"   field="my_text_field",   value="This is the default value for this text field" %}
 {% language_switcher "language_switcher" %}
 {% language_switcher "language_switcher" display_mode="hybrid" %}

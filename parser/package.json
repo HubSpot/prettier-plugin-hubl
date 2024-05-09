@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
+  "private": true,
   "dependencies": {
     "colors": "^1.4.0"
   },
@@ -36,7 +37,6 @@
   },
   "author": "HubSpot, Inc.",
   "license": "Apache-2.0",
-  "private": true,
   "nodemonConfig": {
     "watch": [
       "src",

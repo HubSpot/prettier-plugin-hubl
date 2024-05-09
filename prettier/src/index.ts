@@ -27,7 +27,6 @@ const Token = {
   npe: (index: number) => `npe${index}_`,
   comment: (index: number) => `<!--${index}-->`,
   placeholder: (index: number) => `<!--placeholder-${index}-->`,
-  hublPlaceholder: (index: number) => `<!--hubl-placeholder-${index}-->`,
   jsonBlock: (match: string) => `{% json_block %}${match}{% end_json_block %}`,
 };
 
@@ -60,15 +59,10 @@ const tokenize = (input: string): string => {
   const HUBL_TAG_REGEX_WITH_LEAD = withLead(HUBL_TAG_REGEX);
   const COMMENT_REGEX_WITH_LEAD = withLead(COMMENT_REGEX);
   const VARIABLE_REGEX_WITH_LEAD = withLead(VARIABLE_REGEX);
+<<<<<<< Updated upstream
+=======
 
-  const hublTags = input.match(HUBL_TAG_REGEX);
-  if (hublTags) {
-    hublTags.forEach((match) => {
-      const placeholderToken = Token.hublPlaceholder(tokenIndex++);
-      tokenMap.set(placeholderToken, match.replace(LINE_BREAK_REGEX, " "));
-      input = input.replace(match, placeholderToken);
-    });
-  }
+>>>>>>> Stashed changes
   // Replace tags in style block
   const nestedStyleTags = input.match(STYLE_BLOCK_WITH_HUBL_REGEX);
   if (nestedStyleTags) {
@@ -108,9 +102,10 @@ const tokenize = (input: string): string => {
   }
 
   // Replace expressions inside of HTML tags first
-  const nestedHtmlTags = input.match(HTML_TAG_WITH_HUBL_TAG_REGEX);
+  /* const nestedHtmlTags = input.match(HTML_TAG_WITH_HUBL_TAG_REGEX);
   if (nestedHtmlTags) {
     nestedHtmlTags.forEach((tag) => {
+      console.log("Tag", tag);
       const processMatch = (match: string) => {
         const token = Token.npe(tokenIndex++);
         tokenMap.set(token, match);
@@ -126,7 +121,7 @@ const tokenize = (input: string): string => {
         });
       input = input.replace(tag, newString);
     });
-  }
+  } */
 
   const comments = input.match(COMMENT_REGEX);
   if (comments) {
@@ -134,6 +129,15 @@ const tokenize = (input: string): string => {
       const token = Token.comment(tokenIndex++);
       tokenMap.set(token, comment);
       input = input.replace(comment, token);
+    });
+  }
+
+  const hublTags = input.match(HUBL_TAG_REGEX);
+  if (hublTags) {
+    hublTags.forEach((match) => {
+      const placeholderToken = Token.hublPlaceholder(tokenIndex++);
+      tokenMap.set(placeholderToken, match.replace(LINE_BREAK_REGEX, " "));
+      input = input.replace(match, placeholderToken);
     });
   }
 
@@ -147,11 +151,21 @@ const tokenize = (input: string): string => {
     });
   }
 
+<<<<<<< Updated upstream
+  const matches = input.match(HUBL_TAG_REGEX);
+  if (matches) {
+    matches.forEach((match) => {
+      const placeholderToken = Token.placeholder(tokenIndex++);
+      tokenMap.set(placeholderToken, match.replace(LINE_BREAK_REGEX, " "));
+      input = input.replace(match, placeholderToken);
+=======
   // Split up multiple placeholder tags on the same line.
-  const PLACEHOLDER_REGEX = /(<!--hubl-placeholder-(?:\d*)-->)/g;
+
+  const PLACEHOLDER_REGEX = /(<!--placeholder-(?:\d*)-->)/g;
   const multiplePlaceholders = input.match(
-    /((.*)(<!--hubl-placeholder-(?:\d*)-->)(.*)){2,}/g,
+    /((.*)(<!--placeholder-(?:\d*)-->)(.*)){2,}/g,
   );
+  console.log("Input", input, "matches", multiplePlaceholders);
   if (multiplePlaceholders) {
     multiplePlaceholders.forEach((match) => {
       const splitMatch = match
@@ -160,6 +174,7 @@ const tokenize = (input: string): string => {
         .filter((str) => str !== "")
         .join("\n");
       input = input.replace(match, splitMatch);
+>>>>>>> Stashed changes
     });
   }
 
@@ -171,7 +186,6 @@ const tokenize = (input: string): string => {
       input = input.replace(match, placeholderToken);
     });
   }
-
   tokenIndex = 0;
   return input;
 };
@@ -188,32 +202,44 @@ const preserveFormatting = (input: string) => {
   const BEGIN_PRE_REGEX = /<pre.*?>/gms;
   const END_PRE_REGEX = /(?<!{% end_preserve %})<\/pre>/gms;
 
-  return input
-    .replace(BEGIN_PRE_REGEX, (match) => `${match}{% preserve %}`)
-    .replace(END_PRE_REGEX, (match) => `{% endpreserve %}${match}`);
-};
+  const PRE_TAGS_CONTENT = /<pre>(.|\n)*?<\/pre>/g;
+  const PRESERVE_TAG = /{% preserve %}/;
 
-export const preprocess = (text: string) => {
-  let updatedText: string = text.trim();
-  // Swap HubL tags for placeholders
-  updatedText = tokenize(updatedText);
-  // Parse and format HTML
-  updatedText = synchronizedPrettier.format(updatedText, {
-    parser: "html",
-    trailingComma: "es5",
-  });
-  // Find <pre> tags and add {% preserve %} wrapper
-  // to tell the HubL parser to preserve formatting
-  updatedText = preserveFormatting(updatedText);
-  // Swap back HubL tags and return
-  return unTokenize(updatedText);
+  const preTagContent = input.match(PRE_TAGS_CONTENT);
+  if (preTagContent) {
+    preTagContent.forEach((block) => {
+      // Check if the pre tags contain preserve tags. If it does, don't add them
+      // Not perfect, but should handle most cases.
+      if (!PRESERVE_TAG.test(block)) {
+        const newBlock = block
+          .replace(BEGIN_PRE_REGEX, (match) => `${match}{% preserve %}`)
+          .replace(END_PRE_REGEX, (match) => `{% endpreserve %}${match}`);
+        input.replace(block, newBlock);
+      }
+    });
+  }
+  return input;
 };
 
 const parsers: Plugin["parsers"] = {
   hubl: {
     astFormat: "hubl-ast",
     parse,
-    preprocess,
+    preprocess: (text: string) => {
+      let updatedText: string = text.trim();
+      // Swap HubL tags for placeholders
+      updatedText = tokenize(updatedText);
+      // Parse and format HTML
+      updatedText = synchronizedPrettier.format(updatedText, {
+        parser: "html",
+        trailingComma: "es5",
+      });
+      // Find <pre> tags and add {% preserve %} wrapper
+      // to tell the HubL parser to preserve formatting
+      updatedText = preserveFormatting(updatedText);
+      // Swap back HubL tags and return
+      return unTokenize(updatedText);
+    },
     locStart,
     locEnd,
   },

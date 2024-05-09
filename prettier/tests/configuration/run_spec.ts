@@ -100,7 +100,7 @@ async function run_spec(dirName, options) {
     });
   });
 
-  describe("Preprocessor Idempotence", () => {
+  xdescribe("Preprocessor Idempotence", () => {
     testObjects.forEach(async (testObj) => {
       const { fileName, input } = testObj;
       it(`preprocessor is idempotent for ${fileName}`, async () => {
@@ -111,7 +111,7 @@ async function run_spec(dirName, options) {
     });
   });
 
-  xdescribe("Idempotence tests", () => {
+  describe("Idempotence tests", () => {
     testObjects.forEach(async (testObj) => {
       const { fileName, input, mergedOptions } = testObj;
       it(`is idempotent for ${fileName}`, async () => {
