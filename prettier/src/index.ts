@@ -27,6 +27,7 @@ const Token = {
   npe: (index: number) => `npe${index}_`,
   comment: (index: number) => `<!--${index}-->`,
   placeholder: (index: number) => `<!--placeholder-${index}-->`,
+  hublPlaceholder: (index: number) => `<!--hubl-placeholder-${index}-->`,
   jsonBlock: (match: string) => `{% json_block %}${match}{% end_json_block %}`,
 };
 
@@ -59,10 +60,7 @@ const tokenize = (input: string): string => {
   const HUBL_TAG_REGEX_WITH_LEAD = withLead(HUBL_TAG_REGEX);
   const COMMENT_REGEX_WITH_LEAD = withLead(COMMENT_REGEX);
   const VARIABLE_REGEX_WITH_LEAD = withLead(VARIABLE_REGEX);
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
   // Replace tags in style block
   const nestedStyleTags = input.match(STYLE_BLOCK_WITH_HUBL_REGEX);
   if (nestedStyleTags) {
@@ -151,14 +149,14 @@ const tokenize = (input: string): string => {
     });
   }
 
-<<<<<<< Updated upstream
   const matches = input.match(HUBL_TAG_REGEX);
   if (matches) {
     matches.forEach((match) => {
       const placeholderToken = Token.placeholder(tokenIndex++);
       tokenMap.set(placeholderToken, match.replace(LINE_BREAK_REGEX, " "));
       input = input.replace(match, placeholderToken);
-=======
+    });
+  }
   // Split up multiple placeholder tags on the same line.
 
   const PLACEHOLDER_REGEX = /(<!--placeholder-(?:\d*)-->)/g;
@@ -174,7 +172,6 @@ const tokenize = (input: string): string => {
         .filter((str) => str !== "")
         .join("\n");
       input = input.replace(match, splitMatch);
->>>>>>> Stashed changes
     });
   }
 
