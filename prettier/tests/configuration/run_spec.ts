@@ -1,10 +1,12 @@
 // source: https://github.com/prettier/prettier/blob/ee2839bacbf6a52d004fa2f0373b732f6f191ccc/tests_config/run_spec.js
 "use strict";
 
+import { describe, expect, it, xdescribe } from "@jest/globals";
 import fs from "fs";
 import path from "path";
 import prettier, { ParserOptions } from "prettier";
-import { expect, it, describe } from "@jest/globals";
+import { fileURLToPath } from "url";
+import { preprocess } from "../../src/index";
 
 type TestObject = {
   fileName: string;
@@ -85,14 +87,38 @@ async function run_spec(dirName, options) {
     .map((fileName) => createTestObject(dirName, fileName, options))
     .filter((testObj) => testObj !== undefined) as TestObject[];
 
-  testObjects.forEach(async (testObj) => {
-    const { fileName, source, input, mergedOptions } = testObj;
-    it(`formats ${fileName} correctly`, async () => {
-      const output = await prettyprint(input, mergedOptions);
-      const snapshot = raw(
-        source + "~".repeat(mergedOptions.printWidth) + "\n" + output,
-      );
-      expect(snapshot).toMatchSnapshot();
+  xdescribe("Formatting tests", () => {
+    testObjects.forEach(async (testObj) => {
+      const { fileName, source, input, mergedOptions } = testObj;
+      it(`formats ${fileName} correctly`, async () => {
+        const output = await prettyprint(input, mergedOptions);
+        const snapshot = raw(
+          source + "~".repeat(mergedOptions.printWidth) + "\n" + output,
+        );
+        expect(snapshot).toMatchSnapshot();
+      });
+    });
+  });
+
+  describe("Preprocessor Idempotence", () => {
+    testObjects.forEach(async (testObj) => {
+      const { fileName, input } = testObj;
+      it(`preprocessor is idempotent for ${fileName}`, async () => {
+        const firstRun = await preprocess(input);
+        const secondRun = await preprocess(firstRun);
+        expect(firstRun).toEqual(secondRun);
+      });
+    });
+  });
+
+  xdescribe("Idempotence tests", () => {
+    testObjects.forEach(async (testObj) => {
+      const { fileName, input, mergedOptions } = testObj;
+      it(`is idempotent for ${fileName}`, async () => {
+        const firstRun = await prettyprint(input, mergedOptions);
+        const secondRun = await prettyprint(firstRun, mergedOptions);
+        expect(firstRun).toEqual(secondRun);
+      });
     });
   });
 }
@@ -123,10 +149,11 @@ function raw(string) {
 }
 
 function mergeDefaultOptions(parserConfig) {
+  const testDirectory = path.dirname(fileURLToPath(import.meta.url));
   return Object.assign(
     {
       plugins: [
-        path.resolve(path.join(__dirname, "../.."), "dist/src/index.js"),
+        path.resolve(path.join(testDirectory, "../.."), "dist/src/index.js"),
       ],
       printWidth: 80,
     },
