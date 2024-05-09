@@ -2,36 +2,49 @@
   "name": "hubl-parser",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "colors": "^1.4.0"
   },
   "devDependencies": {
-    "@types/node": "^16.10.2",
-    "@types/prettier": "^2.6.0",
-    "foreman": "^3.0.1",
+    "@types/node": "^20.12.9",
+    "@types/prettier": "^3.0.0",
     "nodemon": "^2.0.7",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.6.3"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   },
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "start": "yarn watch-all",
-    "test": "tsc && ts-node ./tests/testConfig.ts",
-    "watch": "nodemon --config nodemon.test.json",
+    "test": "node --loader ts-node/esm ./tests/testConfig.ts",
+    "watch": "nodemon",
     "watch-all": "yarn watch --simple-working --simple-broken --complex",
     "watch-simple": "yarn watch --simple-working",
     "watch-complex": "yarn watch --complex",
     "watch-broken": "yarn watch --simple-broken",
-    "watch-single": "yarn watch",
-    "watch-build": "nodemon --config nodemon.build.json"
+    "watch-single": "yarn watch"
   },
+  "files": [
+    "dist/**"
+  ],
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git@git.hubteam.com:HubSpot/hubl-prettier-plugin.git"
   },
   "author": "HubSpot, Inc.",
   "license": "Apache-2.0",
-  "private": true
+  "private": true,
+  "nodemonConfig": {
+    "watch": [
+      "src",
+      "tests"
+    ],
+    "exec": "tsc && yarn test",
+    "ext": "js, json, ts, proto, html",
+    "ignoreRoot": [
+      ".git"
+    ]
+  }
 }

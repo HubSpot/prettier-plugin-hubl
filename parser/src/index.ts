@@ -2,17 +2,16 @@
  * This parser is built upon the Nunjucks parser.
  * Please see NOTICE.md for license information
  */
-import parser from "./parser";
-import { Parser } from "./types/parser";
-import Tags from "./Tags";
+import { AST, ParserOptions } from "prettier";
+import * as parser from "./parser/parser.js";
+import Tags from "./Tags.js";
 
-type AST = any; //TODO Type me
-
-const parse = (text: string, parsers: object, options: object): AST => {
-  //@ts-ignore
-  const { parse } = parser.parser as Parser;
+const parse = (text: string, _options: ParserOptions): AST => {
   // We call into parser, but we extend it by passing in our custom tags
-  return parse(text, [new Tags()], { trimBlocks: false, lstripBlocks: false });
+  return parser.parse(text, [new Tags()], {
+    trimBlocks: false,
+    lstripBlocks: false,
+  });
 };
 
 // It is required that we export the parse function for prettier to hook into it

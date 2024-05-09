@@ -1,11 +1,12 @@
 "use strict";
 
-const lexer = require("./lexer");
-const nodes = require("./nodes");
-const Obj = require("./object").Obj;
-const lib = require("./lib");
-const { builtInTests } = require("./tests");
-class Parser extends Obj {
+import * as lexer from "./lexer.js";
+import * as nodes from "./nodes.js";
+import * as lib from "./lib.js";
+import { Obj } from "./object.js";
+import { builtInTests } from "./tests.js";
+
+export class Parser extends Obj {
   init(tokens) {
     this.tokens = tokens;
     this.peeked = null;
@@ -16,7 +17,7 @@ class Parser extends Obj {
   }
 
   nextToken(withWhitespace) {
-    var tok;
+    let tok;
 
     if (this.peeked) {
       if (!withWhitespace && this.peeked.type === lexer.TOKEN_WHITESPACE) {
@@ -35,7 +36,6 @@ class Parser extends Obj {
         tok = this.tokens.nextToken();
       }
     }
-
     return tok;
   }
 
@@ -71,7 +71,7 @@ class Parser extends Obj {
   }
 
   skip(type) {
-    var tok = this.nextToken();
+    const tok = this.nextToken();
     if (!tok || tok.type !== type) {
       this.pushToken(tok);
       return false;
@@ -80,19 +80,19 @@ class Parser extends Obj {
   }
 
   expect(type) {
-    var tok = this.nextToken();
+    const tok = this.nextToken();
     if (tok.type !== type) {
       this.fail(
         "expected " + type + ", got " + tok.type,
         tok.lineno,
-        tok.colno
+        tok.colno,
       );
     }
     return tok;
   }
 
   skipValue(type, val) {
-    var tok = this.nextToken();
+    const tok = this.nextToken();
     if (!tok || tok.type !== type || tok.value !== val) {
       this.pushToken(tok);
       return false;
@@ -105,10 +105,9 @@ class Parser extends Obj {
   }
 
   advanceAfterBlockEnd(name) {
-    var tok;
+    let tok;
     if (!name) {
       tok = this.peekToken();
-
       if (!tok) {
         this.fail("unexpected end of file");
       }
@@ -116,7 +115,7 @@ class Parser extends Obj {
       if (tok.type !== lexer.TOKEN_SYMBOL) {
         this.fail(
           "advanceAfterBlockEnd: expected symbol token or " +
-            "explicit name to be passed"
+            "explicit name to be passed",
         );
       }
 
@@ -139,12 +138,12 @@ class Parser extends Obj {
   }
 
   advanceAfterVariableEnd() {
-    var tok = this.nextToken();
+    const tok = this.nextToken();
 
     if (tok && tok.type === lexer.TOKEN_VARIABLE_END) {
       this.dropLeadingWhitespace =
         tok.value.charAt(
-          tok.value.length - this.tokens.tags.VARIABLE_END.length - 1
+          tok.value.length - this.tokens.tags.VARIABLE_END.length - 1,
         ) === "-";
     } else {
       this.pushToken(tok);
@@ -153,9 +152,9 @@ class Parser extends Obj {
   }
 
   parseFor() {
-    var forTok = this.peekToken();
-    var node;
-    var endBlock;
+    const forTok = this.peekToken();
+    let node;
+    let endBlock;
 
     if (this.skipSymbol("for")) {
       node = new nodes.For(forTok.lineno, forTok.colno);
@@ -194,7 +193,7 @@ class Parser extends Obj {
       this.fail(
         'parseFor: expected "in" keyword for loop',
         forTok.lineno,
-        forTok.colno
+        forTok.colno,
       );
     }
 
@@ -254,7 +253,7 @@ class Parser extends Obj {
 
     // a call block is parsed as a normal FunCall, but with an added
     // 'caller' kwarg which is a Caller node.
-    var callTok = this.peekToken();
+    const callTok = this.peekToken();
     if (!this.skipSymbol("call")) {
       this.fail("expected call");
     }
@@ -279,7 +278,7 @@ class Parser extends Obj {
       callTok.colno,
       callerArgs,
       macroCall,
-      body
+      body,
     );
 
     callNode.whiteSpace = callWhiteSpace;
@@ -287,9 +286,9 @@ class Parser extends Obj {
   }
 
   parseWithContext() {
-    var tok = this.peekToken();
+    const tok = this.peekToken();
 
-    var withContext = null;
+    let withContext = null;
 
     if (this.skipSymbol("with")) {
       withContext = true;
@@ -302,7 +301,7 @@ class Parser extends Obj {
         this.fail(
           "parseFrom: expected context after with/without",
           tok.lineno,
-          tok.colno
+          tok.colno,
         );
       }
     }
@@ -311,12 +310,12 @@ class Parser extends Obj {
   }
 
   parseImport() {
-    var importTok = this.peekToken();
+    const importTok = this.peekToken();
     if (!this.skipSymbol("import")) {
       this.fail(
         "parseImport: expected import",
         importTok.lineno,
-        importTok.colno
+        importTok.colno,
       );
     }
 
@@ -330,7 +329,7 @@ class Parser extends Obj {
         importTok.colno,
         template,
         target,
-        withContext
+        withContext,
       );
     } else {
       node = new nodes.Import(importTok.lineno, importTok.colno, template);
@@ -365,15 +364,15 @@ class Parser extends Obj {
     const names = new nodes.NodeList();
     let withContext;
 
+    // eslint-disable-next-line no-constant-condition
     while (1) {
-      // eslint-disable-line no-constant-condition
       const nextTok = this.peekToken();
       if (nextTok.type === lexer.TOKEN_BLOCK_END) {
         if (!names.children.length) {
           this.fail(
             "parseFrom: Expected at least one import name",
             fromTok.lineno,
-            fromTok.colno
+            fromTok.colno,
           );
         }
 
@@ -399,7 +398,7 @@ class Parser extends Obj {
         this.fail(
           "parseFrom: names starting with an underscore cannot be imported",
           name.lineno,
-          name.colno
+          name.colno,
         );
       }
 
@@ -420,7 +419,7 @@ class Parser extends Obj {
       fromTok.colno,
       template,
       names,
-      withContext
+      withContext,
     );
     fromNode.whiteSpace = fromWhiteSpace;
     return fromNode;
@@ -532,7 +531,7 @@ class Parser extends Obj {
       case "elif":
         node.else_ = this.parseIf(node);
         break;
-      case "else":
+      case "else": {
         let elseNode = { openTag: { start: this.dropLeadingWhitespace } };
         this.advanceAfterBlockEnd();
         elseNode.openTag.end = this.dropLeadingWhitespace;
@@ -551,6 +550,7 @@ class Parser extends Obj {
         }
 
         break;
+      }
       case "endif":
         node.else_ = null;
         if (parentIf) {
@@ -590,7 +590,7 @@ class Parser extends Obj {
     const tok = this.peekToken();
 
     switch (tok && tok.value) {
-      case "else":
+      case "else": {
         const elseWhiteSpace = {
           openTag: { start: this.dropLeadingWhitespace, end: false },
           closingTag: { start: false, end: false },
@@ -604,6 +604,7 @@ class Parser extends Obj {
         this.advanceAfterBlockEnd();
         node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
         break;
+      }
       case "endunless":
         node.else_ = null;
         node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
@@ -641,13 +642,13 @@ class Parser extends Obj {
         this.fail(
           "parseSet: expected = or block end in set tag",
           tag.lineno,
-          tag.colno
+          tag.colno,
         );
       } else {
         node.body = new nodes.Capture(
           tag.lineno,
           tag.colno,
-          this.parseUntilBlocks("endset")
+          this.parseUntilBlocks("endset"),
         );
         node.value = null;
         this.advanceAfterBlockEnd();
@@ -684,7 +685,7 @@ class Parser extends Obj {
       this.fail(
         'parseSwitch: expected "switch," "case" or "default"',
         tag.lineno,
-        tag.colno
+        tag.colno,
       );
     }
 
@@ -728,7 +729,7 @@ class Parser extends Obj {
       default:
         // otherwise bail because EOF
         this.fail(
-          'parseSwitch: expected "case," "default" or "endswitch," got EOF.'
+          'parseSwitch: expected "case," "default" or "endswitch," got EOF.',
         );
     }
 
@@ -737,8 +738,8 @@ class Parser extends Obj {
   }
 
   parseStatement() {
-    var tok = this.peekToken();
-    var node;
+    const tok = this.peekToken();
+    let node;
 
     if (tok.type !== lexer.TOKEN_SYMBOL) {
       this.fail("tag name expected", tok.lineno, tok.colno);
@@ -750,7 +751,6 @@ class Parser extends Obj {
     ) {
       return null;
     }
-
     switch (tok.value) {
       case "raw":
         return this.parseRaw();
@@ -798,7 +798,6 @@ class Parser extends Obj {
         }
         this.fail("unknown block tag: " + tok.value, tok.lineno, tok.colno);
     }
-
     return node;
   }
 
@@ -820,7 +819,7 @@ class Parser extends Obj {
         tagName +
         "|" +
         endTagName +
-        ")\\s*(?=-*%})(-*%})"
+        ")\\s*(?=-*%})(-*%})",
     );
     let rawLevel = 1;
     let str = "";
@@ -887,7 +886,7 @@ class Parser extends Obj {
           tok.lineno,
           tok.colno,
           node,
-          this.parseSignature()
+          this.parseSignature(),
         );
       } else if (tok.type === lexer.TOKEN_LEFT_BRACKET) {
         // Reference
@@ -900,7 +899,7 @@ class Parser extends Obj {
           tok.lineno,
           tok.colno,
           node,
-          lookup.children[0]
+          lookup.children[0],
         );
       } else if (tok.type === lexer.TOKEN_OPERATOR && tok.value === ".") {
         // Reference
@@ -911,7 +910,7 @@ class Parser extends Obj {
           this.fail(
             "expected name as lookup value, got " + val.value,
             val.lineno,
-            val.colno
+            val.colno,
           );
         }
 
@@ -931,7 +930,7 @@ class Parser extends Obj {
           tok.lineno,
           tok.colno,
           node,
-          new nodes.NodeList(tok.lineno, tok.colno, [this.parseExpression()])
+          new nodes.NodeList(tok.lineno, tok.colno, [this.parseExpression()]),
         );
       } else {
         break;
@@ -1014,8 +1013,8 @@ class Parser extends Obj {
 
   parseIn() {
     let node = this.parseIs();
+    // eslint-disable-next-line no-constant-condition
     while (1) {
-      // eslint-disable-line no-constant-condition
       // check if the next token is 'not'
       const tok = this.nextToken();
       if (!tok) {
@@ -1085,8 +1084,8 @@ class Parser extends Obj {
     const expr = this.parseConcat();
     const ops = [];
 
+    // eslint-disable-next-line no-constant-condition
     while (1) {
-      // eslint-disable-line no-constant-condition
       const tok = this.nextToken();
 
       if (!tok) {
@@ -1097,8 +1096,8 @@ class Parser extends Obj {
             tok.lineno,
             tok.colno,
             this.parseConcat(),
-            tok.value
-          )
+            tok.value,
+          ),
         );
       } else {
         this.pushToken(tok);
@@ -1296,8 +1295,8 @@ class Parser extends Obj {
         new nodes.NodeList(
           name.lineno,
           name.colno,
-          [node].concat(this.parseFilterArgs(node))
-        )
+          [node].concat(this.parseFilterArgs(node)),
+        ),
       );
     }
 
@@ -1305,7 +1304,7 @@ class Parser extends Obj {
   }
 
   parseFilterStatement() {
-    var filterTok = this.peekToken();
+    const filterTok = this.peekToken();
     if (!this.skipSymbol("filter")) {
       this.fail("parseFilterStatement: expected filter");
     }
@@ -1317,7 +1316,7 @@ class Parser extends Obj {
     const body = new nodes.Capture(
       name.lineno,
       name.colno,
-      this.parseUntilBlocks("endfilter")
+      this.parseUntilBlocks("endfilter"),
     );
     this.advanceAfterBlockEnd();
 
@@ -1325,16 +1324,15 @@ class Parser extends Obj {
       name.lineno,
       name.colno,
       name,
-      new nodes.NodeList(name.lineno, name.colno, [body].concat(args))
+      new nodes.NodeList(name.lineno, name.colno, [body].concat(args)),
     );
 
     return new nodes.Output(name.lineno, name.colno, [node]);
   }
 
   parseAggregate() {
-    var tok = this.nextToken();
-    var node;
-
+    const tok = this.nextToken();
+    let node;
     switch (tok.type) {
       case lexer.TOKEN_LEFT_PAREN:
         node = new nodes.Group(tok.lineno, tok.colno);
@@ -1348,9 +1346,8 @@ class Parser extends Obj {
       default:
         return null;
     }
-
+    // eslint-disable-next-line no-constant-condition
     while (1) {
-      // eslint-disable-line no-constant-condition
       const type = this.peekToken().type;
       if (
         type === lexer.TOKEN_RIGHT_PAREN ||
@@ -1366,7 +1363,7 @@ class Parser extends Obj {
           this.fail(
             "parseAggregate: expected comma after expression",
             tok.lineno,
-            tok.colno
+            tok.colno,
           );
         }
       }
@@ -1387,7 +1384,7 @@ class Parser extends Obj {
           this.fail(
             "parseAggregate: expected colon after dict key",
             tok.lineno,
-            tok.colno
+            tok.colno,
           );
         }
 
@@ -1422,8 +1419,8 @@ class Parser extends Obj {
     const kwargs = new nodes.KeywordArgs(tok.lineno, tok.colno);
     let checkComma = false;
 
+    // eslint-disable-next-line no-constant-condition
     while (1) {
-      // eslint-disable-line no-constant-condition
       tok = this.peekToken();
       if (!noParens && tok.type === lexer.TOKEN_RIGHT_PAREN) {
         this.nextToken();
@@ -1436,14 +1433,14 @@ class Parser extends Obj {
         this.fail(
           "parseSignature: expected comma after expression",
           tok.lineno,
-          tok.colno
+          tok.colno,
         );
       } else {
         const arg = this.parseExpression();
 
         if (this.skipValue(lexer.TOKEN_OPERATOR, "=")) {
           kwargs.addChild(
-            new nodes.Pair(arg.lineno, arg.colno, arg, this.parseExpression())
+            new nodes.Pair(arg.lineno, arg.colno, arg, this.parseExpression()),
           );
         } else {
           args.addChild(arg);
@@ -1481,7 +1478,7 @@ class Parser extends Obj {
         buf.push(
           new nodes.Output(tok.lineno, tok.colno, [
             new nodes.TemplateData(tok.lineno, tok.colno, data),
-          ])
+          ]),
         );
       } else if (tok.type === lexer.TOKEN_BLOCK_START) {
         this.dropLeadingWhitespace = tok.value.charAt(2) === "-";
@@ -1497,6 +1494,7 @@ class Parser extends Obj {
         variableNode.whiteSpace.openTag.start = this.dropLeadingWhitespace;
         this.advanceAfterVariableEnd();
         variableNode.whiteSpace.openTag.end = this.dropLeadingWhitespace;
+
         buf.push(variableNode);
       } else if (tok.type === lexer.TOKEN_COMMENT) {
         this.dropLeadingWhitespace = false;
@@ -1509,7 +1507,7 @@ class Parser extends Obj {
         this.fail(
           "Unexpected token at top-level: " + tok.type,
           tok.lineno,
-          tok.colno
+          tok.colno,
         );
       }
     }
@@ -1526,13 +1524,11 @@ class Parser extends Obj {
   }
 }
 
-module.exports = {
-  parse(src, extensions, opts) {
-    var p = new Parser(lexer.lex(src, opts));
-    if (extensions !== undefined) {
-      p.extensions = extensions;
-    }
-    return p.parseAsRoot();
-  },
-  Parser: Parser,
-};
+export async function parse(src, extensions, opts) {
+  const resolvedSource = src;
+  const p = new Parser(lexer.lex(resolvedSource, opts));
+  if (extensions !== undefined) {
+    p.extensions = extensions;
+  }
+  return p.parseAsRoot();
+}

@@ -13,12 +13,12 @@ const parseSignature = (parser: ParserClass, nodes: Nodes, lexer: Lexer) => {
   /**
    * Gets the next token without advancing the parser
    */
-  var token = parser.peekToken();
+  let token = parser.peekToken();
   /**
    * This contains all of the arguments/properties of the tag we are parsing.
    * We will iterate through all children and create a tree structure for all arguments
    */
-  var parsedSignature = new nodes.NodeList(token.lineno, token.colno);
+  const parsedSignature = new nodes.NodeList(token.lineno, token.colno);
   /**
    * keywordArgs is initially an object in the following form
    * {
@@ -54,12 +54,13 @@ const parseSignature = (parser: ParserClass, nodes: Nodes, lexer: Lexer) => {
    *
    * Note that children will be an array of objects containing n KV pairs
    */
-  var keywordArgs = new nodes.KeywordArgs();
+  const keywordArgs = new nodes.KeywordArgs();
 
   /**
    * We want to stay in this loop until we finish parsing.  We know we are done when we
    * hit the end of the block (e.g. %} and }} )
    */
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     token = parser.peekToken();
     /**
@@ -82,7 +83,7 @@ const parseSignature = (parser: ParserClass, nodes: Nodes, lexer: Lexer) => {
      * If this is a key with a value, we will parse both in the `parser.skipValue(lexer.TOKEN_OPERATOR, "=")`
      * below, otherwise we will assume this is a single value and add it as is
      */
-    var expression = parser.parseExpression();
+    const expression = parser.parseExpression();
     /**
      * Adding some metadata for prettier
      */
@@ -98,18 +99,18 @@ const parseSignature = (parser: ParserClass, nodes: Nodes, lexer: Lexer) => {
       let rhs;
 
       // In HubL, values can be Dicts with nested variables, so we need to parse them
-      //@ts-ignore
+      // @ts-expect-error Legacy
       if (parser.tokens._extractString("{{")) {
-        //@ts-ignore
+        // @ts-expect-error Legacy
         const parsedVariable = parser.tokens._extractUntil("}}");
         // This is a hack to output the contents verbatim
         const symbolNode = new nodes.Symbol(
           token.lineno,
           token.colno,
-          parsedVariable.trim()
+          parsedVariable.trim(),
         );
         rhs = new nodes.Output(token.lineno, token.colno, [symbolNode]);
-        //@ts-ignore
+        // @ts-expect-error Legacy
         parser.tokens.forwardN(2);
       } else {
         rhs = parser.parseExpression();
@@ -136,7 +137,7 @@ const parseSignature = (parser: ParserClass, nodes: Nodes, lexer: Lexer) => {
        * }
        */
       keywordArgs.addChild(
-        new nodes.Pair(lhs.lineno, lhs.colno, expression, rhs)
+        new nodes.Pair(lhs.lineno, lhs.colno, expression, rhs),
       );
     } else {
       // Otherwise, it's a normal argument, so we don't need to split lhs from rhs
@@ -283,7 +284,7 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     { start: "dnd_row", end: "end_dnd_row" },
     { start: "dnd_section", end: "end_dnd_section" },
     { start: "email_each", end: "endemail_each" },
-    { start: "flip", end: "end_flip" },
+    { start: "flip", end: "endflip" },
     { start: "module_attribute", end: "end_module_attribute" },
     { start: "module_block", end: "end_module_block" },
     { start: "require_css", end: "end_require_css" },

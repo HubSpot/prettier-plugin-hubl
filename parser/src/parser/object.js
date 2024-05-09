@@ -1,8 +1,7 @@
 "use strict";
 
 // A simple class system, more documentation to come
-const EventEmitter = require("events");
-const lib = require("./lib");
+import EventEmitter from "events";
 
 function parentWrap(parent, prop) {
   if (typeof parent !== "function" || typeof prop !== "function") {
@@ -16,15 +15,12 @@ function parentWrap(parent, prop) {
     this.parent = parent;
     const res = prop.apply(this, arguments);
     this.parent = tmp;
-
     return res;
   };
 }
 
-function extendClass(cls, name, props) {
-  props = props || {};
-
-  lib.keys(props).forEach((k) => {
+function extendClass(cls, name, props = {}) {
+  Object.keys(props).forEach((k) => {
     props[k] = parentWrap(cls.prototype[k], props[k]);
   });
 
@@ -34,17 +30,17 @@ function extendClass(cls, name, props) {
     }
   }
 
-  lib._assign(subclass.prototype, props);
-
+  Object.assign(subclass.prototype, props);
   return subclass;
 }
 
-class Obj {
+export class Obj {
   constructor(...args) {
     // Unfortunately necessary for backwards compatibility
     this.init(...args);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   init() {}
 
   get typename() {
@@ -60,13 +56,14 @@ class Obj {
   }
 }
 
-class EmitterObj extends EventEmitter {
+export class EmitterObj extends EventEmitter {
   constructor(...args) {
     super();
     // Unfortunately necessary for backwards compatibility
     this.init(...args);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   init() {}
 
   get typename() {
@@ -81,5 +78,3 @@ class EmitterObj extends EventEmitter {
     return extendClass(this, name, props);
   }
 }
-
-module.exports = { Obj, EmitterObj };

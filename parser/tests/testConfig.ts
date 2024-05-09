@@ -1,7 +1,9 @@
 import "colors";
-import { parse } from "../dist/index";
-import fs from "fs";
-import path from "path";
+import { parse } from "../src/index";
+import * as fs from "fs";
+import * as path from "path";
+import { ParserOptions } from "prettier";
+import { fileURLToPath } from "url";
 
 const simpleWorkingPath = "tests/simple/working";
 const simpleBrokenPath = "tests/simple/broken";
@@ -12,7 +14,8 @@ type Spec = {
   files: Array<string>;
 };
 
-const base = path.join(__dirname, "..");
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const base = path.join(dirname, "..");
 
 const getFiles = (suffix: string) => {
   const folderPath = `${base}/${suffix}`;
@@ -41,7 +44,7 @@ try {
     filesToTest.push(
       getFiles(simpleWorkingPath),
       getFiles(simpleBrokenPath),
-      getFiles(complexPath)
+      getFiles(complexPath),
     );
   } else {
     filesToTest = args
@@ -73,8 +76,7 @@ try {
         // We define success as having no errors
         const output = parse(
           fs.readFileSync(`${folderPath}/${file}`, "utf-8"),
-          {},
-          {}
+          {} as ParserOptions,
         );
 
         if (!process.argv.slice(2).includes("--silent")) {
@@ -95,7 +97,7 @@ try {
         if (e.code === "ENOENT") {
           console.log(
             `File path for testing a single should be the path to a test file from the CWD`
-              .yellow
+              .yellow,
           );
         }
       }

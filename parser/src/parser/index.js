@@ -1,14 +1,11 @@
 "use strict";
 
-const lib = require("./lib");
-const parser = require("./parser");
-const lexer = require("./lexer");
-const nodes = require("./nodes");
-
 // A single instance of an environment, since this is so commonly used
 let e;
 
-function configure(templatesPath, opts) {
+/* eslint-disable no-undef */
+// Not sure what the undefined loaders are supposed to do, but leaving for now. Might be globals?
+export function configure(templatesPath, opts) {
   opts = opts || {};
   if (lib.isObject(templatesPath)) {
     opts = templatesPath;
@@ -16,6 +13,7 @@ function configure(templatesPath, opts) {
   }
 
   let TemplateLoader;
+
   if (loaders.FileSystemLoader) {
     TemplateLoader = new loaders.FileSystemLoader(templatesPath, {
       watch: opts.watch,
@@ -36,11 +34,8 @@ function configure(templatesPath, opts) {
 
   return e;
 }
-
-module.exports = {
-  parser: parser,
-  lexer: lexer,
-  lib: lib,
-  nodes: nodes,
-  configure: configure,
-};
+/* eslint-enable no-undef */
+export * from "./lexer";
+export * from "./lib";
+export * from "./parser";
+export * from "./nodes";

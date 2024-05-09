@@ -1,44 +1,44 @@
 "use strict";
 
-const lib = require("./lib");
+import * as lib from "./lib.js";
 
-let whitespaceChars = " \n\t\r\u00A0";
-let delimChars = "()[]{}%*-+~/#,:|.<>=!";
-let intChars = "0123456789";
+export const whitespaceChars = " \n\t\r\u00A0";
+export const delimChars = "()[]{}%*-+~/#,:|.<>=!";
+export const intChars = "0123456789";
 
-let BLOCK_START = "{%";
-let BLOCK_END = "%}";
-let VARIABLE_START = "{{";
-let VARIABLE_END = "}}";
-let COMMENT_START = "{#";
-let COMMENT_END = "#}";
+export const BLOCK_START = "{%";
+export const BLOCK_END = "%}";
+export const VARIABLE_START = "{{";
+export const VARIABLE_END = "}}";
+export const COMMENT_START = "{#";
+export const COMMENT_END = "#}";
 
-let TOKEN_STRING = "string";
-let TOKEN_WHITESPACE = "whitespace";
-let TOKEN_DATA = "data";
-let TOKEN_BLOCK_START = "block-start";
-let TOKEN_BLOCK_END = "block-end";
-let TOKEN_VARIABLE_START = "variable-start";
-let TOKEN_VARIABLE_END = "variable-end";
-let TOKEN_COMMENT = "comment";
-let TOKEN_LEFT_PAREN = "left-paren";
-let TOKEN_RIGHT_PAREN = "right-paren";
-let TOKEN_LEFT_BRACKET = "left-bracket";
-let TOKEN_RIGHT_BRACKET = "right-bracket";
-let TOKEN_LEFT_CURLY = "left-curly";
-let TOKEN_RIGHT_CURLY = "right-curly";
-let TOKEN_OPERATOR = "operator";
-let TOKEN_COMMA = "comma";
-let TOKEN_COLON = "colon";
-let TOKEN_TILDE = "tilde";
-let TOKEN_PIPE = "pipe";
-let TOKEN_INT = "int";
-let TOKEN_FLOAT = "float";
-let TOKEN_BOOLEAN = "boolean";
-let TOKEN_NONE = "none";
-let TOKEN_SYMBOL = "symbol";
-let TOKEN_SPECIAL = "special";
-let TOKEN_REGEX = "regex";
+export const TOKEN_STRING = "string";
+export const TOKEN_WHITESPACE = "whitespace";
+export const TOKEN_DATA = "data";
+export const TOKEN_BLOCK_START = "block-start";
+export const TOKEN_BLOCK_END = "block-end";
+export const TOKEN_VARIABLE_START = "variable-start";
+export const TOKEN_VARIABLE_END = "variable-end";
+export const TOKEN_COMMENT = "comment";
+export const TOKEN_LEFT_PAREN = "left-paren";
+export const TOKEN_RIGHT_PAREN = "right-paren";
+export const TOKEN_LEFT_BRACKET = "left-bracket";
+export const TOKEN_RIGHT_BRACKET = "right-bracket";
+export const TOKEN_LEFT_CURLY = "left-curly";
+export const TOKEN_RIGHT_CURLY = "right-curly";
+export const TOKEN_OPERATOR = "operator";
+export const TOKEN_COMMA = "comma";
+export const TOKEN_COLON = "colon";
+export const TOKEN_TILDE = "tilde";
+export const TOKEN_PIPE = "pipe";
+export const TOKEN_INT = "int";
+export const TOKEN_FLOAT = "float";
+export const TOKEN_BOOLEAN = "boolean";
+export const TOKEN_NONE = "none";
+export const TOKEN_SYMBOL = "symbol";
+export const TOKEN_SPECIAL = "special";
+export const TOKEN_REGEX = "regex";
 
 function token(type, value, lineno, colno) {
   return {
@@ -49,7 +49,7 @@ function token(type, value, lineno, colno) {
   };
 }
 
-class Tokenizer {
+export class Tokenizer {
   constructor(str, opts) {
     this.str = str;
     this.index = 0;
@@ -166,7 +166,7 @@ class Tokenizer {
             flags: regexFlags,
           },
           lineno,
-          colno
+          colno,
         );
       } else if (delimChars.indexOf(cur) !== -1) {
         // We've hit a delimiter (a special char like a bracket)
@@ -344,7 +344,7 @@ class Tokenizer {
           inComment ? TOKEN_COMMENT : TOKEN_DATA,
           tok,
           lineno,
-          colno
+          colno,
         );
       }
     }
@@ -526,35 +526,6 @@ class Tokenizer {
   }
 }
 
-module.exports = {
-  lex(src, opts) {
-    return new Tokenizer(src, opts);
-  },
-
-  TOKEN_STRING: TOKEN_STRING,
-  TOKEN_WHITESPACE: TOKEN_WHITESPACE,
-  TOKEN_DATA: TOKEN_DATA,
-  TOKEN_BLOCK_START: TOKEN_BLOCK_START,
-  TOKEN_BLOCK_END: TOKEN_BLOCK_END,
-  TOKEN_VARIABLE_START: TOKEN_VARIABLE_START,
-  TOKEN_VARIABLE_END: TOKEN_VARIABLE_END,
-  TOKEN_COMMENT: TOKEN_COMMENT,
-  TOKEN_LEFT_PAREN: TOKEN_LEFT_PAREN,
-  TOKEN_RIGHT_PAREN: TOKEN_RIGHT_PAREN,
-  TOKEN_LEFT_BRACKET: TOKEN_LEFT_BRACKET,
-  TOKEN_RIGHT_BRACKET: TOKEN_RIGHT_BRACKET,
-  TOKEN_LEFT_CURLY: TOKEN_LEFT_CURLY,
-  TOKEN_RIGHT_CURLY: TOKEN_RIGHT_CURLY,
-  TOKEN_OPERATOR: TOKEN_OPERATOR,
-  TOKEN_COMMA: TOKEN_COMMA,
-  TOKEN_COLON: TOKEN_COLON,
-  TOKEN_TILDE: TOKEN_TILDE,
-  TOKEN_PIPE: TOKEN_PIPE,
-  TOKEN_INT: TOKEN_INT,
-  TOKEN_FLOAT: TOKEN_FLOAT,
-  TOKEN_BOOLEAN: TOKEN_BOOLEAN,
-  TOKEN_NONE: TOKEN_NONE,
-  TOKEN_SYMBOL: TOKEN_SYMBOL,
-  TOKEN_SPECIAL: TOKEN_SPECIAL,
-  TOKEN_REGEX: TOKEN_REGEX,
-};
+export function lex(src, opts) {
+  return new Tokenizer(src, opts);
+}
