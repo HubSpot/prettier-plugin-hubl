@@ -365,7 +365,7 @@ export class Parser extends Obj {
     let withContext;
 
     // eslint-disable-next-line no-constant-condition
-    while (true) {
+    while (1) {
       const nextTok = this.peekToken();
       if (nextTok.type === lexer.TOKEN_BLOCK_END) {
         if (!names.children.length) {
