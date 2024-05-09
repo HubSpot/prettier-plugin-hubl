@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "start": "nodemon --config ./configuration/nodemon.inline.json",
-    "test": "node --experimental-vm-modules ../node_modules/jest/bin/jest.js -c ./configuration/jest.config.cjs",
+    "test": "node --experimental-vm-modules ../node_modules/jest/bin/jest.js -c ./tests/configuration/jest.config.ts",
     "watch": "nodemon",
     "update-test": "tsc && jest -c ./configuration/jest.config.js --update-snapshot",
     "test-inline": "tsc && node ./src/test-inline.ts"

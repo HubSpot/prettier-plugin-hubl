@@ -3,19 +3,23 @@
 
 import fs from "fs";
 import path from "path";
-import prettier from "prettier";
-import { fileURLToPath } from "url";
-import { expect, test } from "@jest/globals";
-import { describe } from "node:test";
+import prettier, { ParserOptions } from "prettier";
+import { expect, it, describe } from "@jest/globals";
 
-const testDirectory = path.dirname(fileURLToPath(import.meta.url));
+type TestObject = {
+  fileName: string;
+  dirName: string;
+  source: string;
+  input: string;
+  mergedOptions: ParserOptions;
+};
 
 const RAW = Symbol.for("raw");
 expect.addSnapshotSerializer({
-  print(val) {
-    return val[RAW];
+  print(val: unknown) {
+    return (val as Record<symbol, string>)[RAW];
   },
-  test(val) {
+  test(val: Record<symbol, string>) {
     return (
       val &&
       Object.prototype.hasOwnProperty.call(val, RAW) &&
@@ -24,7 +28,11 @@ expect.addSnapshotSerializer({
   },
 });
 
-function createTestObject(dirName, fileName, options) {
+function createTestObject(
+  dirName: string,
+  fileName: string,
+  options: ParserOptions,
+): TestObject | undefined {
   const filePath = path.join(dirName, fileName);
   const isValidTestFile =
     path.extname(fileName) !== ".snap" &&
@@ -75,19 +83,16 @@ async function run_spec(dirName, options) {
   const testObjects = fs
     .readdirSync(dirName)
     .map((fileName) => createTestObject(dirName, fileName, options))
-    .filter((testObj) => testObj !== undefined);
+    .filter((testObj) => testObj !== undefined) as TestObject[];
 
-  describe("Formatting tests", () => {
-    testObjects.forEach(async (testObj) => {
-      const { fileName, source, input, mergedOptions } = testObj;
-      it(`formats ${fileName} correctly`, async () => {
-        const output = await prettyprint(input, mergedOptions);
-        const snapshot = raw(
-          source + "~".repeat(mergedOptions.printWidth) + "\n" + output,
-        );
-        console.log("Snap", snapshot);
-        expect(snapshot).toMatchSnapshot();
-      });
+  testObjects.forEach(async (testObj) => {
+    const { fileName, source, input, mergedOptions } = testObj;
+    it(`formats ${fileName} correctly`, async () => {
+      const output = await prettyprint(input, mergedOptions);
+      const snapshot = raw(
+        source + "~".repeat(mergedOptions.printWidth) + "\n" + output,
+      );
+      expect(snapshot).toMatchSnapshot();
     });
   });
 }
@@ -121,7 +126,7 @@ function mergeDefaultOptions(parserConfig) {
   return Object.assign(
     {
       plugins: [
-        path.resolve(path.join(testDirectory, ".."), "dist/src/index.js"),
+        path.resolve(path.join(__dirname, "../.."), "dist/src/index.js"),
       ],
       printWidth: 80,
     },
