@@ -27,6 +27,7 @@ const Token = {
   npe: (index: number) => `npe${index}_`,
   comment: (index: number) => `<!--${index}-->`,
   placeholder: (index: number) => `<!--placeholder-${index}-->`,
+  hublPlaceholder: (index: number) => `<!--hubl-placeholder-${index}-->`,
   jsonBlock: (match: string) => `{% json_block %}${match}{% end_json_block %}`,
 };
 
@@ -59,6 +60,15 @@ const tokenize = (input: string): string => {
   const HUBL_TAG_REGEX_WITH_LEAD = withLead(HUBL_TAG_REGEX);
   const COMMENT_REGEX_WITH_LEAD = withLead(COMMENT_REGEX);
   const VARIABLE_REGEX_WITH_LEAD = withLead(VARIABLE_REGEX);
+
+  const hublTags = input.match(HUBL_TAG_REGEX);
+  if (hublTags) {
+    hublTags.forEach((match) => {
+      const placeholderToken = Token.hublPlaceholder(tokenIndex++);
+      tokenMap.set(placeholderToken, match.replace(LINE_BREAK_REGEX, " "));
+      input = input.replace(match, placeholderToken);
+    });
+  }
   // Replace tags in style block
   const nestedStyleTags = input.match(STYLE_BLOCK_WITH_HUBL_REGEX);
   if (nestedStyleTags) {
@@ -137,12 +147,19 @@ const tokenize = (input: string): string => {
     });
   }
 
-  const matches = input.match(HUBL_TAG_REGEX);
-  if (matches) {
-    matches.forEach((match) => {
-      const placeholderToken = Token.placeholder(tokenIndex++);
-      tokenMap.set(placeholderToken, match.replace(LINE_BREAK_REGEX, " "));
-      input = input.replace(match, placeholderToken);
+  // Split up multiple placeholder tags on the same line.
+  const PLACEHOLDER_REGEX = /(<!--hubl-placeholder-(?:\d*)-->)/g;
+  const multiplePlaceholders = input.match(
+    /((.*)(<!--hubl-placeholder-(?:\d*)-->)(.*)){2,}/g,
+  );
+  if (multiplePlaceholders) {
+    multiplePlaceholders.forEach((match) => {
+      const splitMatch = match
+        .split(PLACEHOLDER_REGEX)
+        .map((f) => f.trim())
+        .filter((str) => str !== "")
+        .join("\n");
+      input = input.replace(match, splitMatch);
     });
   }
 
@@ -154,6 +171,7 @@ const tokenize = (input: string): string => {
       input = input.replace(match, placeholderToken);
     });
   }
+
   tokenIndex = 0;
   return input;
 };
@@ -175,25 +193,27 @@ const preserveFormatting = (input: string) => {
     .replace(END_PRE_REGEX, (match) => `{% endpreserve %}${match}`);
 };
 
+export const preprocess = (text: string) => {
+  let updatedText: string = text.trim();
+  // Swap HubL tags for placeholders
+  updatedText = tokenize(updatedText);
+  // Parse and format HTML
+  updatedText = synchronizedPrettier.format(updatedText, {
+    parser: "html",
+    trailingComma: "es5",
+  });
+  // Find <pre> tags and add {% preserve %} wrapper
+  // to tell the HubL parser to preserve formatting
+  updatedText = preserveFormatting(updatedText);
+  // Swap back HubL tags and return
+  return unTokenize(updatedText);
+};
+
 const parsers: Plugin["parsers"] = {
   hubl: {
     astFormat: "hubl-ast",
     parse,
-    preprocess: (text: string) => {
-      let updatedText: string = text.trim();
-      // Swap HubL tags for placeholders
-      updatedText = tokenize(updatedText);
-      // Parse and format HTML
-      updatedText = synchronizedPrettier.format(updatedText, {
-        parser: "html",
-        trailingComma: "es5",
-      });
-      // Find <pre> tags and add {% preserve %} wrapper
-      // to tell the HubL parser to preserve formatting
-      updatedText = preserveFormatting(updatedText);
-      // Swap back HubL tags and return
-      return unTokenize(updatedText);
-    },
+    preprocess,
     locStart,
     locEnd,
   },
