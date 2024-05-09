@@ -23,8 +23,7 @@
     "watch-simple": "yarn watch --simple-working",
     "watch-complex": "yarn watch --complex",
     "watch-broken": "yarn watch --simple-broken",
-    "watch-single": "yarn watch",
-    "watch-build": "nodemon --config nodemon.build.json"
+    "watch-single": "yarn watch"
   },
   "files": [
     "dist/**"

@@ -1,6 +1,6 @@
 {
-  "name": "prettier-printer-hubl",
-  "version": "1.1.0",
+  "name": "@hubspot/prettier-plugin-hubl",
+  "version": "0.3.0",
   "description": "",
   "type": "module",
   "main": "dist/src/index.js",
@@ -29,7 +29,6 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
-  "private": true,
   "nodemonConfig": {
     "watch": [
       "tests",
