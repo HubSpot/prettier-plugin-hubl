@@ -1,0 +1,13 @@
+{% set test_object = {
+    "foo bar": "baz",
+    "another test value": "blah",
+    "a-hyphen": "test",
+    "shouldBeDotted": "test",
+    "should_Be_Dotted": "test"
+}%}
+{{ test_object["foo bar"] }}
+{{ test_object["another test value"] }}
+{{ test_object["a-hyphen"] }}
+{{ test_object["shouldBeDotted"] }}
+{{ test_object["should_Be_Dotted"] }}
+

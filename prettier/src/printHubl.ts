@@ -28,6 +28,9 @@ const closeVar = (whitespace) => {
   return whitespace.end ? "-}}" : "}}";
 };
 
+const isValidVariable = (testString: string) =>
+  /^[a-zA-Z_$][0-9a-zA-Z_$]*$/gm.test(testString);
+
 // Recurvisely print if elif and else
 const printElse = (node) => {
   if (node.else_ && node.else_.typename === "If") {
@@ -275,7 +278,7 @@ function printHubl(node) {
       if (
         node.val.typename === "Literal" &&
         typeof node.val.value === "string" &&
-        !node.val.value.includes("-")
+        isValidVariable(node.val.value)
       ) {
         return [printHubl(node.target), ".", node.val.value];
       }
