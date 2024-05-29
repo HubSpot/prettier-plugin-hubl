@@ -21,13 +21,13 @@ If you have a particular code-style opinion that you feel strongly about, feel f
 You can install this plugin directly from NPM by running:
 
 ```bash
-npm i @hubspot/prettier-plugin-hubl
+npm i @hubspot/prettier-plugin-hubl -D
 ```
 
 If you haven't already installed [prettier](https://prettier.io) you'll want to do that as well:
 
 ```bash
-npm i prettier
+npm i prettier -D
 ```
 
 ## Setup
