@@ -21,7 +21,7 @@
     "start": "yarn watch",
     "test": "lerna run test",
     "watch": "yarn lerna exec --stream yarn build && yarn lerna exec --parallel yarn watch",
-    "run:prettier": "lerna --scope='prettier-printer-hubl' run",
+    "run:prettier": "lerna --scope='@hubspot/prettier-plugin-hubl' run",
     "run:parser": "lerna --scope='hubl-parser' run",
     "watch:prettier": "yarn run:prettier watch",
     "watch:parser": "yarn run:parser watch",
