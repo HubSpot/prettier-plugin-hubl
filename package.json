@@ -4,7 +4,10 @@
   "main": "./prettier/dist/src/index.js",
   "type": "module",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@prettier/sync": "^0.5.2",
+    "hubl-parser": "1.0.0"
+  },
   "peerDependencies": {
     "prettier": "3.x"
   },
