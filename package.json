@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "main": "./prettier/dist/src/index.js",
   "type": "module",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@prettier/sync": "^0.5.2",
     "hubl-parser": "1.0.0"
@@ -19,9 +19,7 @@
     "eslint": "^8.35.0"
   },
   "bundledDependencies": [
-    "@prettier/sync",
-    "hubl-parser",
-    "prettier"
+    "hubl-parser"
   ],
   "engines": {
     "node": ">=16"
@@ -41,8 +39,8 @@
     "npm:publish-latest": "npm publish . --tag latest"
   },
   "files": [
-    "parser/dist",
-    "prettier/dist"
+    "prettier/dist/src",
+    "!prettier/dist/tests/**"
   ],
   "workspaces": [
     "parser",
