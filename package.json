@@ -48,7 +48,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:HubSpot/prettier-plugin-hubl.git"
+    "url": "git+ssh://git@github.com/HubSpot/prettier-plugin-hubl.git"
   },
   "author": "HubSpot, Inc.",
   "license": "Apache-2.0"

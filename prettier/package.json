@@ -1,5 +1,5 @@
 {
-  "name": "@hubspot/prettier-plugin-hubl",
+  "name": "prettier-printer-hubl",
   "version": "0.3.0",
   "description": "",
   "type": "module",
