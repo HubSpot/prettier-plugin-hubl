@@ -1,2 +1,2 @@
-import prettierPlugin from "./prettier/dist/index";
+import * as prettierPlugin from "./prettier/dist/src/index.js";
 module.exports = prettierPlugin;
