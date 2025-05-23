@@ -1,9 +1,13 @@
 {
-  "name": "root",
-  "version": "0.3.0",
+  "name": "@hubspot/prettier-plugin-hubl",
+  "version": "0.3.5",
   "main": "./prettier/dist/src/index.js",
-  "private": true,
-  "dependencies": {},
+  "type": "module",
+  "private": false,
+  "dependencies": {
+    "@prettier/sync": "^0.5.2",
+    "hubl-parser": "1.0.0"
+  },
   "peerDependencies": {
     "prettier": "3.x"
   },
@@ -14,6 +18,9 @@
     "@typescript-eslint/parser": "^5.59.7",
     "eslint": "^8.35.0"
   },
+  "bundledDependencies": [
+    "hubl-parser"
+  ],
   "engines": {
     "node": ">=16"
   },
@@ -29,11 +36,12 @@
     "build:parser": "yarn run:parser build",
     "build": "(yarn run build:parser) && (yarn run build:prettier)",
     "npm:publish-beta": "npm publish . --tag beta",
-    "npm:publish-latest": "npm publish . --tag latest"
+    "npm:publish-latest": "npm publish . --tag latest",
+    "npm:publish-experimental": "npm publish . --tag experimental"
   },
   "files": [
-    "parser/dist",
-    "prettier/dist"
+    "prettier/dist/src",
+    "!prettier/dist/tests/**"
   ],
   "workspaces": [
     "parser",
@@ -41,7 +49,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:HubSpot/prettier-plugin-hubl.git"
+    "url": "git+ssh://git@github.com/HubSpot/prettier-plugin-hubl.git"
   },
   "author": "HubSpot, Inc.",
   "license": "Apache-2.0"
