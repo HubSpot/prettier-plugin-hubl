@@ -32,12 +32,14 @@ npm i prettier -D
 
 ## Setup
 
+**Note**: Starting with Prettier 3.x, plugins must be explicitly listed in your Prettier configuration. Auto-discovery has been removed.
+
 If you don't already have a prettier config file, create one:
 
 ```json
 # .prettierrc.json
----
 {
+  "plugins": ["@hubspot/prettier-plugin-hubl"],
   "overrides": [
     {
       "files": "*.html",
@@ -47,8 +49,6 @@ If you don't already have a prettier config file, create one:
     }
   ]
 }
-
-
 ```
 
 Run prettier
