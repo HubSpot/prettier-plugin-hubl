@@ -3269,6 +3269,24 @@ a_var %}
 {% set key, value = func_with(1, 'two', three,
  four(a,b,c,d,e)) %}
 
+{% set content %}
+  <div class="wrapper">
+    <p>Some content here</p>
+  </div>
+{% endset %}
+
+{%- set module_content -%}
+  <div class="offers-embedded-wrapper">
+    <p>Some content here</p>
+  </div>
+{%- endset -%}
+
+{% set nested_hubl %}
+  <div>{{ some_var }}</div>
+  {% if show_extra %}
+    <span>Extra</span>
+  {% endif %}
+{% endset %}
 
 <!--
   templateType: section
@@ -3302,6 +3320,25 @@ a_var %}
 {% set key, value = 123 %}
 {% set key, value = call_something() %}
 {% set key, value = func_with(1, "two", three, four(a, b, c, d, e)) %}
+
+{% set content %}
+  <div class="wrapper">
+    <p>Some content here</p>
+  </div>
+{% endset %}
+
+{%- set module_content -%}
+  <div class="offers-embedded-wrapper">
+    <p>Some content here</p>
+  </div>
+{%- endset -%}
+
+{% set nested_hubl %}
+  <div>{{ some_var }}</div>
+  {% if show_extra %}
+    <span>Extra</span>
+  {% endif %}
+{% endset %}
 
 <!--
   templateType: section
