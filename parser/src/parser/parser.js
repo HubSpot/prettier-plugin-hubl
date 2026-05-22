@@ -889,18 +889,7 @@ export class Parser extends Obj {
           this.parseSignature(),
         );
       } else if (tok.type === lexer.TOKEN_LEFT_BRACKET) {
-        // Reference
-        lookup = this.parseAggregate();
-        if (lookup.children.length > 1) {
-          this.fail("invalid index");
-        }
-
-        node = new nodes.LookupVal(
-          tok.lineno,
-          tok.colno,
-          node,
-          lookup.children[0],
-        );
+        node = this.parseSubscript(node);
       } else if (tok.type === lexer.TOKEN_OPERATOR && tok.value === ".") {
         // Reference
         this.nextToken();
@@ -1328,6 +1317,63 @@ export class Parser extends Obj {
     );
 
     return new nodes.Output(name.lineno, name.colno, [node]);
+  }
+
+  parseSubscript(target) {
+    const tok = this.nextToken();
+
+    if (this.skip(lexer.TOKEN_COLON)) {
+      let stop = null;
+      const nextAfterLeadingColon = this.peekToken().type;
+      if (
+        nextAfterLeadingColon !== lexer.TOKEN_RIGHT_BRACKET &&
+        nextAfterLeadingColon !== lexer.TOKEN_COLON
+      ) {
+        stop = this.parseExpression();
+      }
+      let step = null;
+      if (this.skip(lexer.TOKEN_COLON)) {
+        if (this.peekToken().type !== lexer.TOKEN_RIGHT_BRACKET) {
+          step = this.parseExpression();
+        }
+      }
+      this.expect(lexer.TOKEN_RIGHT_BRACKET);
+      return new nodes.LookupVal(
+        tok.lineno,
+        tok.colno,
+        target,
+        new nodes.Slice(tok.lineno, tok.colno, null, stop, step),
+      );
+    }
+
+    const first = this.parseExpression();
+
+    if (this.skip(lexer.TOKEN_COLON)) {
+      let stop = null;
+      const nextAfterColon = this.peekToken().type;
+      if (
+        nextAfterColon !== lexer.TOKEN_RIGHT_BRACKET &&
+        nextAfterColon !== lexer.TOKEN_COLON
+      ) {
+        stop = this.parseExpression();
+      }
+      let step = null;
+      if (this.skip(lexer.TOKEN_COLON)) {
+        if (this.peekToken().type !== lexer.TOKEN_RIGHT_BRACKET) {
+          step = this.parseExpression();
+        }
+      }
+      this.expect(lexer.TOKEN_RIGHT_BRACKET);
+      return new nodes.LookupVal(
+        tok.lineno,
+        tok.colno,
+        target,
+        new nodes.Slice(tok.lineno, tok.colno, first, stop, step),
+      );
+    }
+
+    this.expect(lexer.TOKEN_RIGHT_BRACKET);
+    return new nodes.LookupVal(tok.lineno, tok.colno, target, first);
   }
 
   parseAggregate() {
