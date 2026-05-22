@@ -289,6 +289,20 @@ function printHubl(node) {
         softline,
         "]",
       ]);
+    case "Slice": {
+      const sliceParts: Doc[] = [];
+      if (node.start != null) {
+        sliceParts.push(printHubl(node.start));
+      }
+      sliceParts.push(":");
+      if (node.stop != null) {
+        sliceParts.push(printHubl(node.stop));
+      }
+      if (node.step != null) {
+        sliceParts.push(":", printHubl(node.step));
+      }
+      return sliceParts;
+    }
     case "LookupVal":
       if (
         node.val.typename === "Literal" &&

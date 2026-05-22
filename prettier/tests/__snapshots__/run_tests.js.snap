@@ -3366,6 +3366,21 @@ a_var %}
 
 `;
 
+exports[`formats sliceSyntax.html correctly 1`] = `
+{% set filtered_parts = filter_names[0:loop.index]|join('/') %}
+{{ obj['key'] }}
+{{ items[:5] }}
+{{ items[0:] }}
+{{ items[::2] }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% set filtered_parts = filter_names[0:loop.index]|join("/") %}
+{{ obj.key }}
+{{ items[:5] }}
+{{ items[0:] }}
+{{ items[::2] }}
+
+`;
+
 exports[`formats tags.html correctly 1`] = `
 {% extends "custom/page/web_page_basic/my_template.html" %}
 {% block my_sidebar %}
