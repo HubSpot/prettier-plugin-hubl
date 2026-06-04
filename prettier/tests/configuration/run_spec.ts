@@ -79,6 +79,13 @@ function createTestObject(
   };
 }
 
+const IDEMPOTENCY_FIXTURES = new Set([
+  "idempotent-dict-ternary.html",
+  "idempotent-svg-path.html",
+  "set.html",
+  "ternary.html",
+]);
+
 async function run_spec(dirName, options) {
   const testObjects = fs
     .readdirSync(dirName)
@@ -94,6 +101,13 @@ async function run_spec(dirName, options) {
       );
       expect(snapshot).toMatchSnapshot();
     });
+    if (IDEMPOTENCY_FIXTURES.has(fileName)) {
+      it(`formats ${fileName} idempotently`, async () => {
+        const firstPass = await prettyprint(input, mergedOptions);
+        const secondPass = await prettyprint(firstPass, mergedOptions);
+        expect(secondPass).toBe(firstPass);
+      });
+    }
   });
 }
 

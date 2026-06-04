@@ -78,6 +78,37 @@ const printJsonBody = (node) => {
   }
 };
 
+/**
+ * Renders a preserved `<svg>` block so the surrounding macro/block indent is
+ * applied consistently. The SVG content is kept verbatim (never reflowed), so
+ * only its relative indentation is normalized: the opening tag sits at the
+ * block indent and every other line keeps its offset relative to it. Because
+ * normalization is purely relative, re-formatting the output reproduces it
+ * exactly, which keeps the printer idempotent.
+ */
+const printSvgPreserveContent = (value: string): Doc => {
+  const lines = value.split("\n");
+  const [firstLine, ...followingLines] = lines;
+  const nonEmptyFollowing = followingLines.filter(
+    (line) => line.trim().length > 0,
+  );
+  const minIndent =
+    nonEmptyFollowing.length > 0
+      ? Math.min(
+          ...nonEmptyFollowing.map(
+            (line) => line.match(/^[\t ]*/)?.[0].length ?? 0,
+          ),
+        )
+      : 0;
+  const normalizedLines = [
+    firstLine.trimStart(),
+    ...followingLines.map((line) =>
+      line.trim().length === 0 ? "" : line.slice(minIndent),
+    ),
+  ];
+  return join(hardline, normalizedLines);
+};
+
 const printForValues = (node) => {
   return join(
     ", ",
@@ -144,6 +175,9 @@ function printHubl(node) {
         return printHubl(child);
       });
     case "Preserve":
+      if (/^\s*<svg\b/i.test(node.value)) {
+        return printSvgPreserveContent(node.value);
+      }
       return node.value;
     case "Set": {
       const setTargets = join(
@@ -339,18 +373,29 @@ function printHubl(node) {
           return [op.type, " ", printHubl(op.expr)];
         }),
       ]);
-    case "FunCall":
-      return [
+    case "FunCall": {
+      const printedArguments = node.args.children.map((arg) => {
+        return printHubl(arg);
+      });
+      const hasTernaryArgument = node.args.children.some(
+        (arg) => arg.typename === "Ternary",
+      );
+      if (!hasTernaryArgument) {
+        return group([
+          printHubl(node.name),
+          "(",
+          join(", ", printedArguments),
+          ")",
+        ]);
+      }
+      return group([
         printHubl(node.name),
         "(",
-        join(
-          ", ",
-          node.args.children.map((arg) => {
-            return printHubl(arg);
-          }),
-        ),
+        indent([softline, join([",", line], printedArguments)]),
+        softline,
         ")",
-      ];
+      ]);
+    }
     case "Block":
       return [
         [
@@ -394,8 +439,8 @@ function printHubl(node) {
       ];
     }
     case "Dict": {
-      const dictParts: any[] = ["{"];
-      dictParts.push(
+      return group([
+        "{",
         indent(
           join(
             ",",
@@ -404,9 +449,9 @@ function printHubl(node) {
             }),
           ),
         ),
-      );
-      dictParts.push(hardline, "}");
-      return dictParts;
+        hardline,
+        "}",
+      ]);
     }
     case "For": {
       return [

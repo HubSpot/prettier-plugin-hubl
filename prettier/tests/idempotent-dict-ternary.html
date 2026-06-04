@@ -1,0 +1,11 @@
+{% set offersCtaLanguage = {
+  "en": "Download for free",
+  "de": "Kostenlos herunterladen",
+  "fr": "Télécharger gratuitement",
+  "es": "Descargar gratis",
+} %}
+
+{% for cta in module.offers_ctas %}
+  {% set cta_style = cta.cta_style == 'text_icon' and isLarge ? "text_icon" : "button" %}
+  {{ renderCTA(cta, loop.index == 1 ? "primary" : "secondary", "large", cta_style, "offers__cta", cta.tracking_class) }}
+{% endfor %}
