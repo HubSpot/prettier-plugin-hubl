@@ -32,6 +32,12 @@ const Token = {
 };
 
 const SVG_ELEMENT_REGEX = /<svg\b[\s\S]*?<\/svg>/gim;
+// Same as SVG_ELEMENT_REGEX, but also captures the whitespace on the opening
+// `<svg>` tag's own line. Only used post-HTML-format (see wrapSvgWithPreserve)
+// so the correctly-computed nesting indent (e.g. one level inside a parent
+// <div>) is folded into the Preserve node's value instead of being lost.
+const SVG_ELEMENT_WITH_LEADING_WHITESPACE_REGEX =
+  /[ \t]*<svg\b[\s\S]*?<\/svg>/gim;
 
 /**
  * Replaces entire `<svg>...</svg>` blocks with a placeholder before the HTML
@@ -56,12 +62,15 @@ const isInsidePreserveBlock = (fullText: string, matchOffset: number) => {
 };
 
 const wrapSvgWithPreserve = (input: string): string => {
-  return input.replace(SVG_ELEMENT_REGEX, (match, offset, fullText) => {
-    if (isInsidePreserveBlock(fullText, offset)) {
-      return match;
-    }
-    return `{% preserve %}${match}{% endpreserve %}`;
-  });
+  return input.replace(
+    SVG_ELEMENT_WITH_LEADING_WHITESPACE_REGEX,
+    (match, offset, fullText) => {
+      if (isInsidePreserveBlock(fullText, offset)) {
+        return match;
+      }
+      return `{% preserve %}${match}{% endpreserve %}`;
+    },
+  );
 };
 
 const tokenMap: Map<string, string> = new Map();
