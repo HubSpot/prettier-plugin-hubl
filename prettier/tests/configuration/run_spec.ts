@@ -84,6 +84,8 @@ const IDEMPOTENCY_FIXTURES = new Set([
   "idempotent-svg-path.html",
   "set.html",
   "ternary.html",
+  "regex-filters.html",
+  "sliceSyntax.html",
 ]);
 
 async function run_spec(dirName, options) {

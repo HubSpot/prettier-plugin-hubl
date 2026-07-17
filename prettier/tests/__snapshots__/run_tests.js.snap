@@ -3318,6 +3318,45 @@ exports[`formats qatest.html correctly 1`] = `
 
 `;
 
+exports[`formats regex-filters.html correctly 1`] = `
+{%- set option_lower_and_free_of_special_chars = option.name|lower|trim|replace('&', ' ')|replace('/', ' ')|regex_replace('\\\\s+', ' ') -%}
+{% set breadcrumb_schema = {
+  "breadcrumb": {
+    "itemListElement": [
+      {
+        "item": {
+          "@id": content.absolute_url|regex_replace('/[^/]*$', ''),
+          "name": module.name_offer_parent
+        }
+      }
+    ]
+  }
+} %}
+{%- set ends_with_dollar_quote = f('a$', 'b') -%}
+{%- set amp_pattern = x|regex_replace('$&', '') -%}
+{%- set back_tick_pattern = x|regex_replace("$\`", '') -%}
+{%- set backslash_replace = path|replace('\\\\', '/') -%}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{%- set option_lower_and_free_of_special_chars = option.name|lower|trim|replace("&", " ")|replace("/", " ")|regex_replace("\\\\s+", " ") -%}
+{% set breadcrumb_schema = {
+  "breadcrumb": {
+    "itemListElement": [
+      {
+        "item": {
+          "@id": content.absolute_url|regex_replace("/[^/]*$", ""),
+          "name": module.name_offer_parent
+        }
+      }
+    ]
+  }
+} %}
+{%- set ends_with_dollar_quote = f("a$", "b") -%}
+{%- set amp_pattern = x|regex_replace("$&", "") -%}
+{%- set back_tick_pattern = x|regex_replace("$\`", "") -%}
+{%- set backslash_replace = path|replace("\\\\", "/") -%}
+
+`;
+
 exports[`formats set.html correctly 1`] = `
   {% set my_string = "my value" 
   %}
@@ -3424,6 +3463,21 @@ a_var %}
 
   {% end_dnd_column %}
 {% end_dnd_section %}
+
+`;
+
+exports[`formats sliceSyntax.html correctly 1`] = `
+{% set filtered_parts = filter_names[0:loop.index]|join('/') %}
+{{ obj['key'] }}
+{{ items[:5] }}
+{{ items[0:] }}
+{{ items[::2] }}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% set filtered_parts = filter_names[0:loop.index]|join("/") %}
+{{ obj.key }}
+{{ items[:5] }}
+{{ items[0:] }}
+{{ items[::2] }}
 
 `;
 

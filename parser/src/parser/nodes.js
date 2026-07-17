@@ -93,6 +93,9 @@ export const Dict = NodeList.extend("Dict");
 export const LookupVal = Node.extend("LookupVal", {
   fields: ["target", "val"],
 });
+export const Slice = Node.extend("Slice", {
+  fields: ["start", "stop", "step"],
+});
 export const If = Node.extend("If", { fields: ["cond", "body", "else_"] });
 export const Unless = Node.extend("Unless", {
   fields: ["cond", "body", "_else"],
