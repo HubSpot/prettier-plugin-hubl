@@ -27,7 +27,56 @@ const Token = {
   npe: (index: number) => `npe${index}_`,
   comment: (index: number) => `<!--${index}-->`,
   placeholder: (index: number) => `<!--placeholder-${index}-->`,
+  svgBlock: (index: number) => `<!--svgblock-${index}-->`,
   jsonBlock: (match: string) => `{% json_block %}${match}{% end_json_block %}`,
+};
+
+// NOTE: nested `<svg>` elements (an `<svg>` inside another `<svg>`) are not
+// supported. This regex is lazy, so it matches from the outer `<svg` to the
+// *first* `</svg>` it finds (the inner one), leaving the outer closing tag
+// dangling and causing the HTML formatting pass to throw. This is assumed to
+// be a rare enough pattern in practice; a correct fix would need to track
+// nesting depth instead of a single regex.
+const SVG_ELEMENT_REGEX = /<svg\b[\s\S]*?<\/svg>/gim;
+// Same as SVG_ELEMENT_REGEX, but also captures the whitespace on the opening
+// `<svg>` tag's own line. Only used post-HTML-format (see wrapSvgWithPreserve)
+// so the correctly-computed nesting indent (e.g. one level inside a parent
+// <div>) is folded into the Preserve node's value instead of being lost.
+const SVG_ELEMENT_WITH_LEADING_WHITESPACE_REGEX =
+  /[ \t]*<svg\b[\s\S]*?<\/svg>/gim;
+
+/**
+ * Replaces entire `<svg>...</svg>` blocks with a placeholder before the HTML
+ * formatting pass so Prettier's HTML formatter never reflows their contents
+ * (notably long, multi-line `<path d="...">` data, which would otherwise be
+ * re-wrapped differently on each run and break idempotency). The original
+ * SVG is restored verbatim afterwards and wrapped in `{% preserve %}`.
+ */
+const preserveSvgElements = (input: string): string => {
+  return input.replace(SVG_ELEMENT_REGEX, (match) => {
+    const token = Token.svgBlock(tokenIndex++);
+    tokenMap.set(token, match);
+    return token;
+  });
+};
+
+const isInsidePreserveBlock = (fullText: string, matchOffset: number) => {
+  const before = fullText.slice(0, matchOffset);
+  const lastPreserve = before.lastIndexOf("{% preserve");
+  const lastEndPreserve = before.lastIndexOf("{% endpreserve");
+  return lastPreserve !== -1 && lastPreserve > lastEndPreserve;
+};
+
+const wrapSvgWithPreserve = (input: string): string => {
+  return input.replace(
+    SVG_ELEMENT_WITH_LEADING_WHITESPACE_REGEX,
+    (match, offset, fullText) => {
+      if (isInsidePreserveBlock(fullText, offset)) {
+        return match;
+      }
+      return `{% preserve %}${match}{% endpreserve %}`;
+    },
+  );
 };
 
 const tokenMap: Map<string, string> = new Map();
@@ -154,6 +203,9 @@ const tokenize = (input: string): string => {
       input = input.replace(match, placeholderToken);
     });
   }
+
+  input = preserveSvgElements(input);
+
   tokenIndex = 0;
   return input;
 };
@@ -188,11 +240,11 @@ const parsers: Plugin["parsers"] = {
         parser: "html",
         trailingComma: "es5",
       });
+      updatedText = unTokenize(updatedText);
+      updatedText = wrapSvgWithPreserve(updatedText);
       // Find <pre> tags and add {% preserve %} wrapper
       // to tell the HubL parser to preserve formatting
-      updatedText = preserveFormatting(updatedText);
-      // Swap back HubL tags and return
-      return unTokenize(updatedText);
+      return preserveFormatting(updatedText);
     },
     locStart,
     locEnd,

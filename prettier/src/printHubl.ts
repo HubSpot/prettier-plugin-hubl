@@ -78,6 +78,46 @@ const printJsonBody = (node) => {
   }
 };
 
+/**
+ * Renders a preserved `<svg>` block, keeping every line's indentation
+ * relative to `<svg>` exactly as authored (so `<path>` stays nested inside
+ * it, etc). `value`'s first line carries the correct HTML-computed `<svg>`
+ * indent (folded in by `wrapSvgWithPreserve`); every other line still has
+ * its original, unformatted column. We re-anchor those lines against their
+ * smallest shared indent (normally `</svg>`) and re-apply the offset on top
+ * of the real `<svg>` indent, embedding it literally since `indent()` isn't
+ * reapplied per line inside a single `join(hardline, ...)`. Purely relative
+ * and deterministic, so it stays idempotent across repeated formatting.
+ */
+const printSvgPreserveContent = (value: string): Doc => {
+  const lines = value.split("\n");
+  const [firstLine, ...followingLines] = lines;
+  const svgIndent = firstLine.match(/^[\t ]*/)?.[0] ?? "";
+  const nonEmptyFollowing = followingLines.filter(
+    (line) => line.trim().length > 0,
+  );
+  const baselineIndent =
+    nonEmptyFollowing.length > 0
+      ? Math.min(
+          ...nonEmptyFollowing.map(
+            (line) => line.match(/^[\t ]*/)?.[0].length ?? 0,
+          ),
+        )
+      : 0;
+  const normalizedLines = [
+    firstLine,
+    ...followingLines.map((line) => {
+      if (line.trim().length === 0) {
+        return "";
+      }
+      const lineIndent = line.match(/^[\t ]*/)?.[0].length ?? 0;
+      const relativeOffset = Math.max(lineIndent - baselineIndent, 0);
+      return svgIndent + " ".repeat(relativeOffset) + line.trimStart();
+    }),
+  ];
+  return join(hardline, normalizedLines);
+};
+
 const printForValues = (node) => {
   return join(
     ", ",
@@ -144,6 +184,9 @@ function printHubl(node) {
         return printHubl(child);
       });
     case "Preserve":
+      if (/^\s*<svg\b/i.test(node.value)) {
+        return printSvgPreserveContent(node.value);
+      }
       return node.value;
     case "Set": {
       const setTargets = join(
@@ -353,18 +396,29 @@ function printHubl(node) {
           return [op.type, " ", printHubl(op.expr)];
         }),
       ]);
-    case "FunCall":
-      return [
+    case "FunCall": {
+      const printedArguments = node.args.children.map((arg) => {
+        return printHubl(arg);
+      });
+      const hasTernaryArgument = node.args.children.some(
+        (arg) => arg.typename === "Ternary",
+      );
+      if (!hasTernaryArgument) {
+        return group([
+          printHubl(node.name),
+          "(",
+          join(", ", printedArguments),
+          ")",
+        ]);
+      }
+      return group([
         printHubl(node.name),
         "(",
-        join(
-          ", ",
-          node.args.children.map((arg) => {
-            return printHubl(arg);
-          }),
-        ),
+        indent([softline, join([",", line], printedArguments)]),
+        softline,
         ")",
-      ];
+      ]);
+    }
     case "Block":
       return [
         [
@@ -408,8 +462,8 @@ function printHubl(node) {
       ];
     }
     case "Dict": {
-      const dictParts: any[] = ["{"];
-      dictParts.push(
+      return group([
+        "{",
         indent(
           join(
             ",",
@@ -418,9 +472,9 @@ function printHubl(node) {
             }),
           ),
         ),
-      );
-      dictParts.push(hardline, "}");
-      return dictParts;
+        hardline,
+        "}",
+      ]);
     }
     case "For": {
       return [
