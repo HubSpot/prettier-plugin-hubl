@@ -31,6 +31,12 @@ const Token = {
   jsonBlock: (match: string) => `{% json_block %}${match}{% end_json_block %}`,
 };
 
+// NOTE: nested `<svg>` elements (an `<svg>` inside another `<svg>`) are not
+// supported. This regex is lazy, so it matches from the outer `<svg` to the
+// *first* `</svg>` it finds (the inner one), leaving the outer closing tag
+// dangling and causing the HTML formatting pass to throw. This is assumed to
+// be a rare enough pattern in practice; a correct fix would need to track
+// nesting depth instead of a single regex.
 const SVG_ELEMENT_REGEX = /<svg\b[\s\S]*?<\/svg>/gim;
 // Same as SVG_ELEMENT_REGEX, but also captures the whitespace on the opening
 // `<svg>` tag's own line. Only used post-HTML-format (see wrapSvgWithPreserve)
