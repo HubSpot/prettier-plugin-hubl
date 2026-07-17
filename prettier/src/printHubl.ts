@@ -79,26 +79,15 @@ const printJsonBody = (node) => {
 };
 
 /**
- * Renders a preserved `<svg>` block so the surrounding macro/block indent is
- * applied consistently, while keeping every line's indentation *relative to
- * the `<svg>` line* exactly as authored (so `<path>` stays nested one level
- * inside `<svg>`, `d="..."` one level inside `<path>`, etc).
- *
- * `value`'s first line always carries the whitespace that HTML formatting
- * computed for `<svg>` itself (folded in by `wrapSvgWithPreserve`), which
- * reflects the correct nesting depth (e.g. one level inside a parent `<div>`).
- * Every other line is still using its *original, unformatted* column
- * position, so we re-anchor each of them: the smallest indent among the
- * non-blank following lines is treated as the original `<svg>` baseline
- * (normally matching `</svg>`), and each line's offset from that baseline is
- * re-applied on top of the correctly-computed `<svg>` indent.
- *
- * Because the printer's own `indent()` builder is not re-applied per line
- * here (the whole block is a single `join(hardline, ...)`), the `<svg>`
- * indent has to be embedded as a literal prefix on every line, not just the
- * first one. This normalization is purely relative and deterministic, so
- * re-formatting the output reproduces it exactly, keeping the printer
- * idempotent.
+ * Renders a preserved `<svg>` block, keeping every line's indentation
+ * relative to `<svg>` exactly as authored (so `<path>` stays nested inside
+ * it, etc). `value`'s first line carries the correct HTML-computed `<svg>`
+ * indent (folded in by `wrapSvgWithPreserve`); every other line still has
+ * its original, unformatted column. We re-anchor those lines against their
+ * smallest shared indent (normally `</svg>`) and re-apply the offset on top
+ * of the real `<svg>` indent, embedding it literally since `indent()` isn't
+ * reapplied per line inside a single `join(hardline, ...)`. Purely relative
+ * and deterministic, so it stays idempotent across repeated formatting.
  */
 const printSvgPreserveContent = (value: string): Doc => {
   const lines = value.split("\n");
