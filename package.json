@@ -1,6 +1,6 @@
 {
   "name": "@hubspot/prettier-plugin-hubl",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "main": "./prettier/dist/src/index.js",
   "type": "module",
   "private": false,
