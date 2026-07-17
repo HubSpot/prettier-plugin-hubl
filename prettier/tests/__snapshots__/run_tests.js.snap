@@ -3257,6 +3257,45 @@ exports[`formats qatest.html correctly 1`] = `
 
 `;
 
+exports[`formats regex-filters.html correctly 1`] = `
+{%- set option_lower_and_free_of_special_chars = option.name|lower|trim|replace('&', ' ')|replace('/', ' ')|regex_replace('\\\\s+', ' ') -%}
+{% set breadcrumb_schema = {
+  "breadcrumb": {
+    "itemListElement": [
+      {
+        "item": {
+          "@id": content.absolute_url|regex_replace('/[^/]*$', ''),
+          "name": module.name_offer_parent
+        }
+      }
+    ]
+  }
+} %}
+{%- set ends_with_dollar_quote = f('a$', 'b') -%}
+{%- set amp_pattern = x|regex_replace('$&', '') -%}
+{%- set back_tick_pattern = x|regex_replace("$\`", '') -%}
+{%- set backslash_replace = path|replace('\\\\', '/') -%}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{%- set option_lower_and_free_of_special_chars = option.name|lower|trim|replace("&", " ")|replace("/", " ")|regex_replace("\\\\s+", " ") -%}
+{% set breadcrumb_schema = {
+  "breadcrumb": {
+    "itemListElement": [
+      {
+        "item": {
+          "@id": content.absolute_url|regex_replace("/[^/]*$", ""),
+          "name": module.name_offer_parent
+        }
+      }
+    ]
+  }
+} %}
+{%- set ends_with_dollar_quote = f("a$", "b") -%}
+{%- set amp_pattern = x|regex_replace("$&", "") -%}
+{%- set back_tick_pattern = x|regex_replace("$\`", "") -%}
+{%- set backslash_replace = path|replace("\\\\", "/") -%}
+
+`;
+
 exports[`formats set.html correctly 1`] = `
   {% set my_string = "my value" 
   %}
@@ -3269,6 +3308,24 @@ a_var %}
 {% set key, value = func_with(1, 'two', three,
  four(a,b,c,d,e)) %}
 
+{% set content %}
+  <div class="wrapper">
+    <p>Some content here</p>
+  </div>
+{% endset %}
+
+{%- set module_content -%}
+  <div class="offers-embedded-wrapper">
+    <p>Some content here</p>
+  </div>
+{%- endset -%}
+
+{% set nested_hubl %}
+  <div>{{ some_var }}</div>
+  {% if show_extra %}
+    <span>Extra</span>
+  {% endif %}
+{% endset %}
 
 <!--
   templateType: section
@@ -3302,6 +3359,25 @@ a_var %}
 {% set key, value = 123 %}
 {% set key, value = call_something() %}
 {% set key, value = func_with(1, "two", three, four(a, b, c, d, e)) %}
+
+{% set content %}
+  <div class="wrapper">
+    <p>Some content here</p>
+  </div>
+{% endset %}
+
+{%- set module_content -%}
+  <div class="offers-embedded-wrapper">
+    <p>Some content here</p>
+  </div>
+{%- endset -%}
+
+{% set nested_hubl %}
+  <div>{{ some_var }}</div>
+  {% if show_extra %}
+    <span>Extra</span>
+  {% endif %}
+{% endset %}
 
 <!--
   templateType: section

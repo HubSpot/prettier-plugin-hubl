@@ -371,7 +371,7 @@ export class Tokenizer {
             str += "\r";
             break;
           default:
-            str += this.current();
+            str += "\\" + this.current();
         }
         this.forward();
       } else {

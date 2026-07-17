@@ -145,21 +145,36 @@ function printHubl(node) {
       });
     case "Preserve":
       return node.value;
-    case "Set":
+    case "Set": {
+      const setTargets = join(
+        ", ",
+        node.targets.map((target) => {
+          return target.value;
+        }),
+      );
+      if (node.body) {
+        return [
+          openTag(node.whiteSpace.openTag),
+          " set ",
+          setTargets,
+          " ",
+          closeTag(node.whiteSpace.openTag),
+          indent(printBody(node.body.body)),
+          openTag(node.whiteSpace.closingTag),
+          " endset ",
+          closeTag(node.whiteSpace.closingTag),
+        ];
+      }
       return [
         openTag(node.whiteSpace.openTag),
         " set ",
-        join(
-          ", ",
-          node.targets.map((target) => {
-            return target.value;
-          }),
-        ),
+        setTargets,
         " = ",
         printHubl(node.value),
         " ",
         closeTag(node.whiteSpace.openTag),
       ];
+    }
     case "Concat":
       return [printHubl(node.left), " ~ ", printHubl(node.right)];
     case "And":

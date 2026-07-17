@@ -645,20 +645,22 @@ export class Parser extends Obj {
           tag.colno,
         );
       } else {
+        node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
         node.body = new nodes.Capture(
           tag.lineno,
           tag.colno,
           this.parseUntilBlocks("endset"),
         );
+        node.whiteSpace.closingTag.start = this.dropLeadingWhitespace;
         node.value = null;
         this.advanceAfterBlockEnd();
+        node.whiteSpace.closingTag.end = this.dropLeadingWhitespace;
       }
     } else {
       node.value = this.parseExpression();
       this.advanceAfterBlockEnd(tag.value);
+      node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
     }
-
-    node.whiteSpace.openTag.end = this.dropLeadingWhitespace;
 
     return node;
   }

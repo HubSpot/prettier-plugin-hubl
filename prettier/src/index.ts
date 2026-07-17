@@ -160,7 +160,7 @@ const tokenize = (input: string): string => {
 
 const unTokenize = (input: string) => {
   tokenMap.forEach((value, key) => {
-    input = input.replaceAll(key, value);
+    input = input.replaceAll(key, () => value);
   });
   tokenMap.clear();
   return input;
