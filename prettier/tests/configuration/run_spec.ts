@@ -94,6 +94,13 @@ async function run_spec(dirName, options) {
       );
       expect(snapshot).toMatchSnapshot();
     });
+    if (fileName === "regex-filters.html") {
+      it(`formats ${fileName} idempotently`, async () => {
+        const firstPass = await prettyprint(input, mergedOptions);
+        const secondPass = await prettyprint(firstPass, mergedOptions);
+        expect(secondPass).toEqual(firstPass);
+      });
+    }
   });
 }
 
