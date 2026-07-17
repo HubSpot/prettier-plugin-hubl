@@ -1,0 +1,5 @@
+{% set filtered_parts = filter_names[0:loop.index]|join('/') %}
+{{ obj['key'] }}
+{{ items[:5] }}
+{{ items[0:] }}
+{{ items[::2] }}
