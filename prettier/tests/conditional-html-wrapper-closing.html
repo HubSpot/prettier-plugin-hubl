@@ -1,0 +1,19 @@
+{% macro renderCard(item) %}
+  {% set use_wrapper = item.use_wrapper %}
+  {% set show_link = item.show_link or false %}
+
+  {% if use_wrapper or show_link %}
+    <div class="card-wrapper">
+  {% else %}
+    <a class="card-link" href="{{ item.url }}">
+  {% endif %}
+    <div class="card-content">
+      <h3 class="card-title">{{ item.title }}</h3>
+      <p class="card-description">{{ item.description }}</p>
+    </div>
+  {% if use_wrapper or show_link %}
+    </div>
+  {% else %}
+    </a>
+  {% endif %}
+{% endmacro %}

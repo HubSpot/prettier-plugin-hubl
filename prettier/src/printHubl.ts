@@ -192,7 +192,7 @@ function printHubl(node) {
       const setTargets = join(
         ", ",
         node.targets.map((target) => {
-          return target.value;
+          return printHubl(target);
         }),
       );
       if (node.body) {
@@ -306,13 +306,16 @@ function printHubl(node) {
         if (child.typename === "TemplateData") {
           return printHubl(child);
         }
-        return [
+        // `node.colno` is `{{`'s column after HTML formatting; align by it
+        // so multi-line breaks keep surrounding HTML indentation, not just
+        // HubL block nesting.
+        return align(Math.max(node.colno, 0), [
           openVar(node.whiteSpace.openTag),
           " ",
           printHubl(child),
           " ",
           closeVar(node.whiteSpace.openTag),
-        ];
+        ]);
       });
     case "NodeList":
       return node.children.map((child) => {

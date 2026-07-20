@@ -600,6 +600,106 @@ templateType: none
 
 `;
 
+exports[`formats conditional-html-wrapper.html correctly 1`] = `
+{% macro renderSection(indexMap) %}
+  <section class="section-container">
+    <div class="page-width">
+      <h2 class="section-title">{{ module.title }}</h2>
+
+      {% if isSimple %}
+        <div class="section-single">
+      {% else %}
+        <div class="section-tabs tabs">
+          <div class="section-tab-control tab-control">
+            <ul class="section-tab-list tab-list" role="tablist">
+              {% for tab in module.tabs %}
+                <li class="tab-item">
+                  <button class="tab-button" role="tab">{{ tab.label }}</button>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+      {% endif %}
+
+      <div class="section-tab-group tab-group">
+        shared content
+      </div>
+    </div>
+  </section>
+{% endmacro %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% macro renderSection(indexMap) %}
+  <section class="section-container">
+    <div class="page-width">
+      <h2 class="section-title">{{ module.title }}</h2>
+
+      {% if isSimple %}
+        <div class="section-single">
+      {% else %}
+        <div class="section-tabs tabs">
+          <div class="section-tab-control tab-control">
+            <ul class="section-tab-list tab-list" role="tablist">
+              {% for tab in module.tabs %}
+                <li class="tab-item">
+                  <button class="tab-button" role="tab">{{ tab.label }}</button>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+      {% endif %}
+
+      <div class="section-tab-group tab-group">
+        shared content
+      </div>
+    </div>
+  </section>
+{% endmacro %}
+
+`;
+
+exports[`formats conditional-html-wrapper-closing.html correctly 1`] = `
+{% macro renderCard(item) %}
+  {% set use_wrapper = item.use_wrapper %}
+  {% set show_link = item.show_link or false %}
+
+  {% if use_wrapper or show_link %}
+    <div class="card-wrapper">
+  {% else %}
+    <a class="card-link" href="{{ item.url }}">
+  {% endif %}
+    <div class="card-content">
+      <h3 class="card-title">{{ item.title }}</h3>
+      <p class="card-description">{{ item.description }}</p>
+    </div>
+  {% if use_wrapper or show_link %}
+    </div>
+  {% else %}
+    </a>
+  {% endif %}
+{% endmacro %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% macro renderCard(item) %}
+  {% set use_wrapper = item.use_wrapper %}
+  {% set show_link = item.show_link or false %}
+
+  {% if use_wrapper or show_link %}
+    <div class="card-wrapper">
+  {% else %}
+    <a class="card-link" href="{{ item.url }}">
+  {% endif %}
+    <div class="card-content">
+      <h3 class="card-title">{{ item.title }}</h3>
+      <p class="card-description">{{ item.description }}</p>
+    </div>
+  {% if use_wrapper or show_link %}
+    </div>
+  {% else %}
+    </a>
+  {% endif %}
+{% endmacro %}
+
+`;
+
 exports[`formats contact.html correctly 1`] = `
 <!--
   templateType: page
@@ -807,6 +907,15 @@ exports[`formats for.html correctly 1`] = `
 {% for key, val in request.query_dict.items() %}
 {{ key }}:{{ val }}
 {% endfor %}
+
+`;
+
+exports[`formats from-import-and-separator.html correctly 1`] = `
+{% from "macros/component-a.html" import ComponentA and ComponentB %}
+{% from "macros/helper.html" import HelperMacro %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% from "macros/component-a.html" import ComponentA, ComponentB %}
+{% from "macros/helper.html" import HelperMacro %}
 
 `;
 
@@ -1893,6 +2002,73 @@ What is this element?
 <script>
   let anoter_module_{{ name }} = document.getElementById("hs_cos_wrapper_{{ name }}");
 </script>
+
+`;
+
+exports[`formats namespace-attribute-assignment.html correctly 1`] = `
+{%- macro findMatchingOption(value, options) -%}
+  {%- set normalized_value = value|lower|trim -%}
+  {%- set ns = namespace(found=false) -%}
+
+  {%- for option in options -%}
+    {%- if ns.found == false -%}
+      {%- set normalized_option = option.name|lower|trim|replace('&', ' ')|replace('/', ' ')|regex_replace('\\\\s+', ' ') -%}
+      {%- if normalized_option == normalized_value -%}
+        {%- set ns.found = option.name -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {{ ns.found }}
+{%- endmacro -%}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{%- macro findMatchingOption(value, options) -%}
+  {%- set normalized_value = value|lower|trim -%}
+  {%- set ns = namespace(found=false) -%}
+
+  {%- for option in options -%}
+  {%- if ns.found == false -%}
+    {%- set normalized_option = option.name|lower|trim|replace("&", " ")|replace("/", " ")|regex_replace("\\\\s+", " ") -%}
+    {%- if normalized_option == normalized_value -%}
+      {%- set ns.found = option.name -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- endfor -%}
+
+  {{ ns.found }}
+{%- endmacro -%}
+
+`;
+
+exports[`formats nested-multiline-funcall.html correctly 1`] = `
+{% if showContent %}
+  <div class="container">
+    <div class="item-list">
+      {% for item in module.items %}
+      {% set item_style = item.style == "icon" and isLarge ? "icon" : "button" %}
+      {{ renderItem(item, loop.index == 1 ? "primary" : "secondary", "large", item_style, "item", item.class_name) }}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% if showContent %}
+  <div class="container">
+    <div class="item-list">
+      {% for item in module.items %}
+      {% set item_style = item.style == "icon" and isLarge ? "icon" : "button" %}
+      {{ renderItem(
+        item,
+        loop.index == 1 ? "primary" : "secondary",
+        "large",
+        item_style,
+        "item",
+        item.class_name
+      ) }}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
 
 `;
 
@@ -3478,6 +3654,56 @@ exports[`formats sliceSyntax.html correctly 1`] = `
 {{ items[:5] }}
 {{ items[0:] }}
 {{ items[::2] }}
+
+`;
+
+exports[`formats svg-nested-hubl-expression.html correctly 1`] = `
+<div class="progress" data-value="{{ item.value }}">
+  <svg viewBox="0 0 32 32">
+    <circle
+      class="progress-circle"
+      style="stroke-dasharray: {{ item.value }} 100"
+    ></circle>
+  </svg>
+</div>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<div class="progress" data-value="{{ item.value }}">
+  <svg viewBox="0 0 32 32">
+    <circle
+      class="progress-circle"
+      style="stroke-dasharray: {{ item.value }} 100"
+    ></circle>
+  </svg>
+</div>
+
+`;
+
+exports[`formats svg-own-tag-hubl-expression.html correctly 1`] = `
+<div class="hero">
+  <svg
+    class="hero-background -{{ module.theme }}"
+    width="1112"
+    height="1013"
+    viewBox="0 0 1112 1013"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M0 0h1112v1013H0z" fill="currentColor" />
+  </svg>
+</div>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<div class="hero">
+  <svg
+    class="hero-background -{{ module.theme }}"
+    width="1112"
+    height="1013"
+    viewBox="0 0 1112 1013"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M0 0h1112v1013H0z" fill="currentColor" />
+  </svg>
+</div>
 
 `;
 

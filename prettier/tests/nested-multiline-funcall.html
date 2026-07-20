@@ -1,0 +1,10 @@
+{% if showContent %}
+  <div class="container">
+    <div class="item-list">
+      {% for item in module.items %}
+      {% set item_style = item.style == "icon" and isLarge ? "icon" : "button" %}
+      {{ renderItem(item, loop.index == 1 ? "primary" : "secondary", "large", item_style, "item", item.class_name) }}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

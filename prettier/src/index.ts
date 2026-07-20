@@ -1,6 +1,7 @@
 import type { Plugin } from "prettier";
 import synchronizedPrettier from "@prettier/sync";
 import { parse } from "hubl-parser";
+import { findConditionalPreserveRanges } from "./conditionalHtmlPreservation.js";
 import printers from "./printHubl.js";
 
 const languages = [
@@ -28,6 +29,7 @@ const Token = {
   comment: (index: number) => `<!--${index}-->`,
   placeholder: (index: number) => `<!--placeholder-${index}-->`,
   svgBlock: (index: number) => `<!--svgblock-${index}-->`,
+  conditionalBlock: (index: number) => `<!--conditionalblock-${index}-->`,
   jsonBlock: (match: string) => `{% json_block %}${match}{% end_json_block %}`,
 };
 
@@ -80,6 +82,7 @@ const wrapSvgWithPreserve = (input: string): string => {
 };
 
 const tokenMap: Map<string, string> = new Map();
+const conditionalBlockTokens: Set<string> = new Set();
 let tokenIndex = 0;
 
 const lookupDuplicateNestedToken = (match) => {
@@ -94,7 +97,26 @@ const lookupDuplicateNestedToken = (match) => {
 const withLead = (regex: RegExp) =>
   new RegExp(/(:\s*)?/.source + `(${regex.source})`, "gms");
 
+const applyConditionalPreserveTokens = (input: string): string => {
+  const preserveRanges = findConditionalPreserveRanges(input, (offset) =>
+    isInsidePreserveBlock(input, offset),
+  ).sort((left, right) => right.start - left.start);
+
+  let output = input;
+  for (const range of preserveRanges) {
+    const segment = output.slice(range.start, range.end);
+    const token = Token.conditionalBlock(tokenIndex++);
+    tokenMap.set(token, segment);
+    conditionalBlockTokens.add(token);
+    output = output.slice(0, range.start) + token + output.slice(range.end);
+  }
+
+  return output;
+};
+
 const tokenize = (input: string): string => {
+  input = applyConditionalPreserveTokens(input);
+
   const COMMENT_REGEX = /{#.*?#}/gms;
   const HUBL_TAG_REGEX = /({%.+?%})/gs;
   const LINE_BREAK_REGEX = /[\r\n]+/gm;
@@ -211,10 +233,16 @@ const tokenize = (input: string): string => {
 };
 
 const unTokenize = (input: string) => {
-  tokenMap.forEach((value, key) => {
-    input = input.replaceAll(key, () => value);
-  });
+  Array.from(tokenMap.entries())
+    .reverse()
+    .forEach(([key, value]) => {
+      const restoredValue = conditionalBlockTokens.has(key)
+        ? `{% preserve %}${value}{% endpreserve %}`
+        : value;
+      input = input.replaceAll(key, () => restoredValue);
+    });
   tokenMap.clear();
+  conditionalBlockTokens.clear();
   return input;
 };
 

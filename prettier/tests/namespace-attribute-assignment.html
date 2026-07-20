@@ -1,0 +1,15 @@
+{%- macro findMatchingOption(value, options) -%}
+  {%- set normalized_value = value|lower|trim -%}
+  {%- set ns = namespace(found=false) -%}
+
+  {%- for option in options -%}
+    {%- if ns.found == false -%}
+      {%- set normalized_option = option.name|lower|trim|replace('&', ' ')|replace('/', ' ')|regex_replace('\\s+', ' ') -%}
+      {%- if normalized_option == normalized_value -%}
+        {%- set ns.found = option.name -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {{ ns.found }}
+{%- endmacro -%}

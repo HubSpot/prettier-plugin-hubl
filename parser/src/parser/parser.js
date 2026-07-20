@@ -389,7 +389,13 @@ export class Parser extends Obj {
         break;
       }
 
-      if (names.children.length > 0 && !this.skip(lexer.TOKEN_COMMA)) {
+      // HubL allows `and` as an alternative to a comma between imported
+      // names, e.g. `{% from "x" import A and B %}`.
+      if (
+        names.children.length > 0 &&
+        !this.skip(lexer.TOKEN_COMMA) &&
+        !this.skipSymbol("and")
+      ) {
         this.fail("parseFrom: expected comma", fromTok.lineno, fromTok.colno);
       }
 
