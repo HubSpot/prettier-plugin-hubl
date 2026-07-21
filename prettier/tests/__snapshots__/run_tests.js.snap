@@ -799,6 +799,68 @@ border-radius: {{ module.styles.active.corner.radius ~ "px" }};
 
 `;
 
+exports[`formats dicts.html correctly 1`] = `
+<body>
+  {% block body %}
+    <h1>Dicts</h1>
+    <p>On success they should indent properly.</p>
+  {% endblock %}
+
+
+{# a dict in a set tag that should line up #}
+{% set test_object = {
+    position: "footer",
+  defer: true
+}%}
+
+{# a dict as a param #}
+  {{ require_js(get_asset_url("../../scripts/super.hubl.js"), {
+  position: "footer",
+  defer: true
+}) }}
+
+{# One complex example with multiple objects in a macro #}
+  {{ custom_macro(
+    'string_arg',
+  {
+    second_arg_object_property: "foo",
+    bar: true
+  },
+  {
+    third_arg_object_property: "footer", baz: false }
+) }}
+</body>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<body>
+  {% block body %}
+    <h1>Dicts</h1>
+    <p>On success they should indent properly.</p>
+  {% endblock body %}
+
+  {# a dict in a set tag that should line up #}
+  {% set test_object = {
+    position: "footer",
+    defer: true
+  } %}
+
+  {# a dict as a param #}
+  {{ require_js(get_asset_url("../../scripts/super.hubl.js"), {
+    position: "footer",
+    defer: true
+  }) }}
+
+  {# One complex example with multiple objects in a macro #}
+  {{ custom_macro("string_arg", {
+    second_arg_object_property: "foo",
+    bar: true
+  }, {
+    third_arg_object_property: "footer",
+    baz: false
+  }) }}
+</body>
+
+`;
+
 exports[`formats for.html correctly 1`] = `
 {% for key, val in request.query_dict.items() %}
 {{ key }}:{{ val }}

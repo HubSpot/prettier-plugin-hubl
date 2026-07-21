@@ -208,7 +208,7 @@ function printHubl(node) {
           closeTag(node.whiteSpace.closingTag),
         ];
       }
-      return [
+      return align(Math.max(node.colno - 3, 0), [
         openTag(node.whiteSpace.openTag),
         " set ",
         setTargets,
@@ -216,7 +216,7 @@ function printHubl(node) {
         printHubl(node.value),
         " ",
         closeTag(node.whiteSpace.openTag),
-      ];
+      ]);
     }
     case "Concat":
       return [printHubl(node.left), " ~ ", printHubl(node.right)];
@@ -306,13 +306,13 @@ function printHubl(node) {
         if (child.typename === "TemplateData") {
           return printHubl(child);
         }
-        return [
+        return align(node.colno, [
           openVar(node.whiteSpace.openTag),
           " ",
           printHubl(child),
           " ",
           closeVar(node.whiteSpace.openTag),
-        ];
+        ]);
       });
     case "NodeList":
       return node.children.map((child) => {
