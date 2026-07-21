@@ -1,0 +1,26 @@
+{% macro renderSection(indexMap) %}
+  <section class="section-container">
+    <div class="page-width">
+      <h2 class="section-title">{{ module.title }}</h2>
+
+      {% if isSimple %}
+        <div class="section-single">
+      {% else %}
+        <div class="section-tabs tabs">
+          <div class="section-tab-control tab-control">
+            <ul class="section-tab-list tab-list" role="tablist">
+              {% for tab in module.tabs %}
+                <li class="tab-item">
+                  <button class="tab-button" role="tab">{{ tab.label }}</button>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+      {% endif %}
+
+      <div class="section-tab-group tab-group">
+        shared content
+      </div>
+    </div>
+  </section>
+{% endmacro %}

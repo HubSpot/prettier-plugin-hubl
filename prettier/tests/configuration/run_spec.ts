@@ -86,6 +86,13 @@ const IDEMPOTENCY_FIXTURES = new Set([
   "ternary.html",
   "regex-filters.html",
   "sliceSyntax.html",
+  "svg-nested-hubl-expression.html",
+  "svg-own-tag-hubl-expression.html",
+  "namespace-attribute-assignment.html",
+  "conditional-html-wrapper.html",
+  "conditional-html-wrapper-closing.html",
+  "from-import-and-separator.html",
+  "nested-multiline-funcall.html",
 ]);
 
 async function run_spec(dirName, options) {
