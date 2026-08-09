@@ -99,6 +99,10 @@ const IDEMPOTENCY_FIXTURES = new Set([
   "conditional-html-nested-expression.html",
   "call-dict-indentation.html",
   "empty-dict-literal.html",
+  "single-attribute-per-line-hubl.html",
+  "single-attribute-per-line.html",
+  "wide-print-width-hubl.html",
+  "wide-print-width.html",
 ]);
 
 const REGRESSION_ASSERTIONS: Record<string, (output: string) => void> = {
@@ -130,6 +134,25 @@ const REGRESSION_ASSERTIONS: Record<string, (output: string) => void> = {
     expect(output).toMatch(/\{% macro Toggle\(config\s*=\s*\{\}\) %\}/);
     expect(output).toMatch(/"header": \{\}/);
     expect(output).not.toMatch(/\{\n\}/);
+  },
+  "single-attribute-per-line.html": (output) => {
+    expect(output).toContain('<button\n  class="button"');
+    expect(output).toContain('\n  id="save"');
+    expect(output).toContain('\n  title="Save changes"');
+  },
+  "single-attribute-per-line-hubl.html": (output) => {
+    expect(output).toContain('<button\n  class="{{ theme_class }}"');
+    expect(output).toContain('\n  id="save"');
+  },
+  "wide-print-width.html": (output) => {
+    expect(output).toContain(
+      '<button class="button button--primary" id="save-changes" title="Save all pending changes to this record">',
+    );
+  },
+  "wide-print-width-hubl.html": (output) => {
+    expect(output).toContain(
+      '<button class="{{ theme_class }} button--primary" id="save-changes" title="Save all pending changes to this record">',
+    );
   },
 };
 

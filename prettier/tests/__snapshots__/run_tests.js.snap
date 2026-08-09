@@ -3797,6 +3797,32 @@ a_var %}
 
 `;
 
+exports[`formats single-attribute-per-line.html correctly 1`] = `
+<button class="button" id="save" title="Save changes">Save</button>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<button
+  class="button"
+  id="save"
+  title="Save changes"
+>
+  Save
+</button>
+
+`;
+
+exports[`formats single-attribute-per-line-hubl.html correctly 1`] = `
+<button class="{{ theme_class }}" id="save" title="Save changes">Save</button>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<button
+  class="{{ theme_class }}"
+  id="save"
+  title="Save changes"
+>
+  Save
+</button>
+
+`;
+
 exports[`formats sliceSyntax.html correctly 1`] = `
 {% set filtered_parts = filter_names[0:loop.index]|join('/') %}
 {{ obj['key'] }}
@@ -5186,5 +5212,19 @@ Content
 {%- call render_dialog("Hello World", "greeting") -%}
 <p>This is a paragraph tag that I want to render in my.</p>
 {%- endcall -%}
+
+`;
+
+exports[`formats wide-print-width.html correctly 1`] = `
+<button class="button button--primary" id="save-changes" title="Save all pending changes to this record">Save changes</button>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<button class="button button--primary" id="save-changes" title="Save all pending changes to this record">Save changes</button>
+
+`;
+
+exports[`formats wide-print-width-hubl.html correctly 1`] = `
+<button class="{{ theme_class }} button--primary" id="save-changes" title="Save all pending changes to this record">Save changes</button>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<button class="{{ theme_class }} button--primary" id="save-changes" title="Save all pending changes to this record">Save changes</button>
 
 `;
