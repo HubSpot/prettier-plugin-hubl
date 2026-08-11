@@ -31,6 +31,12 @@ const closeVar = (whitespace) => {
 const isValidVariable = (testString: string) =>
   /^[a-zA-Z_$][0-9a-zA-Z_$]*$/gm.test(testString);
 
+const escapeStringControlCharacters = (value: string): string =>
+  value
+    .replaceAll("\n", "\\n")
+    .replaceAll("\t", "\\t")
+    .replaceAll("\r", "\\r");
+
 // Recurvisely print if elif and else
 const printElse = (node) => {
   if (node.else_ && node.else_.typename === "If") {
@@ -378,7 +384,7 @@ function printHubl(node) {
         return "none";
       }
       if (typeof node.value === "string") {
-        return util.makeString(node.value, '"');
+        return util.makeString(escapeStringControlCharacters(node.value), '"');
       }
       return `${node.value}`;
     case "Comment":

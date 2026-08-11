@@ -3812,6 +3812,17 @@ exports[`formats sliceSyntax.html correctly 1`] = `
 
 `;
 
+exports[`formats string-escape-sequences.html correctly 1`] = `
+{% set newline = "First line\\nSecond line" %}
+{% set tab = "First\\tSecond" %}
+{% set carriage_return = "First\\rSecond" %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% set newline = "First line\\nSecond line" %}
+{% set tab = "First\\tSecond" %}
+{% set carriage_return = "First\\rSecond" %}
+
+`;
+
 exports[`formats svg-nested-hubl-expression.html correctly 1`] = `
 <div class="progress" data-value="{{ item.value }}">
   <svg viewBox="0 0 32 32">

@@ -99,6 +99,7 @@ const IDEMPOTENCY_FIXTURES = new Set([
   "conditional-html-nested-expression.html",
   "call-dict-indentation.html",
   "empty-dict-literal.html",
+  "string-escape-sequences.html",
 ]);
 
 const REGRESSION_ASSERTIONS: Record<string, (output: string) => void> = {
@@ -130,6 +131,11 @@ const REGRESSION_ASSERTIONS: Record<string, (output: string) => void> = {
     expect(output).toMatch(/\{% macro Toggle\(config\s*=\s*\{\}\) %\}/);
     expect(output).toMatch(/"header": \{\}/);
     expect(output).not.toMatch(/\{\n\}/);
+  },
+  "string-escape-sequences.html": (output) => {
+    expect(output).toContain('"First line\\nSecond line"');
+    expect(output).toContain('"First\\tSecond"');
+    expect(output).toContain('"First\\rSecond"');
   },
 };
 
