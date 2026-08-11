@@ -322,13 +322,15 @@ const parsers: Plugin["parsers"] = {
   hubl: {
     astFormat: "hubl-ast",
     parse,
-    preprocess: (text: string) => {
+    preprocess: (text: string, options) => {
       let updatedText: string = text.trim();
       // Swap HubL tags for placeholders
       updatedText = tokenize(updatedText);
       // Parse and format HTML
       updatedText = synchronizedPrettier.format(updatedText, {
         parser: "html",
+        printWidth: options.printWidth,
+        singleAttributePerLine: options.singleAttributePerLine,
         trailingComma: "es5",
       });
       updatedText = unTokenize(updatedText);
