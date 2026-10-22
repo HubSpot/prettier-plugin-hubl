@@ -1057,6 +1057,39 @@ border-radius: {{ module.styles.active.corner.radius ~ "px" }};
 
 `;
 
+exports[`formats css-function-arguments.html correctly 1`] = `
+<style>
+  .banner {
+    background-color: rgba({{ module.style.background.color.color|convert_rgb }}, {{ module.style.background.color.opacity / 100 }});
+    color: rgb({{ red }},{{ green }},{{ blue }});
+    box-shadow: 0 0 4px rgba(0, 0, 0, {{ shadow_opacity }});
+    transform: translate({{ offset_x }}px, {{ offset_y }}px);
+    width: calc({{ width }} - 10px);
+    font-family: {{ heading_font }}, {{ body_font }};
+  }
+  .banner, {{ extra_selector }} {
+    margin: 0;
+  }
+  {{ extra_css }}
+</style>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<style>
+  .banner {
+    background-color: rgba({{ module.style.background.color.color|convert_rgb }}, {{ module.style.background.color.opacity / 100 }});
+    color: rgb({{ red }}, {{ green }}, {{ blue }});
+    box-shadow: 0 0 4px rgba(0, 0, 0, {{ shadow_opacity }});
+    transform: translate({{ offset_x }}px, {{ offset_y }}px);
+    width: calc({{ width }} - 10px);
+    font-family: {{ heading_font }}, {{ body_font }};
+  }
+  .banner, {{ extra_selector }} {
+    margin: 0;
+  }
+  {{ extra_css }}
+</style>
+
+`;
+
 exports[`formats empty-dict-literal.html correctly 1`] = `
 {% set items = {} %}
 

@@ -183,6 +183,31 @@ const lookupDuplicateNestedToken = (match) => {
 const withLead = (regex: RegExp) =>
   new RegExp(/(:\s*)?/.source + `(${regex.source})`, "gms");
 
+/**
+ * Returns true when `offset` falls inside the parentheses of a CSS function
+ * in the current declaration, e.g. the arguments of `rgba()` or `calc()`.
+ * HubL in that position has to be swapped for a value token rather than a
+ * comment token. Newer Prettier versions treat comment-only arguments as
+ * empty and drop the commas between them, and put a space between a comment
+ * and a unit that follows it (`{{ x }}px` becomes `{{ x }} px`).
+ */
+const isInsideCssFunction = (css: string, offset: number): boolean => {
+  // Blank out HubL first so its braces aren't mistaken for CSS blocks.
+  const before = css
+    .slice(0, offset)
+    .replace(/{{[\s\S]*?}}|{%[\s\S]*?%}|{#[\s\S]*?#}/g, "x");
+  const declaration = before.slice(
+    Math.max(
+      before.lastIndexOf("{"),
+      before.lastIndexOf("}"),
+      before.lastIndexOf(";"),
+    ) + 1,
+  );
+  const opened = (declaration.match(/\(/g) || []).length;
+  const closed = (declaration.match(/\)/g) || []).length;
+  return opened > closed;
+};
+
 const applyConditionalPreserveTokens = (input: string): string => {
   const preserveRanges = findConditionalPreserveRanges(input, (offset) =>
     isInsidePreserveBlock(input, offset),
@@ -325,11 +350,14 @@ const tokenize = (input: string): string => {
   const nestedStyleTags = input.match(STYLE_BLOCK_WITH_HUBL_REGEX);
   if (nestedStyleTags) {
     nestedStyleTags.forEach((tag) => {
-      const processMatch = (_all, lead: string, match: string) => {
+      const processMatch = (_all, lead: string, match: string, ...rest) => {
+        const offset: number = rest[rest.length - 2];
+        const css: string = rest[rest.length - 1];
         // Match the lead (the ":  ") so that we can distinguish between a value and a block
-        const token = lead
-          ? Token.styleValue(tokenIndex++)
-          : Token.styleBlock(tokenIndex++);
+        const token =
+          lead || isInsideCssFunction(css, offset)
+            ? Token.styleValue(tokenIndex++)
+            : Token.styleBlock(tokenIndex++);
         tokenMap.set(token, match);
         return `${lead || ""}${token}`;
       };
