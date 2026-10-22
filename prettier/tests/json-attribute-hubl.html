@@ -1,0 +1,14 @@
+{% widget_attribute "facebook" is_json=True %}
+  {
+    "custom_link_format": "",
+    "enabled": true,
+    "network": "facebook",
+    "img_src": "{{ get_asset_url('../images/icons/facebook.svg') }}"
+  }
+{% end_widget_attribute %}
+
+{% module_block module "social" path="@hubspot/social_sharing" %}
+  {% module_attribute "links" is_json=True %}
+    [{"label": "{{ module.label }}", "icon": "{{ get_asset_url('../images/x.svg') }}", "url": "{{ content.absolute_url|urlencode }}"}]
+  {% end_module_attribute %}
+{% end_module_block %}

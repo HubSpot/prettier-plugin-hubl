@@ -3,7 +3,7 @@ import synchronizedPrettier from "@prettier/sync";
 import { parse as hublParse } from "hubl-parser";
 import type { HublParserOptions } from "hubl-parser";
 import { findConditionalPreserveRanges } from "./conditionalHtmlPreservation.js";
-import printers from "./printHubl.js";
+import printers, { jsonHublTokens } from "./printHubl.js";
 
 interface PrettierHublOptions {
   hublCustomTags?: string[];
@@ -29,6 +29,7 @@ function locEnd(node) {
 const Token = {
   styleValue: (index: number) => `__STYLE_VALUE${index}__`,
   styleBlock: (index: number) => `/*styleblock${index}*/`,
+  jsonHubl: (index: number) => `__JSON_HUBL${index}__`,
   npe: (index: number) => `npe${index}_`,
   comment: (index: number) => `<!--${index}-->`,
   placeholder: (index: number) => `<!--placeholder-${index}-->`,
@@ -416,7 +417,14 @@ const tokenize = (input: string): string => {
   if (jsonBlocks) {
     jsonBlocks.forEach((match) => {
       const placeholderToken = Token.placeholder(tokenIndex++);
-      const jsonBlock = Token.jsonBlock(match);
+      // HubL inside the JSON is kept out of the parser so the body can be
+      // formatted as JSON. printJsonBody puts it back as written.
+      const jsonBody = match.replace(/{{[\s\S]*?}}|{%[\s\S]*?%}/g, (hubl) => {
+        const token = Token.jsonHubl(tokenIndex++);
+        jsonHublTokens.set(token, hubl);
+        return token;
+      });
+      const jsonBlock = Token.jsonBlock(jsonBody);
       tokenMap.set(placeholderToken, jsonBlock);
       input = input.replace(match, placeholderToken);
     });
@@ -916,6 +924,7 @@ const parsers: Plugin["parsers"] = {
       });
     },
     preprocess: (text: string) => {
+      jsonHublTokens.clear();
       const originalText: string = text.trim();
       let updatedText: string = originalText;
       // Swap HubL tags for placeholders

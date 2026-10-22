@@ -66,14 +66,38 @@ const printTagArgs = (node) => {
   });
 };
 
+/**
+ * HubL found inside `is_json=True` attribute bodies, keyed by the token that
+ * replaces it during preprocessing. Keeping the HubL away from the parser
+ * lets the body be formatted as plain JSON, and the original HubL is put back
+ * as written afterwards. Reprinting it would switch its single quotes to
+ * double quotes, which ends the surrounding JSON string early.
+ */
+export const jsonHublTokens: Map<string, string> = new Map();
+
+const restoreJsonHubl = (text: string): string => {
+  let restored = text;
+  for (const [token, hubl] of jsonHublTokens) {
+    restored = restored.replaceAll(token, () => hubl);
+  }
+  return restored;
+};
+
 const printJsonBody = (node) => {
   try {
     // This is a predictable tag structure
     const bodyText = node.children[0].children[0].value;
     const formattedBodyText = prettierSync.format(bodyText, { parser: "json" });
-    return join(line, formattedBodyText.trim().split("\n"));
+    return join(line, restoreJsonHubl(formattedBodyText).trim().split("\n"));
   } catch (e) {
     // If JSON parsing fails, we can fall back on the normal printer
+    node.children.forEach((item) =>
+      item.children?.forEach((child) => {
+        if (child.typename === "TemplateData") {
+          child.value = restoreJsonHubl(child.value);
+        }
+      }),
+    );
     return printBody(node);
   }
 };
