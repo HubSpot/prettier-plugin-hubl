@@ -18,6 +18,12 @@ const {
 const openTag = (whitespace) => {
   return whitespace.start ? "{%-" : "{%";
 };
+// Column of a tag's `{%`, given that `node.colno` is the column of its
+// keyword (e.g. `set`), which follows `{% ` or `{%- `.
+const tagStartColumn = (node) => {
+  const openTagLength = node.whiteSpace.openTag.start ? 4 : 3;
+  return Math.max(node.colno - openTagLength, 0);
+};
 const closeTag = (whitespace) => {
   return whitespace.end ? "-%}" : "%}";
 };
@@ -213,7 +219,9 @@ function printHubl(node) {
         " set ",
         setTargets,
         " = ",
-        printHubl(node.value),
+        // Align a multi-line value (e.g. a broken Dict) with the `{%`, as in
+        // the `Caller` case below.
+        align(tagStartColumn(node), printHubl(node.value)),
         " ",
         closeTag(node.whiteSpace.openTag),
       ];
@@ -593,13 +601,11 @@ function printHubl(node) {
         group([
           openTag(node.whiteSpace.openTag),
           " call ",
-          // `node.colno` is the `call` keyword's column, which sits 3
-          // characters after `{% ` (`{`, `%`, ` `). Subtracting 3 recovers
-          // the `{%`'s own column so multi-line args (e.g. a broken Dict)
-          // align with the tag itself rather than resetting to whatever
-          // ambient HubL block indent happens to be active (see the
-          // `Output` case above for the same technique with `{{ }}`).
-          align(Math.max(node.colno - 3, 0), printHubl(node.args)),
+          // Align multi-line args (e.g. a broken Dict) with the `{%` itself
+          // rather than resetting to whatever ambient HubL block indent
+          // happens to be active (see the `Output` case above for the same
+          // technique with `{{ }}`).
+          align(tagStartColumn(node), printHubl(node.args)),
           " ",
           closeTag(node.whiteSpace.openTag),
         ]),
@@ -617,7 +623,8 @@ function printHubl(node) {
             return group([
               openTag(node.whiteSpace.openTag),
               " do ",
-              printHubl(node.children),
+              // Same `{%` alignment as the `Caller` case above.
+              align(tagStartColumn(node), printHubl(node.children)),
               " ",
               closeTag(node.whiteSpace.openTag),
             ]);

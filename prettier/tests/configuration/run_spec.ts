@@ -81,6 +81,7 @@ function createTestObject(
 
 const IDEMPOTENCY_FIXTURES = new Set([
   "nested-call-for-indentation.html",
+  "set-do-dict-indentation.html",
   "idempotent-dict-ternary.html",
   "idempotent-svg-path.html",
   "set.html",

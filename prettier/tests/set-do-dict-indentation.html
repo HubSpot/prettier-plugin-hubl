@@ -1,0 +1,23 @@
+<div class="container">
+  {% set articles = [] %}
+  {% for card in module.card %}
+    {% if card.card_type is equalto("page") %}
+      {% do articles.append({
+        "title": article.title,
+        "type": "page"
+      }) %}
+    {% else %}
+      {% set post_link = {
+        "url": {
+          "type": "EXTERNAL",
+          "href": article.absolute_url
+        },
+        "no_follow": false
+      } %}
+    {% endif %}
+    {%- set link = {
+      "href": card.url,
+      "open_in_new_tab": false
+    } -%}
+  {% endfor %}
+</div>
