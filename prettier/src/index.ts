@@ -915,7 +915,7 @@ const parsers: Plugin["parsers"] = {
         hublCustomTags: customTags,
       });
     },
-    preprocess: (text: string) => {
+    preprocess: (text: string, options) => {
       const originalText: string = text.trim();
       let updatedText: string = originalText;
       // Swap HubL tags for placeholders
@@ -966,6 +966,8 @@ const parsers: Plugin["parsers"] = {
       try {
         updatedText = synchronizedPrettier.format(updatedText, {
           parser: "html",
+          printWidth: options.printWidth,
+          singleAttributePerLine: options.singleAttributePerLine,
           trailingComma: "es5",
         });
       } catch {
