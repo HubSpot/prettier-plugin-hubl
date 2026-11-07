@@ -1,0 +1,31 @@
+{% macro Panel(i18n, language, embed=false) %}
+  {% set panel_body %}
+    <div
+      id="panel"
+      class="panel{% if not embed %} ds-card -border{% endif %}"
+      {% if not embed %}data-ds-theme="dark"
+        data-ds-background="background-01"
+      {% endif %}
+    >
+      {% set tooltip_text = i18n["tooltip_text"][language]|default("", true)|trim %}
+      {% if tooltip_text %}
+        <div class="panel-trigger-wrapper">
+          <button class="panel-info-trigger" aria-label="About this panel">
+            <svg class="panel-info-icon ds-icon" aria-hidden="true" focusable="false">
+              <use href="#ds-icon-information"></use>
+            </svg>
+          </button>
+          <div id="panel-tooltip" class="panel-tooltip ds-tooltip-container">
+            <div class="ds-card-caret -left-center">
+              <div class="panel-tooltip-content ds-tooltip-content">
+                <p>{{ tooltip_text }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <p class="panel-subtitle ds-p">{{ i18n["subtitle"][language] }}</p>
+    </div>
+  {% endset %}
+  {{ panel_body }}
+{% endmacro %}

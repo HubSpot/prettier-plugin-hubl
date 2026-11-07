@@ -1,0 +1,14 @@
+<form class="newsletter-signup-form">
+  <fieldset class="newsletter-signup-form-categories">
+    {% for category in categories %}
+      <li class="newsletter-signup-form-category">
+        <div class="newsletter-signup-form-category-card ds-card">
+          {% if category.icon.src %}<img class="newsletter-signup-form-category-card-image" src="{{ category.icon.src }}" alt="">{% endif %}
+          <span>
+            <label class="newsletter-signup-form-category-card-title" for="option-{{ category.option_id }}">{{ category.display_label }}</label>
+          </span>
+        </div>
+      </li>
+    {% endfor %}
+  </fieldset>
+</form>

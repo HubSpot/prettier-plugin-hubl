@@ -152,6 +152,10 @@ What is this element?
 {% if var is string_startingwith "v" %}{% endif %}
 {% if var is string_startingwith("v") %}{% endif %}
 
+{{- content.template_path is string_containing pathFragment or content.template_path_for_render is string_containing pathFragment -}}
+{{- a is string_containing x and b is string_containing y -}}
+{{- foo is not string_containing bar or baz is string_containing qux -}}
+
 {{ foo in bar }}
 {{ foo % bar }}
 {{ foo ** bar }}

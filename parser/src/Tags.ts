@@ -155,7 +155,16 @@ const parseSignature = (parser: ParserClass, nodes: Nodes, lexer: Lexer) => {
   return parsedSignature;
 };
 
-export default function RemoteExtension(this: RemoteExtensionContext) {
+export interface CustomTag {
+  name: string;
+  /** When provided, the tag is treated as a block tag with this closing tag name. */
+  endTag?: string;
+}
+
+export default function RemoteExtension(
+  this: RemoteExtensionContext,
+  customTags: CustomTag[] = [],
+) {
   /**
    * This is where we register all custom tags.  If it is a block-scoped tag
    * also add it to the `blockTags` array below.  When the parser encounters
@@ -167,6 +176,8 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     "blog_social_sharing",
     "blog_subscribe",
     "boolean",
+    "break",
+    "continue",
     "choice",
     "comment",
     "color",
@@ -269,6 +280,8 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     "end_widget_container",
     "end_widget_wrapper",
     "end_json_block",
+    ...customTags.map((t) => t.name),
+    ...customTags.filter((t) => t.endTag).map((t) => t.endTag as string),
   ];
 
   /**
@@ -305,6 +318,9 @@ export default function RemoteExtension(this: RemoteExtensionContext) {
     { start: "widget_container", end: "end_widget_container" },
     { start: "widget_wrapper", end: "end_widget_wrapper" },
     { start: "json_block", end: "end_json_block" },
+    ...customTags
+      .filter((t) => t.endTag)
+      .map((t) => ({ start: t.name, end: t.endTag as string })),
   ];
   this.parse = function (parser: ParserClass, nodes: Nodes, lexer: Lexer) {
     const tagWhiteSpace = {

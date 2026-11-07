@@ -1,0 +1,13 @@
+{% for item in items %}
+  {% if item.id == target_id %}
+    {% set result = item %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% for item in items %}
+  {% if item.skip %}
+    {% continue %}
+  {% endif %}
+  <div>{{ item.name }}</div>
+{% endfor %}

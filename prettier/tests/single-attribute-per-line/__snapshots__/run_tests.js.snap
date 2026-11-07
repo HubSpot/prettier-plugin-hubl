@@ -1,0 +1,192 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`formats inline-block-tag-after-tag-close.html correctly 1`] = `
+<form class="newsletter-signup-form">
+  <fieldset class="newsletter-signup-form-categories">
+    {% for category in categories %}
+      <li class="newsletter-signup-form-category">
+        <div class="newsletter-signup-form-category-card ds-card">
+          {% if category.icon.src %}<img class="newsletter-signup-form-category-card-image" src="{{ category.icon.src }}" alt="">{% endif %}
+          <span>
+            <label class="newsletter-signup-form-category-card-title" for="option-{{ category.option_id }}">{{ category.display_label }}</label>
+          </span>
+        </div>
+      </li>
+    {% endfor %}
+  </fieldset>
+</form>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<form class="newsletter-signup-form">
+  <fieldset class="newsletter-signup-form-categories">
+    {% for category in categories %}
+      <li class="newsletter-signup-form-category">
+        <div class="newsletter-signup-form-category-card ds-card">
+          {% if category.icon.src %}<img
+              class="newsletter-signup-form-category-card-image"
+              src="{{ category.icon.src }}"
+              alt=""
+            />
+          {% endif %}
+          <span>
+            <label
+              class="newsletter-signup-form-category-card-title"
+              for="option-{{ category.option_id }}"
+              >{{ category.display_label }}</label
+            >
+          </span>
+        </div>
+      </li>
+    {% endfor %}
+  </fieldset>
+</form>
+
+`;
+
+exports[`formats split-closing-tag-expression.html correctly 1`] = `
+{% macro ItemAuthors(module) %}
+  <div class="item-header-info">
+    <div class="item-header-info-authors">
+      <span>{{ strings.written_by[lang] }}</span>
+      {{ AuthorLink(primaryAuthor, "primary") }}
+      {% if module.secondary_author.display_name and module.secondary_author.slug %}
+        <span> {{ strings.and_text[lang] }} </span
+        >{{ AuthorLink(module.secondary_author, "secondary") }}
+      {% endif %}
+    </div>
+  </div>
+{% endmacro %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% macro ItemAuthors(module) %}
+  <div class="item-header-info">
+    <div class="item-header-info-authors">
+      <span>{{ strings.written_by[lang] }}</span>
+      {{ AuthorLink(primaryAuthor, "primary") }}
+      {% if module.secondary_author.display_name and module.secondary_author.slug %}
+        <span> {{ strings.and_text[lang] }} </span
+        >{{ AuthorLink(module.secondary_author, "secondary") }}
+      {% endif %}
+    </div>
+  </div>
+{% endmacro %}
+
+`;
+
+exports[`formats tag-regex-overmatch.html correctly 1`] = `
+{# The img tag opening is already split across lines. A multi-line set block
+   further down lets a HubL alternative bridge newlines, so a tag-matching
+   regex that allows HubL to span lines can step over the img's own closing
+   bracket and keep going — swallowing the branch close, the sibling paragraph
+   and the anchor into a single match. Everything inside would then be
+   tokenised as short npe tokens rather than placeholder comment tokens, and
+   the differing token widths change where the HTML formatter wraps. #}
+{% for card in cards %}
+  <div class="quote-list-card-author">
+    {% if card.author_avatar.src %}
+      <img
+        class="quote-list-card-avatar"
+        src="{{ resize_image_url(card.author_avatar.src, 32, 32) }}"
+        width="32"
+        height="32"
+        alt="{{ card.author_avatar.alt or card.author_name }}"
+        loading="lazy"
+      />
+    {% endif %}
+    <p class="quote-list-card-author-name ds-p -microheading">
+      {{ card.author_name }}{% if card.author_title %}
+        ({{ card.author_title }}){% endif %}
+    </p>
+  </div>
+  {% if card.url.url.href %}
+    {% set card_link_rel = [
+      card.url.open_in_new_tab ? "noopener noreferrer" : "",
+      card.url.no_follow ? "nofollow" : ""
+    ]|select("truthy")|join(" ") %}
+    <a
+      class="quote-list-card-link"
+      href="{{ card.url.url.href }}"
+      {% if card.url.open_in_new_tab %}
+        target="_blank"
+      {% endif %}{% if card_link_rel %}
+        rel="{{ card_link_rel }}"
+      {% endif %}
+    >
+      <span class="visually-hidden">{{ card.description }}</span>
+    </a>
+  {% endif %}
+{% endfor %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{# The img tag opening is already split across lines. A multi-line set block
+   further down lets a HubL alternative bridge newlines, so a tag-matching
+   regex that allows HubL to span lines can step over the img's own closing
+   bracket and keep going — swallowing the branch close, the sibling paragraph
+   and the anchor into a single match. Everything inside would then be
+   tokenised as short npe tokens rather than placeholder comment tokens, and
+   the differing token widths change where the HTML formatter wraps. #}
+{% for card in cards %}
+  <div class="quote-list-card-author">
+    {% if card.author_avatar.src %}
+      <img
+        class="quote-list-card-avatar"
+        src="{{ resize_image_url(card.author_avatar.src, 32, 32) }}"
+        width="32"
+        height="32"
+        alt="{{ card.author_avatar.alt or card.author_name }}"
+        loading="lazy"
+      />
+    {% endif %}
+    <p class="quote-list-card-author-name ds-p -microheading">
+      {{ card.author_name }}{% if card.author_title %}
+        ({{ card.author_title }}){% endif %}
+    </p>
+  </div>
+  {% if card.url.url.href %}
+    {% set card_link_rel = [
+      card.url.open_in_new_tab ? "noopener noreferrer" : "",
+      card.url.no_follow ? "nofollow" : ""
+    ]|select("truthy")|join(" ") %}
+    <a
+      class="quote-list-card-link"
+      href="{{ card.url.url.href }}"
+      {% if card.url.open_in_new_tab %}
+        target="_blank"
+      {% endif %}{% if card_link_rel %}
+        rel="{{ card_link_rel }}"
+      {% endif %}
+    >
+      <span class="visually-hidden">{{ card.description }}</span>
+    </a>
+  {% endif %}
+{% endfor %}
+
+`;
+
+exports[`formats unclosed-element-scan.html correctly 1`] = `
+{% macro ItemMeta(config) %}
+  {% call SectionWrapper({ tag_name: "section" }) %}
+    {% if updatedDate %}
+      <div class="meta-item -updated">
+        <span
+          >{{ strings.updated[lang] }}:
+          <time datetime="{{ updatedDate|datetimeformat('%Y-%m-%d') }}">{{ prettyDate }}</time></span
+        >
+      </div>
+    {% endif %}
+  {% endcall %}
+{% endmacro %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% macro ItemMeta(config) %}
+  {% call SectionWrapper({
+    tag_name: "section"
+  }) %}
+    {% if updatedDate %}
+      <div class="meta-item -updated">
+        <span
+          >{{ strings.updated[lang] }}:
+          <time datetime="{{ updatedDate|datetimeformat('%Y-%m-%d') }}">{{ prettyDate }}</time></span
+        >
+      </div>
+    {% endif %}
+  {% endcall %}
+{% endmacro %}
+
+`;

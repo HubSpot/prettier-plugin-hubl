@@ -377,9 +377,9 @@ screenshotPath: ../images/template-previews/blog-post.png
               purpose="decorative",
               style="SOLID" %}
             {% for tag in content.tag_list %}
-            <a class="blog-post__tag-link" href="{{ blog_tag_url(group.id, tag.slug) }}" rel="tag"
-              >{{ tag.name }}</a
-            >{% if not loop.last %},{% endif %}
+              <a class="blog-post__tag-link" href="{{ blog_tag_url(group.id, tag.slug) }}" rel="tag"
+                >{{ tag.name }}</a
+              >{% if not loop.last %},{% endif %}
             {% endfor %}
           </div>
         {% endif %}
@@ -478,6 +478,37 @@ exports[`formats brackets.html correctly 1`] = `
 
 `;
 
+exports[`formats break-continue.html correctly 1`] = `
+{% for item in items %}
+  {% if item.id == target_id %}
+    {% set result = item %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% for item in items %}
+  {% if item.skip %}
+    {% continue %}
+  {% endif %}
+  <div>{{ item.name }}</div>
+{% endfor %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% for item in items %}
+  {% if item.id == target_id %}
+    {% set result = item %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% for item in items %}
+  {% if item.skip %}
+    {% continue %}
+  {% endif %}
+  <div>{{ item.name }}</div>
+{% endfor %}
+
+`;
+
 exports[`formats call-dict-indentation.html correctly 1`] = `
 <div class="primary-content">
   <div class="menu-container">
@@ -496,7 +527,7 @@ exports[`formats call-dict-indentation.html correctly 1`] = `
       anchorId: "primary-menu",
       classExtension: "menu-trigger"
     }) %}
-    <div class="menu-trigger-content"></div>
+      <div class="menu-trigger-content"></div>
     {% endcall %}
   </div>
 </div>
@@ -622,6 +653,43 @@ templateType: none
     {{ standard_footer_includes }}
   </body>
 </html>
+
+`;
+
+exports[`formats conditional-html-elif-branches.html correctly 1`] = `
+{% if topic %}
+  <main class="listing page-width" data-testid="tag-listing">
+    <h1 class="tag-title">{{ tag }}</h1>
+    <p>Tag content</p>
+  </main>
+{% elif author %}
+  {% include '/example/templates/author.html' %}
+{% elif isLandingPage %}
+  <main class="category-listing">
+    <h1>Category</h1>
+  </main>
+{% else %}
+  <main class="listing page-width">
+    <p>Default listing content</p>
+  </main>
+{% endif %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% if topic %}
+  <main class="listing page-width" data-testid="tag-listing">
+    <h1 class="tag-title">{{ tag }}</h1>
+    <p>Tag content</p>
+  </main>
+{% elif author %}
+  {% include '/example/templates/author.html' %}
+{% elif isLandingPage %}
+  <main class="category-listing">
+    <h1>Category</h1>
+  </main>
+{% else %}
+  <main class="listing page-width">
+    <p>Default listing content</p>
+  </main>
+{% endif %}
 
 `;
 
@@ -1020,7 +1088,7 @@ exports[`formats for.html correctly 1`] = `
 {% endfor %}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {% for key, val in request.query_dict.items() %}
-{{ key }}:{{ val }}
+  {{ key }}:{{ val }}
 {% endfor %}
 
 `;
@@ -1340,9 +1408,9 @@ screenshotPath: ../images/template-previews/hubdb.png
 
           <ul>
             {% for row in rows %}
-            <li>
-              <a href="{{ request.path }}/{{ row.hs_path }}">{{ row.name }}</a>
-            </li>
+              <li>
+                <a href="{{ request.path }}/{{ row.hs_path }}">{{ row.name }}</a>
+              </li>
             {% endfor %}
           </ul>
 
@@ -1362,13 +1430,13 @@ screenshotPath: ../images/template-previews/hubdb.png
             </thead>
             <tbody>
               {% for col in hubdb_table(table_id).columns %}
-              <tr>
-                <th>{{ col.label }}</th>
-                <td>
-                  <code>{{ col.name }}</code>
-                </td>
-                <td>{{ row[col.name] }}</td>
-              </tr>
+                <tr>
+                  <th>{{ col.label }}</th>
+                  <td>
+                    <code>{{ col.name }}</code>
+                  </td>
+                  <td>{{ row[col.name] }}</td>
+                </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -1401,6 +1469,60 @@ screenshotPath: ../images/template-previews/hubdb.png
     </section>
   </div>
 {% endblock body %}
+
+`;
+
+exports[`formats hubl-in-tag-name-position.html correctly 1`] = `
+<main{% if not useCompactHeader %} data-monitor="landing-body"{% endif %}>
+  {% module "hero_section" path="/example/modules/hero-section" %}
+
+  {% dnd_area "content_area", class="landing-page-content" %}
+    {% dnd_section %}
+    {% end_dnd_section %}
+  {% end_dnd_area %}
+</main>
+
+<div{% if tagAttrs|first not in [' ', '>'] %} class="fallback"{% endif %}>
+  <p>content</p>
+</div>
+
+{% for segment in bodySegments %}
+  {% if not loop.first %}
+    {% set tagAttrs = segment|split(">")|first %}
+    {% if tagAttrs is string_containing 'id="' %}
+      <h2{% if tagAttrs|first not in [' ', '>'] %} {% endif %}{{ segment }}
+    {% else %}
+      <h2 id="section-{{ loop.index - 1 }}"{% if tagAttrs|first not in [' ', '>'] %} {% endif %}{{ segment }}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<main {% if not useCompactHeader %} data-monitor="landing-body" {% endif %}>
+  {% module "hero_section" path="/example/modules/hero-section" %}
+
+  {% dnd_area "content_area" class="landing-page-content" %}
+    {% dnd_section %}
+    {% end_dnd_section %}
+  {% end_dnd_area %}
+</main>
+
+<div {% if not tagAttrs|first in [ " ", ">"] %} class="fallback" {% endif %}>
+  <p>content</p>
+</div>
+
+{% for segment in bodySegments %}
+  {% if not loop.first %}
+    {% set tagAttrs = segment|split(">")|first %}
+    {% if tagAttrs is string_containing("id=\\"") %}
+      <h2 {% if not tagAttrs|first in [ " ", ">"] %} {% endif %}{{ segment }}
+    {% else %}
+      <h2 id="section-{{ loop.index - 1 }}"{% if not tagAttrs|first in [
+        " ",
+        ">"
+      ] %} {% endif %}{{ segment }}
+    {% endif %}
+  {% endif %}
+{% endfor %}
 
 `;
 
@@ -1440,15 +1562,15 @@ exports[`formats idempotent-dict-ternary.html correctly 1`] = `
 } %}
 
 {% for cta in module.offers_ctas %}
-{% set cta_style = cta.cta_style == "text_icon" and isLarge ? "text_icon" : "button" %}
-{{ renderCTA(
-  cta,
-  loop.index == 1 ? "primary" : "secondary",
-  "large",
-  cta_style,
-  "offers__cta",
-  cta.tracking_class
-) }}
+  {% set cta_style = cta.cta_style == "text_icon" and isLarge ? "text_icon" : "button" %}
+  {{ renderCTA(
+    cta,
+    loop.index == 1 ? "primary" : "secondary",
+    "large",
+    cta_style,
+    "offers__cta",
+    cta.tracking_class
+  ) }}
 {% endfor %}
 
 `;
@@ -1631,6 +1753,26 @@ exports[`formats landing-page.html correctly 1`] = `
 
   {% end_dnd_area %}
 {% endblock body %}
+
+`;
+
+exports[`formats macro-multiline.html correctly 1`] = `
+{% macro short(a, b) %}{{ a }}{{ b }}{% endmacro %}
+{% macro LongMacroName(first_arg, second_arg, third_arg, show_cta=true, embed=false, powered_by=false) %}
+  <p>{{ first_arg }}</p>
+{% endmacro %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% macro short(a, b) %}{{ a }}{{ b }}{% endmacro %}
+{% macro LongMacroName(
+  first_arg,
+  second_arg,
+  third_arg,
+  show_cta=true,
+  embed=false,
+  powered_by=false
+) %}
+  <p>{{ first_arg }}</p>
+{% endmacro %}
 
 `;
 
@@ -1906,6 +2048,10 @@ What is this element?
 {% if var is string_startingwith "v" %}{% endif %}
 {% if var is string_startingwith("v") %}{% endif %}
 
+{{- content.template_path is string_containing pathFragment or content.template_path_for_render is string_containing pathFragment -}}
+{{- a is string_containing x and b is string_containing y -}}
+{{- foo is not string_containing bar or baz is string_containing qux -}}
+
 {{ foo in bar }}
 {{ foo % bar }}
 {{ foo ** bar }}
@@ -2108,6 +2254,10 @@ What is this element?
 {% if var is string_startingwith("v") %}{% endif %}
 {% if var is string_startingwith("v") %}{% endif %}
 
+{{- content.template_path is string_containing(pathFragment) or content.template_path_for_render is string_containing(pathFragment) -}}
+{{- a is string_containing(x) and b is string_containing(y) -}}
+{{- foo is not string_containing(bar) or baz is string_containing(qux) -}}
+
 {{ foo in bar }}
 {{ foo % bar }}
 {{ foo ** bar }}
@@ -2182,16 +2332,63 @@ exports[`formats namespace-attribute-assignment.html correctly 1`] = `
   {%- set ns = namespace(found=false) -%}
 
   {%- for option in options -%}
-  {%- if ns.found == false -%}
-    {%- set normalized_option = option.name|lower|trim|replace("&", " ")|replace("/", " ")|regex_replace("\\\\s+", " ") -%}
-    {%- if normalized_option == normalized_value -%}
-      {%- set ns.found = option.name -%}
+    {%- if ns.found == false -%}
+      {%- set normalized_option = option.name|lower|trim|replace("&", " ")|replace("/", " ")|regex_replace("\\\\s+", " ") -%}
+      {%- if normalized_option == normalized_value -%}
+        {%- set ns.found = option.name -%}
+      {%- endif -%}
     {%- endif -%}
-  {%- endif -%}
   {%- endfor -%}
 
   {{ ns.found }}
 {%- endmacro -%}
+
+`;
+
+exports[`formats nested-call-for-indentation.html correctly 1`] = `
+{% call OuterSection({
+  "style_field": style,
+  "extra_classes": "widget-container"
+}) %}
+{% call InnerTabs({
+  "module_class": "widget",
+  "tabs": tabs_array
+}) %}
+{% for tab in tabs_array %}
+{% set tab_data = tab.tab_data %}
+<div class="widget__card">
+{% if tab_data.heading %}
+<h3>{{ tab_data.heading }}</h3>
+{% endif %}
+{% for item in tab_data.items %}
+<p>{{ item.value }}</p>
+{% endfor %}
+</div>
+{% endfor %}
+{% endcall %}
+{% endcall %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% call OuterSection({
+  "style_field": style,
+  "extra_classes": "widget-container"
+}) %}
+  {% call InnerTabs({
+    "module_class": "widget",
+    "tabs": tabs_array
+  }) %}
+    {% for tab in tabs_array %}
+      {% set tab_data = tab.tab_data %}
+      <div class="widget__card">
+        {% if tab_data.heading %}
+          <h3>{{ tab_data.heading }}</h3>
+        {% endif %}
+        {% for item in tab_data.items %}
+          <p>{{ item.value }}</p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  {% endcall %}
+{% endcall %}
 
 `;
 
@@ -2211,19 +2408,86 @@ exports[`formats nested-multiline-funcall.html correctly 1`] = `
   <div class="container">
     <div class="item-list">
       {% for item in module.items %}
-      {% set item_style = item.style == "icon" and isLarge ? "icon" : "button" %}
-      {{ renderItem(
-        item,
-        loop.index == 1 ? "primary" : "secondary",
-        "large",
-        item_style,
-        "item",
-        item.class_name
-      ) }}
+        {% set item_style = item.style == "icon" and isLarge ? "icon" : "button" %}
+        {{ renderItem(
+          item,
+          loop.index == 1 ? "primary" : "secondary",
+          "large",
+          item_style,
+          "item",
+          item.class_name
+        ) }}
       {% endfor %}
     </div>
   </div>
 {% endif %}
+
+`;
+
+exports[`formats nested-same-tag-element-scan.html correctly 1`] = `
+{% macro Panel(i18n, language, embed=false) %}
+  {% set panel_body %}
+    <div
+      id="panel"
+      class="panel{% if not embed %} ds-card -border{% endif %}"
+      {% if not embed %}data-ds-theme="dark"
+        data-ds-background="background-01"
+      {% endif %}
+    >
+      {% set tooltip_text = i18n["tooltip_text"][language]|default("", true)|trim %}
+      {% if tooltip_text %}
+        <div class="panel-trigger-wrapper">
+          <button class="panel-info-trigger" aria-label="About this panel">
+            <svg class="panel-info-icon ds-icon" aria-hidden="true" focusable="false">
+              <use href="#ds-icon-information"></use>
+            </svg>
+          </button>
+          <div id="panel-tooltip" class="panel-tooltip ds-tooltip-container">
+            <div class="ds-card-caret -left-center">
+              <div class="panel-tooltip-content ds-tooltip-content">
+                <p>{{ tooltip_text }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <p class="panel-subtitle ds-p">{{ i18n["subtitle"][language] }}</p>
+    </div>
+  {% endset %}
+  {{ panel_body }}
+{% endmacro %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% macro Panel(i18n, language, embed=false) %}
+  {% set panel_body %}
+    <div
+      id="panel"
+      class="panel{% if not embed %} ds-card -border{% endif %}"
+      {% if not embed %}data-ds-theme="dark"
+        data-ds-background="background-01"
+      {% endif %}
+    >
+      {% set tooltip_text = i18n["tooltip_text"][language]|default("", true)|trim %}
+      {% if tooltip_text %}
+        <div class="panel-trigger-wrapper">
+          <button class="panel-info-trigger" aria-label="About this panel">
+            <svg class="panel-info-icon ds-icon" aria-hidden="true" focusable="false">
+              <use href="#ds-icon-information"></use>
+            </svg>
+          </button>
+          <div id="panel-tooltip" class="panel-tooltip ds-tooltip-container">
+            <div class="ds-card-caret -left-center">
+              <div class="panel-tooltip-content ds-tooltip-content">
+                <p>{{ tooltip_text }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <p class="panel-subtitle ds-p">{{ i18n["subtitle"][language] }}</p>
+    </div>
+  {% endset %}
+  {{ panel_body }}
+{% endmacro %}
 
 `;
 
@@ -4266,26 +4530,26 @@ Smart content rule 1
 {% endmacro %}
 
 {% call render_dialog("Hello World") %}
-This is a simple dialog rendered by using a macro and a call block.
+  This is a simple dialog rendered by using a macro and a call block.
 {% endcall %}
 {% macro dump_users(users) %}
   <ul>
     {% for user in users %}
-    <li>
-      <p>{{ user.username|e }}</p>
-      {{ caller(user) }}
-    </li>
+      <li>
+        <p>{{ user.username|e }}</p>
+        {{ caller(user) }}
+      </li>
     {%- endfor %}
   </ul>
 {% endmacro %}
 
 {% call dump_users(list_of_user) %}
-<dl>
-  <dl>Realname</dl>
-  <dd>{{ user.realname|e }}</dd>
-  <dl>Description</dl>
-  <dd>{{ user.description }}</dd>
-</dl>
+  <dl>
+    <dl>Realname</dl>
+    <dd>{{ user.realname|e }}</dd>
+    <dl>Description</dl>
+    <dd>{{ user.description }}</dd>
+  </dl>
 {% endcall %}
 {% choice "flip_layout"
   value="left",
@@ -4313,7 +4577,7 @@ This is a simple dialog rendered by using a macro and a call block.
   widget_name="Employee Quote",
   label="Employee image and quote section" %}
 {% for content in contents %}
-<div class="post-item {% cycle "odd" "even" %}">Blog post content</div>
+  <div class="post-item {% cycle "odd" "even" %}">Blog post content</div>
 {% endfor %}
 {% dnd_area "unique_name" class="main" %}
 {% end_dnd_area %}
@@ -4455,17 +4719,17 @@ This is a simple dialog rendered by using a macro and a call block.
     title="Follow Us",
     module_title_tag="h2" %}
   {% for item in items %}
-  {{ item }}
+    {{ item }}
   {% endfor %}
   {% for value in dictionary %}
-  {{ value }}
+    {{ value }}
   {% endfor %}
   {% for key, value in dictionary.items() %}
-  {{ key }}:
-  {{ value }}
+    {{ key }}:
+    {{ value }}
   {% endfor %}
   {% for content in contents %}
-  Post content variables
+    Post content variables
   {% endfor %}
   {% form "my_form" %}
   {% form "my_form"
@@ -4542,19 +4806,21 @@ This is a simple dialog rendered by using a macro and a call block.
   {% endif %}
   {% if number <= 2 %}
     Variable named number is less than or equal to 2.
-{% elif number <= 4 %} Variable named number
-    is less than or equal to 4.
-{% elif number <= 6 %} Variable named number is less than or equal
-    to 6.
-{% else %} Variable named number is greater than 6. {% endif %} {% image
-                                                                          "image" %} {% image
-                                                                                              "executive_image"
-                                                                                              label="Executive photo",
-                                                                                              alt="Photo of Brian Halligan",
-                                                                                              src="//cdn2.hubspot.net/hub/53/file-733888619-jpg/assets/hubspot.com/about/management/brian-home.jpg",
-                                                                                              width="300",
-                                                                                              loading="lazy" %} {% image_slider
-                                                                                                                                                                                                                                                                                                                       "image_slider" %}
+  {% elif number <= 4 %}
+    Variable named number is less than or equal to 4.
+  {% elif number <= 6 %}
+    Variable named number is less than or equal to 6.
+  {% else %}
+    Variable named number is greater than 6.
+  {% endif %}
+  {% image "image" %}
+  {% image "executive_image"
+    label="Executive photo",
+    alt="Photo of Brian Halligan",
+    src="//cdn2.hubspot.net/hub/53/file-733888619-jpg/assets/hubspot.com/about/management/brian-home.jpg",
+    width="300",
+    loading="lazy" %}
+  {% image_slider "image_slider" %}
   {% widget_block image_slider "crm_slider"
     sizing="static",
     only_thumbnails=False,
@@ -4568,23 +4834,39 @@ This is a simple dialog rendered by using a macro and a call block.
     label="Image Slider",
     loop_slides=True,
     num_seconds=5,
-    version="0" %} {% widget_attribute "slides"
-                                                                                                                                                                                                                                                                                                                  is_json=True %}[{"caption": "CRM Contacts App", "show_caption": true, "link_url":
-      "http://www.hubspot.com/crm", "alt_text": "Screenshot of CRM Contacts",
-      "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
-      "open_in_new_tab": true}, {"caption": "HubSpot CRM Contact Profile",
-      "show_caption": true, "link_url": "http://www.hubspot.com/", "alt_text":
-      "HubSpot CRM Contact Profile", "img_src":
-      "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
-      "open_in_new_tab": true}]
-  {% end_widget_attribute %} {% end_widget_block %} {% image_src
-                                                                               "image_src" %} {% image_src
-                                                                                                           "executve_image_src"
-                                                                                                           src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
-                                                                                                           no_wrapper=True %} {% import "custom/page/web_page_basic/my_macros.html" as header_footer %} {{ header_footer.header("h1", "My page title") }} {{ header_footer.footer("h3", "Company footer info") }}
-  {% include "custom/page/web_page_basic/my_footer.html" %} {% include "generated_global_groups/2781996615.html" %} {% include "hubspot/styles/patches/recommended.css" %} {% inline_rich_text
-                                                                                                                                                                             "inline_rich_text"
-                                                                                                                                                                             field="my_text_field" %}
+    version="0" %}
+    {% widget_attribute "slides" is_json=True %}
+      [
+        {
+          "caption": "CRM Contacts App",
+          "show_caption": true,
+          "link_url": "http://www.hubspot.com/crm",
+          "alt_text": "Screenshot of CRM Contacts",
+          "img_src": "http://go.hubspot.com/hubfs/Contacts-View-1.png?t=1430860504240",
+          "open_in_new_tab": true
+        },
+        {
+          "caption": "HubSpot CRM Contact Profile",
+          "show_caption": true,
+          "link_url": "http://www.hubspot.com/",
+          "alt_text": "HubSpot CRM Contact Profile",
+          "img_src": "http://cdn2.hubspot.net/hubfs/53/Contact-Profile.png?t=1430860504240",
+          "open_in_new_tab": true
+        }
+      ]
+    {% end_widget_attribute %}
+  {% end_widget_block %}
+  {% image_src "image_src" %}
+  {% image_src "executve_image_src"
+    src="//cdn2.hubspot.net/hub/53/file-733888614-jpg/assets/hubspot.com/about/management/dharmesh-home.jpg",
+    no_wrapper=True %}
+  {% import "custom/page/web_page_basic/my_macros.html" as header_footer %}
+  {{ header_footer.header("h1", "My page title") }}
+  {{ header_footer.footer("h3", "Company footer info") }}
+  {% include "custom/page/web_page_basic/my_footer.html" %}
+  {% include "generated_global_groups/2781996615.html" %}
+  {% include "hubspot/styles/patches/recommended.css" %}
+  {% inline_rich_text "inline_rich_text" field="my_text_field" %}
   {% inline_rich_text "inline_rich_text"
     field="my_text_field",
     html="<p>My rich text default content</p>" %}
@@ -4841,10 +5123,12 @@ This is a simple dialog rendered by using a macro and a call block.
     no_wrapper=True %}
   {% unless x < 0 %}
     x is greater than zero
-{% endunless %} {% widget_block rich_text "my_text_block"
-                                           overrideable=True,
-                                           label="Right Column" %} {% widget_attribute
-                                                                                                                                  "html" %}
+  {% endunless %}
+
+  {% widget_block rich_text "my_text_block"
+    overrideable=True,
+    label="Right Column" %}
+    {% widget_attribute "html" %}
       <h2>Something Powerful</h2>
       <p>Some paragraph content...</p>
     {% end_widget_attribute %}
@@ -5195,7 +5479,7 @@ Content
 {%- end_widget_attribute -%}
 
 {%- call render_dialog("Hello World", "greeting") -%}
-<p>This is a paragraph tag that I want to render in my.</p>
+  <p>This is a paragraph tag that I want to render in my.</p>
 {%- endcall -%}
 
 `;

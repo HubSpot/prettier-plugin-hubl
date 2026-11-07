@@ -1,0 +1,12 @@
+{% macro ItemAuthors(module) %}
+  <div class="item-header-info">
+    <div class="item-header-info-authors">
+      <span>{{ strings.written_by[lang] }}</span>
+      {{ AuthorLink(primaryAuthor, "primary") }}
+      {% if module.secondary_author.display_name and module.secondary_author.slug %}
+        <span> {{ strings.and_text[lang] }} </span
+        >{{ AuthorLink(module.secondary_author, "secondary") }}
+      {% endif %}
+    </div>
+  </div>
+{% endmacro %}
