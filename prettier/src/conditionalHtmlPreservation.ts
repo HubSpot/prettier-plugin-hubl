@@ -1,8 +1,9 @@
 /**
- * Detects `{% if %}/{% else %}` blocks whose branches leave HTML tags
- * unbalanced. The HTML formatter flattens both branches into one sequential
- * view, which corrupts tag nesting for anything that follows — so callers
- * replace the affected spans with opaque tokens before formatting.
+ * Detects `{% if %}/{% elif %}/{% else %}` blocks whose branches leave HTML
+ * tags unbalanced or share the same top-level HTML element types across
+ * branches. The HTML formatter flattens all branches into one sequential view,
+ * which can corrupt tag nesting or produce invalid sibling structures — so
+ * callers replace the affected spans with opaque tokens before formatting.
  */
 
 /** A half-open character offset range `[start, end)` into the source text. */
@@ -29,9 +30,8 @@ const VOID_HTML_ELEMENTS = new Set([
 ]);
 
 /**
- * Matches HubL control-flow block tags (`{% if %}`, `{% else %}`, `{% endif %}`, etc.).
- * Used by `findIfElseBlocks` to locate if/else pairs; only `if`/`else`/`endif` are
- * handled in the stack walk today (`elif` is matched but not yet supported).
+ * Matches HubL control-flow block tags (`{% if %}`, `{% elif %}`, `{% else %}`,
+ * `{% endif %}`). Used by `findIfBlocks` to locate all branch boundaries.
  */
 const HUBL_CONTROL_TAG_REGEX = /\{%-?\s*(if|elif|else|endif)\b[^%]*?-?%\}/g;
 
@@ -53,14 +53,28 @@ const SELF_CLOSING_HTML_TAG_REGEX = /\/>\s*$/;
 /** `{% if %}` / `{% endif %}` at the start of a forward-scan slice. */
 const HUBL_IF_ENDIF_AT_START_REGEX = /^\{%-?\s*(if|endif)\b[^%]*?-?%\}/;
 
-/** Character offsets delimiting a single `{% if %}...{% else %}...{% endif %}`. */
-interface IfElseBlock {
+/** A single branch's content span inside an `{% if %}/{% elif %}/{% else %}` block. */
+interface BranchRange {
+  /** Offset of the first character after the opening control tag. */
   start: number;
-  afterIf: number;
-  elseStart: number;
-  afterElse: number;
-  beforeEndif: number;
+  /** Offset of the first character of the next control tag (or `{% endif %}`). */
   end: number;
+}
+
+/**
+ * All branches of an `{% if %}...{% elif %}...{% else %}...{% endif %}` block.
+ * Blocks without a final `{% else %}` branch are also collected so that
+ * unbalanced single-branch `{% if %}...{% endif %}` constructs can be detected.
+ */
+interface IfBlock {
+  /** Offset of the start of the `{% if %}` tag. */
+  start: number;
+  /** Offset just past the `{% endif %}` tag. */
+  end: number;
+  /** Content ranges for each branch: if, each elif, and (optionally) else. */
+  branches: BranchRange[];
+  /** Whether the block has a final `{% else %}` branch. */
+  hasElse: boolean;
 }
 
 const isSelfClosingHtmlTag = (tag: string): boolean => {
@@ -119,9 +133,7 @@ const stripHubLExpressions = (fragment: string): string => {
 /** Removes HubL syntax so only literal HTML remains for tag-balance counting. */
 const stripHubL = (fragment: string): string =>
   stripHubLExpressions(
-    fragment
-      .replace(HUBL_BLOCK_TAG_REGEX, "")
-      .replace(HUBL_COMMENT_REGEX, ""),
+    fragment.replace(HUBL_BLOCK_TAG_REGEX, "").replace(HUBL_COMMENT_REGEX, ""),
   );
 
 /**
@@ -158,14 +170,55 @@ const getHtmlTagBalance = (fragment: string): number => {
   return balance;
 };
 
-/** Collects top-level `{% if %}...{% else %}...{% endif %}` blocks via a stack walk. */
-const findIfElseBlocks = (text: string): IfElseBlock[] => {
-  const blocks: IfElseBlock[] = [];
+/**
+ * Returns the set of HTML element types that appear as top-level (depth-0)
+ * elements in `fragment`, after stripping HubL. Void and self-closing elements
+ * are excluded. Used to detect when two branches both contribute the same
+ * block-level element, which would produce invalid sibling structures when
+ * the branches are flattened by the HTML formatter.
+ */
+const getTopLevelTagNames = (fragment: string): Set<string> => {
+  const withoutHubL = stripHubL(fragment);
+  const result = new Set<string>();
+  const stack: string[] = [];
+
+  HTML_TAG_REGEX.lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = HTML_TAG_REGEX.exec(withoutHubL)) !== null) {
+    const fullTag = match[0];
+    const tagName = match[1].toLowerCase();
+
+    if (VOID_HTML_ELEMENTS.has(tagName) || isSelfClosingHtmlTag(fullTag)) {
+      continue;
+    }
+
+    if (fullTag.startsWith("</")) {
+      if (stack.length > 0 && stack[stack.length - 1] === tagName) {
+        stack.pop();
+      }
+    } else {
+      if (stack.length === 0) {
+        result.add(tagName);
+      }
+      stack.push(tagName);
+    }
+  }
+
+  return result;
+};
+
+/**
+ * Collects all `{% if %}...{% elif %}...{% else %}...{% endif %}` blocks via
+ * a stack walk, recording every branch boundary (if, each elif, else).
+ */
+const findIfBlocks = (text: string): IfBlock[] => {
+  const blocks: IfBlock[] = [];
   const stack: Array<{
     start: number;
-    afterIf: number;
-    elseStart: number | null;
-    afterElse: number | null;
+    branchStarts: number[];
+    branchEnds: number[];
+    hasElse: boolean;
   }> = [];
 
   HUBL_CONTROL_TAG_REGEX.lastIndex = 0;
@@ -179,39 +232,39 @@ const findIfElseBlocks = (text: string): IfElseBlock[] => {
     if (tagType === "if") {
       stack.push({
         start: tagStart,
-        afterIf: tagEnd,
-        elseStart: null,
-        afterElse: null,
+        branchStarts: [tagEnd],
+        branchEnds: [],
+        hasElse: false,
       });
       continue;
     }
 
-    if (tagType === "else" && stack.length > 0) {
+    if ((tagType === "elif" || tagType === "else") && stack.length > 0) {
       const current = stack[stack.length - 1];
-      if (current.elseStart === null) {
-        current.elseStart = tagStart;
-        current.afterElse = tagEnd;
+      current.branchEnds.push(tagStart);
+      current.branchStarts.push(tagEnd);
+      if (tagType === "else") {
+        current.hasElse = true;
       }
       continue;
     }
 
     if (tagType === "endif" && stack.length > 0) {
-      const current = stack.pop();
-      if (
-        !current ||
-        current.elseStart === null ||
-        current.afterElse === null
-      ) {
-        continue;
-      }
+      const current = stack.pop()!;
+      current.branchEnds.push(tagStart);
+
+      const branches: BranchRange[] = current.branchStarts.map(
+        (branchStart, index) => ({
+          start: branchStart,
+          end: current.branchEnds[index],
+        }),
+      );
 
       blocks.push({
         start: current.start,
-        afterIf: current.afterIf,
-        elseStart: current.elseStart,
-        afterElse: current.afterElse,
-        beforeEndif: tagStart,
         end: tagEnd,
+        branches,
+        hasElse: current.hasElse,
       });
     }
   }
@@ -298,7 +351,11 @@ const findContainerCloseEnd = (text: string, openStart: number): number => {
 
     if (
       !VOID_HTML_ELEMENTS.has(tagName) &&
-      !(tag.startsWith("<") && !tag.startsWith("</") && isSelfClosingHtmlTag(tag))
+      !(
+        tag.startsWith("<") &&
+        !tag.startsWith("</") &&
+        isSelfClosingHtmlTag(tag)
+      )
     ) {
       if (tag.startsWith("</") && tagName === rootTag) {
         depth--;
@@ -374,7 +431,11 @@ const findPreserveEnd = (
 
       if (
         !VOID_HTML_ELEMENTS.has(tagName) &&
-        !(tag.startsWith("<") && !tag.startsWith("</") && isSelfClosingHtmlTag(tag))
+        !(
+          tag.startsWith("<") &&
+          !tag.startsWith("</") &&
+          isSelfClosingHtmlTag(tag)
+        )
       ) {
         if (tag.startsWith("</")) {
           balance--;
@@ -400,7 +461,9 @@ const findPreserveEnd = (
   // container opened at `preserveStart` does). Re-check with the tag-name-
   // aware `findContainerCloseEnd` and extend the range if it reaches
   // further, so the preserved span always covers the whole container.
-  const openTagMatch = text.slice(preserveStart).match(/^<([a-zA-Z][\w-]*)[^>]*>/);
+  const openTagMatch = text
+    .slice(preserveStart)
+    .match(/^<([a-zA-Z][\w-]*)[^>]*>/);
   if (openTagMatch) {
     const containerCloseEnd = findContainerCloseEnd(text, preserveStart);
     if (containerCloseEnd > index) {
@@ -434,7 +497,22 @@ const mergeOverlappingRanges = (ranges: TextRange[]): TextRange[] => {
 
 /**
  * Returns text spans that must be preserved verbatim because an
- * `{% if %}/{% else %}` pair leaves HTML tags unbalanced across branches.
+ * `{% if %}/{% elif %}/{% else %}` block would produce invalid HTML when its
+ * branches are flattened by the HTML formatter.
+ *
+ * Two conditions each trigger preservation independently:
+ *
+ * 1. **Unbalanced branch** — any single branch has a non-zero net HTML tag
+ *    balance (more opens than closes, or vice-versa). This is the classic
+ *    split-wrapper pattern: `{% if %}<div>{% else %}</div>{% endif %}`. Only
+ *    blocks with two or more branches qualify; see below.
+ *
+ * 2. **Duplicate top-level element** — the same HTML element type appears as
+ *    a top-level element in two or more branches. When flattened, all branches
+ *    are rendered as siblings, which can produce invalid HTML (e.g. three
+ *    sibling `<main>` elements). This check only applies to blocks that have a
+ *    final `{% else %}` branch to avoid flagging simple `{% if %}...{% endif %}`
+ *    patterns that are always safe to flatten.
  *
  * @param input - Source template text before tokenization.
  * @param shouldSkip - Optional predicate; when it returns true for a block's
@@ -445,7 +523,7 @@ export const findConditionalPreserveRanges = (
   input: string,
   shouldSkip: (offset: number) => boolean = () => false,
 ): TextRange[] => {
-  const blocks = findIfElseBlocks(input);
+  const blocks = findIfBlocks(input);
   const preserveRanges: TextRange[] = [];
 
   for (const block of blocks) {
@@ -453,14 +531,40 @@ export const findConditionalPreserveRanges = (
       continue;
     }
 
-    const ifBranch = input.slice(block.afterIf, block.elseStart);
-    const elseBranch = input.slice(block.afterElse, block.beforeEndif);
-    const ifBalance = getHtmlTagBalance(ifBranch);
-    const elseBalance = getHtmlTagBalance(elseBranch);
+    const branchTexts = block.branches.map((branch) =>
+      input.slice(branch.start, branch.end),
+    );
+    const branchBalances = branchTexts.map(getHtmlTagBalance);
 
-    // Balanced branches are safe — the HTML formatter's flattened view
-    // resyncs to the same depth regardless of which branch is "real".
-    if (ifBalance === 0 && elseBalance === 0) {
+    // A lone {% if %}...{% endif %} is excluded: templates routinely open a
+    // wrapper element in one such block and close it in a separate later one,
+    // and the HTML formatter flattens that correctly. Preserving it would
+    // anchor the range at the outermost unclosed element, which can swallow
+    // most of the template and emit it verbatim and unindented.
+    const hasUnbalancedBranch =
+      block.branches.length > 1 &&
+      branchBalances.some((balance) => balance !== 0);
+
+    // Check #2 only for blocks with an {% else %} branch (two or more branches).
+    // A lone {% if %}...{% endif %} with balanced content is always safe.
+    let hasDuplicateTopLevelElement = false;
+    if (block.hasElse) {
+      const seenTagNames = new Set<string>();
+      for (const branchText of branchTexts) {
+        for (const tagName of getTopLevelTagNames(branchText)) {
+          if (seenTagNames.has(tagName)) {
+            hasDuplicateTopLevelElement = true;
+            break;
+          }
+          seenTagNames.add(tagName);
+        }
+        if (hasDuplicateTopLevelElement) {
+          break;
+        }
+      }
+    }
+
+    if (!hasUnbalancedBranch && !hasDuplicateTopLevelElement) {
       continue;
     }
 

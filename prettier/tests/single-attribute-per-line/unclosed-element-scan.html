@@ -1,0 +1,12 @@
+{% macro ItemMeta(config) %}
+  {% call SectionWrapper({ tag_name: "section" }) %}
+    {% if updatedDate %}
+      <div class="meta-item -updated">
+        <span
+          >{{ strings.updated[lang] }}:
+          <time datetime="{{ updatedDate|datetimeformat('%Y-%m-%d') }}">{{ prettyDate }}</time></span
+        >
+      </div>
+    {% endif %}
+  {% endcall %}
+{% endmacro %}

@@ -1,0 +1,16 @@
+{% if topic %}
+  <main class="listing page-width" data-testid="tag-listing">
+    <h1 class="tag-title">{{ tag }}</h1>
+    <p>Tag content</p>
+  </main>
+{% elif author %}
+  {% include '/example/templates/author.html' %}
+{% elif isLandingPage %}
+  <main class="category-listing">
+    <h1>Category</h1>
+  </main>
+{% else %}
+  <main class="listing page-width">
+    <p>Default listing content</p>
+  </main>
+{% endif %}

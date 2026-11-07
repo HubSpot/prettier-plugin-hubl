@@ -57,6 +57,36 @@ Run prettier
 npx prettier --write '**/*.html'
 ```
 
+## Options
+
+### `hublCustomTags`
+
+Register additional HubL tag names that the plugin should recognise but that are not part of the standard HubL tag set (for example, private or org-specific tags).
+
+Each entry is a string:
+
+- **Self-closing tag**: `"tag_name"`
+- **Block-scoped tag**: `"tag_name:end_tag_name"`
+
+```js
+// .prettierrc.js
+export default {
+  plugins: ["@hubspot/prettier-plugin-hubl"],
+  hublCustomTags: [
+    "my_self_closing_tag",
+    "my_block_tag:end_my_block_tag",
+  ],
+  overrides: [
+    {
+      files: "*.html",
+      options: { parser: "hubl" },
+    },
+  ],
+};
+```
+
+Without this option, the plugin throws `unknown block tag: <name>` when it encounters an unrecognised tag.
+
 ## Troubleshooting Errors
 
 Check under “Known Issues” to see if your error has been reported already. If not, feel free to [open up a new issue](https://github.com/HubSpot/prettier-plugin-hubl/issues/new). You can also review the expected formatting of different elements [here](./TYPE_DOCS.md).

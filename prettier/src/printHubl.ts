@@ -495,13 +495,21 @@ function printHubl(node) {
           " ",
           closeTag(node.whiteSpace.openTag),
         ]),
-        printHubl(node.body),
+        indent(printBody(node.body)),
         openTag(node.whiteSpace.closingTag),
         " endfor ",
         closeTag(node.whiteSpace.closingTag),
       ];
     }
-    case "Macro":
+    case "Macro": {
+      const macroArgs = node.args.children.flatMap((arg) => {
+        if (arg.typename === "KeywordArgs") {
+          return arg.children.map((kw) =>
+            group([kw.key.value, "=", printHubl(kw.value)]),
+          );
+        }
+        return [printHubl(arg)];
+      });
       return [
         group([
           openTag(node.whiteSpace.openTag),
@@ -509,12 +517,8 @@ function printHubl(node) {
           group([
             printHubl(node.name),
             "(",
-            join(
-              ", ",
-              node.args.children.map((arg) => {
-                return printHubl(arg);
-              }),
-            ),
+            indent([softline, join([",", line], macroArgs)]),
+            softline,
             ")",
             " ",
             closeTag(node.whiteSpace.openTag),
@@ -527,6 +531,7 @@ function printHubl(node) {
           closeTag(node.whiteSpace.closingTag),
         ]),
       ];
+    }
     case "Not":
       if (node.target.typename === "Is") {
         return [
@@ -598,7 +603,7 @@ function printHubl(node) {
           " ",
           closeTag(node.whiteSpace.openTag),
         ]),
-        printHubl(node.body),
+        indent(printBody(node.body)),
         group([
           openTag(node.whiteSpace.closingTag),
           " endcall ",

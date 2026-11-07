@@ -1,0 +1,23 @@
+<main{% if not useCompactHeader %} data-monitor="landing-body"{% endif %}>
+  {% module "hero_section" path="/example/modules/hero-section" %}
+
+  {% dnd_area "content_area", class="landing-page-content" %}
+    {% dnd_section %}
+    {% end_dnd_section %}
+  {% end_dnd_area %}
+</main>
+
+<div{% if tagAttrs|first not in [' ', '>'] %} class="fallback"{% endif %}>
+  <p>content</p>
+</div>
+
+{% for segment in bodySegments %}
+  {% if not loop.first %}
+    {% set tagAttrs = segment|split(">")|first %}
+    {% if tagAttrs is string_containing 'id="' %}
+      <h2{% if tagAttrs|first not in [' ', '>'] %} {% endif %}{{ segment }}
+    {% else %}
+      <h2 id="section-{{ loop.index - 1 }}"{% if tagAttrs|first not in [' ', '>'] %} {% endif %}{{ segment }}
+    {% endif %}
+  {% endif %}
+{% endfor %}

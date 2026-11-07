@@ -4,11 +4,16 @@
  */
 import { AST, ParserOptions } from "prettier";
 import * as parser from "./parser/parser.js";
-import Tags from "./Tags.js";
+import Tags, { CustomTag } from "./Tags.js";
 
-const parse = (text: string, _options: ParserOptions): AST => {
+export interface HublParserOptions extends ParserOptions {
+  hublCustomTags?: CustomTag[];
+}
+
+const parse = (text: string, options: HublParserOptions): AST => {
+  const customTags: CustomTag[] = options?.hublCustomTags ?? [];
   // We call into parser, but we extend it by passing in our custom tags
-  return parser.parse(text, [new Tags()], {
+  return parser.parse(text, [new Tags(customTags)], {
     trimBlocks: false,
     lstripBlocks: false,
   });

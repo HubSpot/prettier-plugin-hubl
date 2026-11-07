@@ -927,7 +927,7 @@ export class Parser extends Obj {
           tok.lineno,
           tok.colno,
           node,
-          new nodes.NodeList(tok.lineno, tok.colno, [this.parseExpression()]),
+          new nodes.NodeList(tok.lineno, tok.colno, [this.parseUnary()]),
         );
       } else {
         break;

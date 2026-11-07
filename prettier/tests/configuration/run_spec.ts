@@ -80,9 +80,11 @@ function createTestObject(
 }
 
 const IDEMPOTENCY_FIXTURES = new Set([
+  "nested-call-for-indentation.html",
   "idempotent-dict-ternary.html",
   "idempotent-svg-path.html",
   "set.html",
+  "break-continue.html",
   "ternary.html",
   "regex-filters.html",
   "sliceSyntax.html",
@@ -92,20 +94,45 @@ const IDEMPOTENCY_FIXTURES = new Set([
   "conditional-html-wrapper.html",
   "conditional-html-wrapper-closing.html",
   "from-import-and-separator.html",
-  "nested-multiline-funcall.html",
-  "module-attribute-svg-preserve.html",
-  "hubl-none-literal.html",
-  "json-ld-hubl-conditional.html",
-  "conditional-html-nested-expression.html",
-  "call-dict-indentation.html",
-  "empty-dict-literal.html",
+  "hubl-in-tag-name-position.html",
+  "nested-same-tag-element-scan.html",
+  "unclosed-element-scan.html",
+  "tag-regex-overmatch.html",
+  "inline-block-tag-after-tag-close.html",
+  "split-closing-tag-expression.html",
   "single-attribute-per-line-hubl.html",
   "single-attribute-per-line.html",
   "wide-print-width-hubl.html",
   "wide-print-width.html",
+  "nested-multiline-funcall.html",
+  "macro-multiline.html",
+  "module-attribute-svg-preserve.html",
+  "hubl-none-literal.html",
+  "json-ld-hubl-conditional.html",
+  "conditional-html-nested-expression.html",
+  "conditional-html-elif-branches.html",
+  "call-dict-indentation.html",
+  "empty-dict-literal.html",
+  "blog-post.html",
 ]);
 
 const REGRESSION_ASSERTIONS: Record<string, (output: string) => void> = {
+  "nested-call-for-indentation.html": (output) => {
+    const indentOf = (trimmedLine: string): number => {
+      const line = output
+        .split("\n")
+        .find((candidate) => candidate.trim() === trimmedLine);
+      expect(line).toBeDefined();
+      return line!.length - line!.trimStart().length;
+    };
+    expect(indentOf("{% call OuterSection({")).toBe(0);
+    expect(indentOf("{% call InnerTabs({")).toBe(2);
+    expect(indentOf("{% for tab in tabs_array %}")).toBe(4);
+    expect(indentOf('<div class="widget__card">')).toBe(6);
+    expect(indentOf("{% for item in tab_data.items %}")).toBe(8);
+    expect(indentOf("<p>{{ item.value }}</p>")).toBe(10);
+    expect(indentOf("{% endcall %}")).toBe(2);
+  },
   "module-attribute-svg-preserve.html": (output) => {
     expect(output).not.toMatch(/\{%-?\s*(end)?preserve/i);
   },
@@ -117,23 +144,76 @@ const REGRESSION_ASSERTIONS: Record<string, (output: string) => void> = {
     expect(output).toContain("</main>");
     expect(output).not.toMatch(/<!--conditionalblock-\d+-->\s*<\/main>/);
   },
-  "call-dict-indentation.html": (output) => {
-    const callBlockMatch = output.match(
-      /(\s*)\{% call menuMacros\.MenuTrigger\(\{[\s\S]*?\}\) %\}/,
-    );
-    expect(callBlockMatch).not.toBeNull();
-    const baseIndent = callBlockMatch![1];
-    const callBlock = callBlockMatch![0];
-    const propertyIndent = `${baseIndent}  `;
-    expect(callBlock).toContain(`${propertyIndent}anchorId:`);
-    expect(callBlock).toContain(`${propertyIndent}classExtension:`);
-    expect(callBlock).toContain(`${baseIndent}}) %}`);
+  "conditional-html-elif-branches.html": (output) => {
+    expect(output).not.toMatch(/\{%\s*preserve\s*%\}/);
+    expect(output).toContain("<main");
+    expect(output).toContain("</main>");
+    expect(output).toContain("{% if topic %}");
+    expect(output).toContain("{% elif author %}");
+    expect(output).toContain("{% elif isLandingPage %}");
+    expect(output).toContain("{% else %}");
+    expect(output).toContain("{% endif %}");
+    const mainMatches = output.match(/<main\b/g);
+    expect(mainMatches).not.toBeNull();
+    expect(mainMatches!.length).toBe(3);
   },
-  "empty-dict-literal.html": (output) => {
-    expect(output).toContain("{% set items = {} %}");
-    expect(output).toMatch(/\{% macro Toggle\(config\s*=\s*\{\}\) %\}/);
-    expect(output).toMatch(/"header": \{\}/);
-    expect(output).not.toMatch(/\{\n\}/);
+  "blog-post.html": (output) => {
+    // This template pairs `{% if count == 1 %}` opening three wrappers with a
+    // later `{% if count == total %}` closing them. Treating either as a
+    // preserve candidate swallows the whole body and emits it at column 0.
+    const indentOf = (trimmedLine: string): number => {
+      const line = output
+        .split("\n")
+        .find((candidate) => candidate.trim() === trimmedLine);
+      expect(line).toBeDefined();
+      return line!.length - line!.trimStart().length;
+    };
+    expect(
+      indentOf('<div class="body-container body-container--blog-post">'),
+    ).toBe(2);
+    expect(indentOf('<div class="content-wrapper">')).toBe(4);
+    expect(indentOf('<article class="blog-post">')).toBe(6);
+    expect(indentOf("<h1>{{ content.name }}</h1>")).toBe(8);
+    expect(indentOf('<section class="blog-related-posts">')).toBe(8);
+    expect(output).not.toMatch(/\{%-?\s*(end)?preserve/i);
+  },
+  "hubl-in-tag-name-position.html": (output) => {
+    expect(output).toContain("<main");
+    expect(output).toContain("</main>");
+    expect(output).not.toMatch(/<main\w/);
+  },
+  "nested-same-tag-element-scan.html": (output) => {
+    expect(output).toContain("{% if tooltip_text %}");
+    expect(output).toContain("{% endif %}");
+    expect(output).toContain("{% endset %}");
+    expect(output).toContain("{% endmacro %}");
+    expect(output).not.toMatch(/\{%\s*preserve\s*%\}[\s\S]*\{%\s*endset\s*%\}/);
+    expect(output).not.toMatch(/<!--conditionalblock-\d+-->/);
+  },
+  "unclosed-element-scan.html": (output) => {
+    expect(output).toContain("{% endif %}");
+    expect(output).toContain("{% endcall %}");
+    expect(output).toContain("{% endmacro %}");
+    expect(output).not.toMatch(
+      /\{%\s*preserve\s*%\}[\s\S]*\{%\s*endcall\s*%\}/,
+    );
+  },
+  "tag-regex-overmatch.html": (output) => {
+    expect(output).not.toMatch(
+      /npe\d+_|<!--(?:placeholder|comment|conditionalblock|svgblock)-\d+-->/,
+    );
+    expect(output).toContain("<img");
+    expect(output).toContain("</p>");
+    expect(output).toContain("</a>");
+    expect(output).toContain("visually-hidden");
+    expect(output.match(/{%-?\s*endif\s*-?%}/g)!.length).toBe(5);
+  },
+  "inline-block-tag-after-tag-close.html": (output) => {
+    expect(output).not.toMatch(/^\{%\s*endif\s*%\}/m);
+    expect(output).toMatch(/^[ \t]+\{%\s*endif\s*%\}/m);
+  },
+  "split-closing-tag-expression.html": (output) => {
+    expect(output).toMatch(/>\{\{ AuthorLink\(module\.secondary_author/);
   },
   "single-attribute-per-line.html": (output) => {
     expect(output).toContain('<button\n  class="button"');
@@ -153,6 +233,38 @@ const REGRESSION_ASSERTIONS: Record<string, (output: string) => void> = {
     expect(output).toContain(
       '<button class="{{ theme_class }} button--primary" id="save-changes" title="Save all pending changes to this record">',
     );
+  },
+  "call-dict-indentation.html": (output) => {
+    const callBlockMatch = output.match(
+      /(\s*)\{% call menuMacros\.MenuTrigger\(\{[\s\S]*?\}\) %\}/,
+    );
+    expect(callBlockMatch).not.toBeNull();
+    const baseIndent = callBlockMatch![1];
+    const callBlock = callBlockMatch![0];
+    const propertyIndent = `${baseIndent}  `;
+    expect(callBlock).toContain(`${propertyIndent}anchorId:`);
+    expect(callBlock).toContain(`${propertyIndent}classExtension:`);
+    expect(callBlock).toContain(`${baseIndent}}) %}`);
+  },
+  "empty-dict-literal.html": (output) => {
+    expect(output).toContain("{% set items = {} %}");
+    expect(output).toMatch(/\{% macro Toggle\(config\s*=\s*\{\}\) %\}/);
+    expect(output).toMatch(/"header": \{\}/);
+    expect(output).not.toMatch(/\{\n\}/);
+  },
+  "misc.html": (output) => {
+    expect(output).toContain("is string_containing(pathFragment) or");
+    expect(output).not.toContain("is string_containing(pathFragment or");
+    expect(output).toContain("is string_containing(x) and");
+    expect(output).not.toContain("is string_containing(x and");
+    expect(output).toContain("is not string_containing(bar) or");
+    expect(output).not.toContain("is not string_containing(bar or");
+  },
+  "macro-multiline.html": (output) => {
+    expect(output).toMatch(/{% macro LongMacroName\(\n/);
+    expect(output).toContain("  show_cta=true,");
+    expect(output).toContain("  powered_by=false");
+    expect(output).toMatch(/^\)\ %}/m);
   },
 };
 

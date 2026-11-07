@@ -1,0 +1,21 @@
+{% call OuterSection({
+  "style_field": style,
+  "extra_classes": "widget-container"
+}) %}
+{% call InnerTabs({
+  "module_class": "widget",
+  "tabs": tabs_array
+}) %}
+{% for tab in tabs_array %}
+{% set tab_data = tab.tab_data %}
+<div class="widget__card">
+{% if tab_data.heading %}
+<h3>{{ tab_data.heading }}</h3>
+{% endif %}
+{% for item in tab_data.items %}
+<p>{{ item.value }}</p>
+{% endfor %}
+</div>
+{% endfor %}
+{% endcall %}
+{% endcall %}

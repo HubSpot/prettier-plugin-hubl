@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`formats custom-tags.html correctly 1`] = `
+{% my_self_closing_tag name="foo", value=42 %}
+{% my_block_tag name="outer" %}
+  <p>Content inside the block</p>
+  {% my_self_closing_tag name="inner" %}
+{% end_my_block_tag %}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{% my_self_closing_tag
+  name="foo",
+  value=42 %}
+{% my_block_tag name="outer" %}
+  <p>Content inside the block</p>
+  {% my_self_closing_tag name="inner" %}
+{% end_my_block_tag %}
+
+`;

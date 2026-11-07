@@ -1,6 +1,6 @@
 {
   "name": "@hubspot/prettier-plugin-hubl",
-  "version": "0.3.7",
+  "version": "0.3.10",
   "main": "./prettier/dist/src/index.js",
   "type": "module",
   "private": false,
@@ -35,9 +35,9 @@
     "build:prettier": "yarn run:prettier build",
     "build:parser": "yarn run:parser build",
     "build": "(yarn run build:parser) && (yarn run build:prettier)",
-    "npm:publish-beta": "npm publish . --tag beta",
-    "npm:publish-latest": "npm publish . --tag latest",
-    "npm:publish-experimental": "npm publish . --tag experimental"
+    "npm:publish-beta": "npm publish . --tag beta --registry https://registry.npmjs.org/",
+    "npm:publish-latest": "npm publish . --tag latest --registry https://registry.npmjs.org/",
+    "npm:publish-experimental": "npm publish . --tag experimental --registry https://registry.npmjs.org/"
   },
   "files": [
     "prettier/dist/src",
